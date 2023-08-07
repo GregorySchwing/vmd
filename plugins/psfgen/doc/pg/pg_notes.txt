@@ -1,0 +1,146 @@
+PSFGEN was extensively documented and commented so the next fellow will have 
+less difficulties in understanding the code. If you see that the comments 
+don't match the code exactly, please correct the comments (or the code if it is 
+busted).
+
+In terms of optimization, the topo_mol_residue_t structure now stores the 
+atoms in an array of topo_mol_atom_t, instead of a linked-list. This makes 
+the atom accessing more straight forward and efficient, since for any 
+non-modified residue (no patch was applied to it), the position of the atom is 
+the position of the atom in the topology. By storing a flag signaling if the 
+array was modified (int reorder), one can always assumed that the indexing keeps 
+the same order as defined in the topology file.
+
+The topo_mol_auto_dihedrals was also substantially optimized. Instead of using 
+the two angles (and their combinations) to detect the dihedral, psfgen now uses 
+the consecutive bonds formed atoms with increasing atomids to form the dihedral. 
+Of course the waters are checked and excluded from this search. Additionally, 
+the atoms in first position of the dihedral only stores the dihedrals where 
+itself appeared in the first position. Opposing to all atoms participating in 
+the dihedral store the same dihedral information. This way we have less atoms to 
+go through in the dihedral linked-list per atom.
+
+the rest of the data structures did not changed much, if any, because I didn't 
+see any improvements over speed. Some changes might be preferable to save some 
+memory, but I didn't check for that.
+
+----------------------------- Lone Pairs and Drude ---------------------------
+
+Most of the documentations and explanations that I found for the implementation 
+of Drude and lone pairs I added as comments in code. Please refer to the code 
+for any particular implementation doubt. (topo_mol_output.c 1179~1232; 
+topo_mol_struct.h 164~230)
+
+Now, I left some hooks for the implementation of other lone pairs, besides the 
+colinear (additive) and relative(drude). Although I never found any practical 
+application of other types of lone pairs, I tried to make the current 
+implementation as flexible as possible.
+
+In general, the drude particles are never defined as atoms, until the psf/pdb or 
+js file is produced. A drude particle has no topology information. The drude 
+particle is named after his host atom, with a fixed mass 
+(0.4 and hot = mass - 0.4), and alpha and thole is defined in the host atom 
+topology. All the values associated to the drude is stored in the 
+host atom. This creates an issue when trying to, for instance modify atom's 
+fields of the drudes, and not form the host, and vice-versa. So far, one can use 
+VMD for it, and use atoms names, not any other property.
+
+The lone pairs are defined as atoms with their own definition in the topology 
+file. This also creates another issue, since in reality they are not atoms. 
+In psfgen I used the last integer column in psf file to flag the atoms as atoms 
+(0), lonepair (-1), and drude (-2). I could not find any use of this column that 
+would prevent me from doing this, but if I am wrong, please correct this.
+
+VMD, NAMD and psfgen need to agree in how to treat these particles and segregate 
+them from the atoms. For instance, VMD, to draw the bond between atoms and lone 
+pairs needs to have the bond explicitly defined. NAMD, on the other hand, 
+cannot have the bond explicitly defined, otherwise it crashes. psfgen has the 
+varibale "vpbonds", for virtual particle bonds, that will print (1) or not (0) 
+the bonds between the drude, atoms and lone pairs.
+
+-------------------------------- Automated test suite -------------------------
+
+I created an automated test routine to evaluate psfgen, comparing two different 
+version, and compare the output, both character by character, and using VMD to 
+evaluate if the the files that are different in the char vs char, are in fact 
+different. Since I changed the way the atoms and dihedrals are stored, the bonds, 
+angles, dihedrals, and impropers might appeared defined in a different order, 
+but containing the same atoms' indexing, and in the same order. I used VMD to 
+evaluate if the particular atom index sequence is present in the bonds, angles, 
+dihedrals, and impropers. 
+
+The test suite does not check for lone pairs and drude force field, since the 
+previous versions of psfgen were not able to prepare these structures. One still 
+needs to update the suite to incorporate these tests. 
+
+The test suite is located at /Projects/jribeiro/moving-out/psfgen/test and 
+one can execute an example at /Projects/jribeiro/moving-out/psfgen/test/example 
+"vmd -dispdev text -e exec_psfgen_test_unit.tcl" and let it run. 
+
+the script creates an output folder "psfgen_test_unit_output", where it stores all 
+the outputs for analysis if an error occurs, and a summary file inside, 
+psfgen_test_log.txt. This file contains basically all information that one 
+needs to track the problematic test, to check which versions were tested, on 
+which machine, and so on.
+
+There are two sets of tests: 
+
+  *independent_tests - the structure is downloaded from PDB databank
+  *dependent_tests - the structure is stored locally, because is a system from 
+                     a user or something like this.
+
+
+The output folder is organized as:
+
+psfgen_test_unit_output ---- psfgen_test_log.txt
+                          |
+                          ---dependent_tests_output -| --- <VERSION1> ALL tests
+                           |                         | --- <VERSION2>ALL tests
+                           |
+                          ---dependent_tests_output -| --- <VERSION1> ALL tests
+                                                     | --- <VERSION2>ALL tests
+                                     
+
+For each test, the results will look like:
+"
+ File: <test filename>.tcl
+
+    V <VERSION1> - Success
+    V <VERSION2> - Success
+        ------ or ------
+    X <VERSION1> - Error
+    X <VERSION2> - Error
+
+
+    Text based Comparison of the Output Files: (this is the char vs char comparison)
+
+    ==   Files <filename>.pdb   <filename>.pdb   with <VERSION1> and <VERSION2>
+    !=   Files <filename>.psf   <filename>.psf   with <VERSION1> and <VERSION2>
+
+    (== means equal and != means different) 
+
+
+    VMD based Comparison of the Output Files:
+
+    ==  {<filename>.psf <filename>.pdb}   {<filename>.psf <filename>.pdb}
+"
+
+
+The files (and the pair of files) are defined at the end of each psfgen script 
+test by the variable "pairs" that is return at the end of the script. If the 
+script generates one or more psf/pdb pairs, please follow the format 
+
+"lappend pairs [list [file join [pwd] 8apoa1.psf] [file join [pwd] 8apoa1.pdb] ]"
+
+. If it is generating a single file, like a js file, please follow the format:
+
+"lappend pairs [list [file join [pwd] 8apoa1.js]  ]".
+
+Please note that the absolute path is stored, so one can analyze the files from 
+the rootdir folder where the script is being executed. Check the current test 
+for templates and examples out to build you own testing script.
+
+
+
+
+

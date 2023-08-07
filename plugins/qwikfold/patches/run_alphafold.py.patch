@@ -1,0 +1,33 @@
+--- run_alphafold.py	2021-10-21 14:21:35.207816314 -0500
++++ run_alphafold.py.patched	2021-10-28 15:10:03.196930746 -0500
+@@ -124,15 +124,22 @@
+ 
+   # Get features.
+   t_0 = time.time()
+-  feature_dict = data_pipeline.process(
+-      input_fasta_path=fasta_path,
+-      msa_output_dir=msa_output_dir)
+-  timings['features'] = time.time() - t_0
+-
+-  # Write out features as a pickled dictionary.
+   features_output_path = os.path.join(output_dir, 'features.pkl')
+-  with open(features_output_path, 'wb') as f:
+-    pickle.dump(feature_dict, f, protocol=4)
++  if not os.path.isfile(features_output_path) : 
++	  feature_dict = data_pipeline.process(
++		  input_fasta_path=fasta_path,
++		  msa_output_dir=msa_output_dir)
++
++	  timings['features'] = time.time() - t_0
++
++	  # Write out features as a pickled dictionary.
++	  with open(features_output_path, 'wb') as f:
++		  pickle.dump(feature_dict, f, protocol=4)
++
++  else :
++	  with open(features_output_path, 'rb') as f:
++		  feature_dict = pickle.load(f)
++  	
+ 
+   relaxed_pdbs = {}
+   plddts = {}

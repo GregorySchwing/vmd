@@ -1,0 +1,20 @@
+--- amber_minimize.py	2021-10-29 11:26:36.450887034 -0500
++++ amber_minimize.py.patched	2021-10-29 11:41:37.038861111 -0500
+@@ -90,7 +90,7 @@
+     _add_restraints(system, pdb, stiffness, restraint_set, exclude_residues)
+ 
+   integrator = openmm.LangevinIntegrator(0, 0.01, 0.0)
+-  platform = openmm.Platform.getPlatformByName("CPU")
++  platform = openmm.Platform.getPlatformByName("CUDA")
+   simulation = openmm_app.Simulation(
+       pdb.topology, system, integrator, platform)
+   simulation.context.setPositions(pdb.positions)
+@@ -530,7 +530,7 @@
+   simulation = openmm_app.Simulation(openmm_pdbs[0].topology,
+                                      system,
+                                      openmm.LangevinIntegrator(0, 0.01, 0.0),
+-                                     openmm.Platform.getPlatformByName("CPU"))
++                                     openmm.Platform.getPlatformByName("CUDA"))
+   energies = []
+   for pdb in openmm_pdbs:
+     try:

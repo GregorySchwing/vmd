@@ -1,0 +1,1170 @@
+This is pdfTeX, Version 3.14159-1.10b (Web2C 7.4.5) (format=pdflatex 2007.11.30)  1 MAY 2020 14:02
+**ug
+(./ug.tex{/usr/local/share/texmf/pdftex/config/pdftex.cfg}
+LaTeX2e <2001/06/01>
+Babel <v3.7h> and hyphenation patterns for american, french, german, ngerman, n
+ohyphenation, loaded.
+(/usr/local/share/texmf/tex/latex/base/article.cls
+Document Class: article 2001/04/21 v1.4e Standard LaTeX document class
+(/usr/local/share/texmf/tex/latex/base/size10.clo
+File: size10.clo 2001/04/21 v1.4e Standard LaTeX file (size option)
+)
+\c@part=\count79
+\c@section=\count80
+\c@subsection=\count81
+\c@subsubsection=\count82
+\c@paragraph=\count83
+\c@subparagraph=\count84
+\c@figure=\count85
+\c@table=\count86
+\abovecaptionskip=\skip41
+\belowcaptionskip=\skip42
+\bibindent=\dimen102
+)
+\@input{ug_macros.aux}
+\openout2 = `ug_macros.aux'.
+
+(./ug_macros.tex) (./ug.aux (./ug_title.aux) (./ug_psfgen.aux))
+\openout1 = `ug.aux'.
+
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 16.
+LaTeX Font Info:    ... okay on input line 16.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 16.
+LaTeX Font Info:    ... okay on input line 16.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 16.
+LaTeX Font Info:    ... okay on input line 16.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 16.
+LaTeX Font Info:    ... okay on input line 16.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 16.
+LaTeX Font Info:    ... okay on input line 16.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 16.
+LaTeX Font Info:    ... okay on input line 16.
+\openout2 = `ug_title.aux'.
+
+ (./ug_title.tex) [1
+
+
+
+
+{/usr/local/share/texmf/dvips/config/pdftex.map}]
+\openout2 = `ug_psfgen.aux'.
+
+ (./ug_psfgen.tex
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 8.
+
+(/usr/local/share/texmf/tex/latex/base/omscmr.fd
+File: omscmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
+)
+LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10> not available
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 8.
+LaTeX Font Info:    Try loading font information for OMS+cmtt on input line 34.
+
+LaTeX Font Info:    No file OMScmtt.fd. on input line 34.
+
+
+LaTeX Font Warning: Font shape `OMS/cmtt/m/n' undefined
+(Font)              using `OMS/cmsy/m/n' instead
+(Font)              for symbol `textbullet' on input line 34.
+
+
+Overfull \hbox (27.74092pt too wide) in paragraph at lines 36--38
+[]/cmtt10/structure preparation containing colinear lone pairs (halogen atoms i
+n the latest additive
+ []
+
+
+Overfull \hbox (12.49094pt too wide) in paragraph at lines 42--51
+[]/cmtt10/To use the Drude force field, one only needs to load the Drude topolo
+gy files and prepare
+ []
+
+
+Overfull \hbox (18.49075pt too wide) in paragraph at lines 42--51
+/cmtt10/the structures as per usual. Most commands are available for both lone 
+pairs in the additive
+ []
+
+
+Overfull \hbox (39.49057pt too wide) in paragraph at lines 42--51
+/cmtt10/and polarizable force fields, although some operations are not yet avai
+lable for Drude particles.
+ []
+
+
+Overfull \hbox (18.49075pt too wide) in paragraph at lines 42--51
+/cmtt10/Atom modification operations, e.g., psfset, and queries with the segmen
+t command on the drude
+ []
+
+
+Overfull \hbox (7.99084pt too wide) in paragraph at lines 42--51
+/cmtt10/particles, are not implemented. We advise the user to use VMD to assign
+ beta and occupancy
+ []
+
+
+Overfull \hbox (2.74089pt too wide) in paragraph at lines 42--51
+/cmtt10/values during the structure preparation. writemol and readmol commands 
+are not compatible
+ []
+
+
+Overfull \hbox (12.49094pt too wide) in paragraph at lines 52--59
+[]/cmtt10/The new psfgen log file allows the user to save all the information r
+egularly printed out
+ []
+
+
+Overfull \hbox (2.74089pt too wide) in paragraph at lines 52--59
+/cmtt10/during a psfgen execution script to a file. It is possible to open and 
+close multiple log
+ []
+
+
+Overfull \hbox (13.2408pt too wide) in paragraph at lines 52--59
+/cmtt10/files in a psfgen script, but only one file is active at any given mome
+nt. An example of an
+ []
+
+
+Overfull \hbox (2.74089pt too wide) in paragraph at lines 52--59
+/cmtt10/application of multiple log files is to save the information of the loa
+ding process of the
+ []
+
+
+Overfull \hbox (23.7407pt too wide) in paragraph at lines 52--59
+/cmtt10/topology files to one log file and the rest of information of structure
+ preparation to another
+ []
+
+[2
+
+
+]
+Overfull \hbox (23.7407pt too wide) in paragraph at lines 105--116
+/cmtt10/psfgen is currently distributed in two forms. One form is as a standalo
+ne program implemented
+ []
+
+
+Overfull \hbox (23.7407pt too wide) in paragraph at lines 105--116
+/cmtt10/as a Tcl interpreter which reads commands from standard output. You may
+ use loops, variables,
+ []
+
+
+Overfull \hbox (13.2408pt too wide) in paragraph at lines 105--116
+/cmtt10/etc. as you would in a VMD or NAMD script. You may use psfgen interacti
+vely, but we expect
+ []
+
+
+Overfull \hbox (13.2408pt too wide) in paragraph at lines 105--116
+/cmtt10/it to be run most often with a script file redirected to standard input
+. The second form is
+ []
+
+
+Overfull \hbox (34.24062pt too wide) in paragraph at lines 105--116
+/cmtt10/as a Tcl package which can be imported into any Tcl application, includ
+ing VMD. All the commands
+ []
+
+
+Overfull \hbox (13.2408pt too wide) in paragraph at lines 105--116
+/cmtt10/available to the standalone version of psfgen are available to the Tcl 
+package; using psfgen
+ []
+
+
+Overfull \hbox (2.74089pt too wide) in paragraph at lines 105--116
+/cmtt10/within VMD lets you harness VMD's powerful atom selection capability, a
+s well as instantly
+ []
+
+
+Overfull \hbox (7.99084pt too wide) in paragraph at lines 105--116
+/cmtt10/view the result of your structure building scripts. Examples of using p
+sfgen both with and
+ []
+
+[3]
+Overfull \hbox (33.49075pt too wide) in paragraph at lines 117--119
+[]/cmtt10/Generating PSF and PDB files for use with NAMD will typically consist
+ of the following steps: 
+ []
+
+
+Overfull \hbox (1.49115pt too wide) in paragraph at lines 121--123
+[]/cmtt10/Preparing separate PDB files containing individual segments of protei
+n, solvent, etc.
+ []
+
+
+Overfull \hbox (17.24101pt too wide) in paragraph at lines 123--127
+[]/cmtt10/Reading in the appropriate topology definition files and aliasing res
+idue and atom names
+ []
+
+
+Overfull \hbox (17.24101pt too wide) in paragraph at lines 123--127
+/cmtt10/found in the PDB file to those found in the topology files. This will g
+enerally include
+ []
+
+
+Overfull \hbox (23.7407pt too wide) in paragraph at lines 136--143
+/cmtt10/Many PDB files in the PDB databank contain multiple chains, correspondi
+ng to protein subunits,
+ []
+
+
+Overfull \hbox (13.2408pt too wide) in paragraph at lines 136--143
+/cmtt10/water, and other miscellaneous groups. Protein subunits are often ident
+ified by their chain
+ []
+
+
+Overfull \hbox (7.99084pt too wide) in paragraph at lines 136--143
+/cmtt10/ID in the PDB file. In psfgen, each of these groups must be assigned to
+ their own /cmitt10/segment/cmtt10/.
+ []
+
+
+Overfull \hbox (7.99084pt too wide) in paragraph at lines 136--143
+/cmtt10/This applies most strictly in the case of protein chains, each of which
+ must be assigned to
+ []
+
+
+Overfull \hbox (2.74089pt too wide) in paragraph at lines 136--143
+/cmtt10/its own segment so that N-terminal and C-terminal patches can be applie
+d. You are free to
+ []
+
+
+Overfull \hbox (22.99084pt too wide) in paragraph at lines 144--148
+[]/cmtt10/Chains can be split up into their own PDB files using your favorite t
+ext editor and/or Unix
+ []
+
+
+Overfull \hbox (13.2408pt too wide) in paragraph at lines 144--148
+/cmtt10/shell commands, as illustrated in the BPTI example below. If you are us
+ing VMD you can also
+ []
+
+
+Overfull \hbox (7.99084pt too wide) in paragraph at lines 165--170
+/cmtt10/The delatom command described below allows you to delete selected atoms
+ from the structure.
+ []
+
+
+Overfull \hbox (13.2408pt too wide) in paragraph at lines 165--170
+/cmtt10/It's fine to remove atoms from your structure before building the PSF a
+nd PDB files, but you
+ []
+
+
+Overfull \hbox (2.74089pt too wide) in paragraph at lines 165--170
+/cmtt10/should never edit the PSF and PDB files created by psfgen by hand as it
+ will probably mess
+ []
+
+
+Overfull \hbox (7.24098pt too wide) in paragraph at lines 171--175
+[]/cmtt10/Very often the atoms you want to delete are water molecules that are 
+either too far from
+ []
+
+
+Overfull \hbox (2.74089pt too wide) in paragraph at lines 171--175
+/cmtt10/the solute, or else outside of the periodic box you are trying to prepa
+re. In either case
+ []
+
+[4]
+Overfull \hbox (6.7411pt too wide) in paragraph at lines 203--206
+[]/cmtt10/the CHARMM topology and parameter files []top_all22_prot.inp and []pa
+r_all22_prot.inp from
+ []
+
+
+Overfull \hbox (6.7411pt too wide) in paragraph at lines 206--209
+[]/cmtt10/the BPTI PDB file []6PTI.pdb available from the Protein Data Bank at 
+http://www.pdb.org/
+ []
+
+
+Overfull \hbox (23.7407pt too wide) in paragraph at lines 212--215
+/cmtt10/In this demo, we create the files []bpti.psf and []bpti.pdb in the outp
+ut directory which can then
+ []
+
+[5]
+Overfull \hbox (18.49075pt too wide) in paragraph at lines 275--280
+/cmtt10/Bank. It contains a single chain of protein and some PO4 and H2O HETATM
+ records. Since each
+ []
+
+
+Overfull \hbox (7.99084pt too wide) in paragraph at lines 275--280
+/cmtt10/segment must have a separate input file, we remove all non-protein atom
+ records using grep.
+ []
+
+
+Overfull \hbox (13.2408pt too wide) in paragraph at lines 275--280
+/cmtt10/If there were multiple chains we would have to split the file by hand. 
+Create a second file
+ []
+
+
+Overfull \hbox (13.2408pt too wide) in paragraph at lines 282--287
+/cmtt10/until ``ENDMOL'' as input. You may run psfgen interactively as well. Si
+nce psfgen is built
+ []
+
+
+Overfull \hbox (7.99084pt too wide) in paragraph at lines 282--287
+/cmtt10/on a Tcl interpreter, you may use loops, variables, etc., but you must 
+use []$$ for variables
+ []
+
+
+Overfull \hbox (28.99066pt too wide) in paragraph at lines 282--287
+/cmtt10/when inside a shell script. If you want, run psfgen and enter the follo
+wing commands manually. 
+ []
+
+
+Overfull \hbox (13.2408pt too wide) in paragraph at lines 289--293
+/cmtt10/This must match the parameter file used for the simulation as well. Mul
+tiple topology files
+ []
+
+
+Overfull \hbox (2.74089pt too wide) in paragraph at lines 289--293
+/cmtt10/may be read in since psfgen and NAMD use atom type names rather than nu
+mbers in psf files. 
+ []
+
+
+Overfull \hbox (17.29816pt too wide) in paragraph at lines 295--303
+ /cmbx10/(4) Build pro-tein seg-ment. /cmtt10/Actually build a segment, calling
+ it BPTI and reading the sequence
+ []
+
+
+Overfull \hbox (28.99066pt too wide) in paragraph at lines 295--303
+/cmtt10/of residues from the stripped pdb file created above. In addition to th
+e pdb command, we could
+ []
+
+
+Overfull \hbox (2.74089pt too wide) in paragraph at lines 295--303
+/cmtt10/specify residues explicitly. Both angles and dihedrals are generated au
+tomatically unless
+ []
+
+
+Overfull \hbox (23.7407pt too wide) in paragraph at lines 295--303
+/cmtt10/``auto none'' is added (which is required to build residues of water). 
+The commands ``first''
+ []
+
+
+Overfull \hbox (34.24062pt too wide) in paragraph at lines 295--303
+/cmtt10/and ``last'' may be used to change the default patches for the ends of 
+the chain. The structure
+ []
+
+
+Overfull \hbox (33.99068pt too wide) in paragraph at lines 295--303
+/cmtt10/is built when the closing /cmsy10/g /cmtt10/is encountered, and some er
+rors regarding the first and last residue
+ []
+
+[6]
+Overfull \hbox (8.23572pt too wide) in paragraph at lines 305--309
+ /cmbx10/(5) Patch pro-tein seg-ment. /cmtt10/Some patch residues (those not us
+ed to begin or end a chain) are
+ []
+
+
+Overfull \hbox (2.74089pt too wide) in paragraph at lines 305--309
+/cmtt10/applied after the segment is built. These contain all angle and dihedra
+l terms explicitly
+ []
+
+
+Overfull \hbox (23.7407pt too wide) in paragraph at lines 305--309
+/cmtt10/since they were already generated. In this case we apply the patch for 
+a disulfide link three
+ []
+
+
+Overfull \hbox (2.74089pt too wide) in paragraph at lines 311--318
+/cmtt10/now read to extract coordinates. In the residue ILE, the atom CD is cal
+led CD1 in the pdb
+ []
+
+
+Overfull \hbox (2.74089pt too wide) in paragraph at lines 311--318
+/cmtt10/file, so we use ``pdbalias atom'' to define the correct name. If the se
+gment names in the
+ []
+
+
+Overfull \hbox (2.74089pt too wide) in paragraph at lines 311--318
+/cmtt10/pdb file match the name we gave in the segment statement, then we don't
+ need to specify it
+ []
+
+
+Overfull \hbox (13.2408pt too wide) in paragraph at lines 311--318
+/cmtt10/again; in this case we do specify the segment, so that all atoms in the
+ pdb file must belong
+ []
+
+
+Overfull \hbox (14.4023pt too wide) in paragraph at lines 320--324
+ /cmbx10/(7) Build wa-ter seg-ment. /cmtt10/Build a segment for the crystal wat
+ers. The residue type for water
+ []
+
+
+Overfull \hbox (2.74089pt too wide) in paragraph at lines 320--324
+/cmtt10/depends on the model, so here we alias HOH to TIP3. Because CHARMM uses
+ an additional H-H
+ []
+
+
+Overfull \hbox (13.2408pt too wide) in paragraph at lines 320--324
+/cmtt10/bond we must disable generation of angles and dihedrals for segments co
+ntaining water. Then
+ []
+
+
+Overfull \hbox (7.99084pt too wide) in paragraph at lines 326--329
+/cmtt10/and read coordinates from the file to the segment SOLV. Hydrogen doesn'
+t show up in crystal
+ []
+
+
+Overfull \hbox (28.99066pt too wide) in paragraph at lines 331--339
+/cmtt10/which can be used to guess the locations of many atoms, hydrogens in pa
+rticular. In the output
+ []
+
+
+Overfull \hbox (2.74089pt too wide) in paragraph at lines 331--339
+/cmtt10/pdb file, the occupancy field of guessed atoms will be set to 0, atoms 
+which are known are
+ []
+
+
+Overfull \hbox (34.24062pt too wide) in paragraph at lines 331--339
+/cmtt10/set to 1, and atoms which could not be guessed are set to -1. Some atom
+s are ``poorly guessed''
+ []
+
+
+Overfull \hbox (23.7407pt too wide) in paragraph at lines 331--339
+/cmtt10/if needed bond lengths and angles were missing from the topology file. 
+Similarly, waters with
+ []
+
+
+Overfull \hbox (3.10538pt too wide) in paragraph at lines 341--345
+ /cmbx10/Write struc-ture and co-or-di-nate files. /cmtt10/Now that all of the 
+atoms and bonds have been created,
+ []
+
+
+Overfull \hbox (28.99066pt too wide) in paragraph at lines 341--345
+/cmtt10/we can write out the psf structure file for the system. We also create 
+the matching coordinate
+ []
+
+
+Overfull \hbox (13.2408pt too wide) in paragraph at lines 341--345
+/cmtt10/pdb file. The psf and pdb files are a matched set with identical atom o
+rdering as needed by
+ []
+
+
+Overfull \hbox (23.7407pt too wide) in paragraph at lines 349--352
+/cmtt10/The files bpti.pdb and bpti.psf can now be used with NAMD, but the init
+ial coordinates require
+ []
+
+
+Overfull \hbox (23.7407pt too wide) in paragraph at lines 349--352
+/cmtt10/minimization first. The following is an example NAMD configuration file
+ for the BPTI example. 
+ []
+
+[7]
+Overfull \hbox (13.2408pt too wide) in paragraph at lines 404--409
+/cmtt10/The following script illustrates how psfgen and VMD can be used togethe
+r to add water around
+ []
+
+
+Overfull \hbox (23.7407pt too wide) in paragraph at lines 404--409
+/cmtt10/a protein structure. It assumes you already have a psf and pdb file for
+ your protein, as well
+ []
+
+
+Overfull \hbox (13.2408pt too wide) in paragraph at lines 404--409
+/cmtt10/as a box of water which is large enough to contain the protein. For mor
+e information on how
+ []
+
+[8] [9]
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <7> on input line 484.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <5> on input line 484.
+
+Overfull \hbox (11.99106pt too wide) in paragraph at lines 484--485
+/cmtt10/close: Close the active log file. The file name should not be included 
+in the closing
+ []
+
+
+Overfull \hbox (18.18704pt too wide) in paragraph at lines 492--493
+/cmbx10/Arguments: /cmtt10/dowater: 1 for true, 0 for false. Partition the wate
+r molecules. Default
+ []
+
+
+Overfull \hbox (19.68698pt too wide) in paragraph at lines 497--498
+/cmbx10/Purpose: /cmtt10/Print the bonds between the virtual particles (drude p
+articles and lone pairs)
+ []
+
+
+Overfull \hbox (45.0951pt too wide) in paragraph at lines 497--498
+/cmbx10/Context: /cmtt10/Before writing the psf file. May call multiple times. 
+WARNING: To run simulations
+ []
+
+
+Overfull \hbox (24.93694pt too wide) in paragraph at lines 520--521
+/cmbx10/Purpose: /cmtt10/Provide alternate names for residues found in topology
+ file. An alternate name
+ []
+
+
+Overfull \hbox (27.74092pt too wide) in paragraph at lines 520--521
+/cmtt10/used to generate a residue will be used on output. Compare to ``pdbalia
+s residue'' below,
+ []
+
+
+Overfull \hbox (14.43703pt too wide) in paragraph at lines 531--532
+/cmbx10/Purpose: /cmtt10/Provide translations from residues found in PDB files 
+to proper residue names
+ []
+
+
+Overfull \hbox (6.7411pt too wide) in paragraph at lines 531--532
+/cmtt10/read in from topology definition files. Proper names from topology file
+s will be used
+ []
+
+
+Overfull \hbox (17.24101pt too wide) in paragraph at lines 531--532
+/cmtt10/in generated PSF and PDB files. Compare to ``topology alias'' above, in
+ which the alias
+ []
+
+
+Overfull \hbox (6.7411pt too wide) in paragraph at lines 531--532
+/cmtt10/is is used as the residue name in generated files. This command also ex
+ists under the
+ []
+
+[10]
+Overfull \hbox (34.49174pt too wide) in paragraph at lines 557--558
+[]/cmtt10/segment $/cmr10/[$/cmtt10/segids$/cmr10/]$ $[$/cmtt10/resids$/cmr10/]
+$ $[$/cmtt10/residue$/cmr10/]$ $[$/cmtt10/first$/cmr10/]$ $[$/cmtt10/last$/cmr1
+0/]$ $/cmmi10/<$/cmitt10/segment ID$/cmmi10/>$ $/cmr10/[$/cmitt10/resid$/cmr10/
+]$ $[$/cmitt10/atom name$/cmr10/]$ /cmsy10/f $/cmmi10/<$/cmitt10/commands$/cmmi
+10/>$
+ []
+
+
+Overfull \hbox (40.6868pt too wide) in paragraph at lines 557--558
+/cmbx10/Purpose: /cmtt10/Build a segment of the molecule. A segment is typicall
+y a single chain of protein
+ []
+
+
+Overfull \hbox (38.24083pt too wide) in paragraph at lines 557--558
+/cmtt10/or DNA, with default patches applied to the termini. Segments may also 
+contain pure solvent
+ []
+
+
+Overfull \hbox (8.2692pt too wide) in paragraph at lines 557--558
+/cmtt10/or lipid. Options $/cmr10/[$/cmtt10/segids$/cmr10/]$ $[$/cmtt10/resids$
+/cmr10/]$ $[$/cmtt10/residue$/cmr10/]$ $[$/cmtt10/first$/cmr10/]$ $[$/cmtt10/la
+st$/cmr10/]$ /cmtt10/are used to query information
+ []
+
+
+Overfull \hbox (7.68713pt too wide) in paragraph at lines 557--558
+/cmbx10/Arguments: /cmtt10/segids: Return a list of segids for the molecule in 
+the current context. 
+ []
+
+
+Overfull \hbox (32.99088pt too wide) in paragraph at lines 557--558
+/cmtt10/residue: Return the residue name of the residue in the given segment wi
+th the given resid. 
+ []
+
+
+Overfull \hbox (17.24101pt too wide) in paragraph at lines 557--558
+/cmtt10/atomid: Return the one-based atomid of the given atom. These are only a
+ssigned/updated
+ []
+
+
+Overfull \hbox (11.99106pt too wide) in paragraph at lines 557--558
+/cmtt10/when writing a file. Therefore writepsf, writepdb, or writemol must be 
+called to avoid
+ []
+
+
+Overfull \hbox (17.24101pt too wide) in paragraph at lines 557--558
+/cmtt10/first: Returns the name of the patch that was applied to the beginning 
+of the specified
+ []
+
+
+Overfull \hbox (27.74092pt too wide) in paragraph at lines 557--558
+/cmtt10/last: Returns the name of the patch that was applied to the end of the 
+specified segment. 
+ []
+
+
+Overfull \hbox (6.54684pt too wide) in paragraph at lines 557--558
+/cmmi10/<$/cmitt10/commands$/cmmi10/>$/cmtt10/: Sequence of commands in Tcl syn
+tax to build the primary structure of the
+ []
+
+
+Overfull \hbox (50.34505pt too wide) in paragraph at lines 557--558
+/cmbx10/Context: /cmtt10/After topology definitions and residue aliases. May ca
+ll multiple times. Structure
+ []
+
+
+Overfull \hbox (24.93694pt too wide) in paragraph at lines 565--566
+/cmbx10/Purpose: /cmtt10/Override default settings from topology file for autom
+atic generation of angles
+ []
+
+
+Overfull \hbox (9.18707pt too wide) in paragraph at lines 571--572
+/cmbx10/Purpose: /cmtt10/Override default patch applied to first residue in seg
+ment. Default is read
+ []
+
+
+Overfull \hbox (3.93712pt too wide) in paragraph at lines 577--578
+/cmbx10/Purpose: /cmtt10/Override default patch applied to last residue in segm
+ent. Default is read
+ []
+
+
+Overfull \hbox (54.5482pt too wide) in paragraph at lines 584--585
+/cmbx10/Arguments: $/cmmi10/<$/cmitt10/resid$/cmmi10/>$/cmtt10/: Unique name fo
+r residue, 1--5 characters, usually numeric. $/cmmi10/<$/cmitt10/resname$/cmmi1
+0/>$/cmtt10/:
+ []
+
+
+Overfull \hbox (19.68698pt too wide) in paragraph at lines 591--592
+/cmbx10/Purpose: /cmtt10/Extract sequence information from PDB file when buildi
+ng segment. Residue IDs
+ []
+
+
+Overfull \hbox (1.49115pt too wide) in paragraph at lines 591--592
+/cmtt10/will be preserved, residue names must match entries in the topology fil
+e or should be
+ []
+
+[11]
+Overfull \hbox (54.5482pt too wide) in paragraph at lines 597--598
+/cmbx10/Arguments: $/cmmi10/<$/cmitt10/resid$/cmmi10/>$/cmtt10/: Unique name fo
+r residue, 1--5 characters, usually numeric. $/cmmi10/<$/cmitt10/resname$/cmmi1
+0/>$/cmtt10/:
+ []
+
+
+Overfull \hbox (3.93712pt too wide) in paragraph at lines 607--608
+/cmbx10/Purpose: /cmtt10/Apply a patch to one or more residues. Patches make sm
+all modifications to
+ []
+
+
+Overfull \hbox (17.24101pt too wide) in paragraph at lines 607--608
+/cmtt10/the structure of residues such as converting one to a terminus, changin
+g the protonation
+ []
+
+
+Overfull \hbox (3.93712pt too wide) in paragraph at lines 617--618
+/cmbx10/Purpose: /cmtt10/Remove all angles and/or dihedrals and completely rege
+nerate them using the
+ []
+
+
+Overfull \hbox (1.49115pt too wide) in paragraph at lines 617--618
+/cmtt10/segment automatic generation algorithms. This is only needed if patches
+ were applied
+ []
+
+
+Overfull \hbox (69.74055pt too wide) in paragraph at lines 617--618
+/cmtt10/that do not correct angles and bonds. Segment and file defaults are ign
+ored, and angles/dihedrals
+ []
+
+
+Overfull \hbox (9.18707pt too wide) in paragraph at lines 626--627
+/cmbx10/Purpose: /cmtt10/Remove insertion codes and minimally modify resids to 
+retain uniqueness. No
+ []
+
+
+Overfull \hbox (11.99106pt too wide) in paragraph at lines 626--627
+/cmtt10/modifications will be made in segments that have monotonically increasi
+ng resids and do
+ []
+
+
+Overfull \hbox (22.49097pt too wide) in paragraph at lines 626--627
+/cmtt10/not contain insertion codes. Within a segment, no modifications will be
+ made to residues
+ []
+
+
+Overfull \hbox (19.68698pt too wide) in paragraph at lines 632--633
+/cmbx10/Purpose: /cmtt10/Create multiple images of a set of atoms for use in lo
+cally enhanced sampling.
+ []
+
+
+Overfull \hbox (17.04675pt too wide) in paragraph at lines 632--633
+/cmtt10/The beta column of the output pdb file is set to 1...$/cmmi10/<$/cmitt1
+0/factor$/cmmi10/>$ /cmtt10/for each image. Multiple
+ []
+
+
+Overfull \hbox (38.24083pt too wide) in paragraph at lines 632--633
+/cmtt10/copies of bonds, angles, etc. are created. Atom, residue or segment nam
+es are not altered;
+ []
+
+
+Overfull \hbox (6.7411pt too wide) in paragraph at lines 632--633
+/cmtt10/images are distinguished only by beta value. This is not a normal molec
+ular structure
+ []
+
+
+Overfull \hbox (32.79662pt too wide) in paragraph at lines 632--633
+/cmmi10/<$/cmitt10/segid:resid:atomname$/cmmi10/>$/cmtt10/: segment, residue, o
+r atom to be multiplied. If :resid is omitted
+ []
+
+
+Overfull \hbox (32.99088pt too wide) in paragraph at lines 632--633
+/cmtt10/the entire segment is multiplied; if :atomname is omitted the entire re
+sidue is multiplied.
+ []
+
+
+Overfull \hbox (29.34523pt too wide) in paragraph at lines 632--633
+/cmbx10/Context: /cmtt10/After one or more segments have been built, all patche
+s applied, and coordinates
+ []
+
+
+Overfull \hbox (40.6868pt too wide) in paragraph at lines 643--644
+/cmbx10/Purpose: /cmtt10/Delete one or more atoms. If only segid is specified, 
+all atoms from that segment
+ []
+
+
+Overfull \hbox (1.49115pt too wide) in paragraph at lines 643--644
+/cmtt10/will be removed from the structure. If both segid and resid are specifi
+ed, all atoms
+ []
+
+
+Overfull \hbox (22.49097pt too wide) in paragraph at lines 643--644
+/cmtt10/from just that residue will be removed. If segid, resid, and atomname a
+re all specified,
+ []
+
+[12]
+Overfull \hbox (3.93712pt too wide) in paragraph at lines 650--651
+/cmbx10/Purpose: /cmtt10/Delete all segments in the structure. The topology def
+initions and aliases
+ []
+
+
+Overfull \hbox (11.99106pt too wide) in paragraph at lines 650--651
+/cmtt10/are left intact. If you want to clear the topology and aliases as well,
+ use psfcontext
+ []
+
+
+Overfull \hbox (19.68698pt too wide) in paragraph at lines 665--666
+/cmbx10/Purpose: /cmtt10/Switches between complete contexts, including structur
+e, topology definitions,
+ []
+
+
+Overfull \hbox (32.79662pt too wide) in paragraph at lines 665--666
+/cmtt10/and aliases. If no arguments are provided, the current context is retur
+ned. If $/cmmi10/<$/cmitt10/context$/cmmi10/>$
+ []
+
+
+Overfull \hbox (22.49097pt too wide) in paragraph at lines 665--666
+/cmtt10/or new is specified, a new context is entered and the old context is re
+turned. If delete
+ []
+
+
+Overfull \hbox (32.79662pt too wide) in paragraph at lines 665--666
+/cmtt10/is also specified, the old context is destroyed and ``deleted $/cmmi10/
+<$/cmitt10/old context$/cmmi10/>$/cmtt10/'' is returned.
+ []
+
+
+Overfull \hbox (11.99106pt too wide) in paragraph at lines 665--666
+/cmtt10/An error is returned if the specified context does not exist or if dele
+te was specified
+ []
+
+
+Overfull \hbox (69.74055pt too wide) in paragraph at lines 665--666
+/cmtt10/and the current context would still be in use. /cmitt10/It may be possi
+ble to write robust, error-tolerant
+ []
+
+
+Overfull \hbox (17.24101pt too wide) in paragraph at lines 665--666
+/cmitt10/code with this interface, but it would not be easy. Please employ the 
+following revised
+ []
+
+
+Overfull \hbox (14.43703pt too wide) in paragraph at lines 672--673
+/cmbx10/Purpose: /cmtt10/Make context case sensitive by preserving case of all 
+segment, residue, atom,
+ []
+
+
+Overfull \hbox (13.59537pt too wide) in paragraph at lines 672--673
+/cmbx10/Context: /cmtt10/Before reading files requiring case sensitive behavior
+, normally as the first
+ []
+
+
+Overfull \hbox (3.93712pt too wide) in paragraph at lines 680--681
+/cmbx10/Purpose: /cmtt10/Make context case insensitive by converting all segmen
+t, residue, atom, and
+ []
+
+
+Overfull \hbox (11.99106pt too wide) in paragraph at lines 680--681
+/cmtt10/patch names to upper case characters on input. This is the default beha
+vior and should
+ []
+
+
+Overfull \hbox (18.84532pt too wide) in paragraph at lines 680--681
+/cmbx10/Context: /cmtt10/Before reading files requiring case insensitive behavi
+or, not needed in normal
+ []
+
+
+Overfull \hbox (45.93675pt too wide) in paragraph at lines 686--687
+/cmbx10/Purpose: /cmtt10/Clears the structure, topology definitions, and aliase
+s, creating clean environment
+ []
+
+
+Overfull \hbox (14.43703pt too wide) in paragraph at lines 693--694
+/cmbx10/Purpose: /cmtt10/Creates a new context and returns its ID, but does not
+ switch to it. This is
+ []
+
+
+Overfull \hbox (38.24083pt too wide) in paragraph at lines 693--694
+/cmtt10/different from psfcontext new above, which switches to the newly create
+d context and returns
+ []
+
+
+Overfull \hbox (14.43703pt too wide) in paragraph at lines 701--702
+/cmbx10/Purpose: /cmtt10/Deletes the specified context. An error is returned if
+ the specified context
+ []
+
+
+Overfull \hbox (6.54684pt too wide) in paragraph at lines 701--702
+/cmtt10/does not exist or would still be in use. This is different from psfcont
+ext $/cmmi10/<$/cmitt10/context$/cmmi10/>$
+ []
+
+[13]
+Overfull \hbox (29.99263pt too wide) in paragraph at lines 709--710
+/cmbx10/Purpose: /cmtt10/Evaluates $/cmmi10/<$/cmitt10/commands$/cmmi10/>$ /cmt
+t10/in the specified context, returning to the current context
+ []
+
+
+Overfull \hbox (32.99088pt too wide) in paragraph at lines 709--710
+/cmtt10/on exit. This should be totally robust, returning to the orignal contex
+t in case of errors
+ []
+
+
+Overfull \hbox (3.93712pt too wide) in paragraph at lines 715--716
+/cmbx10/Purpose: /cmtt10/Returns the total numbers of contexts that have been c
+reated and destroyed.
+ []
+
+
+Overfull \hbox (30.18689pt too wide) in paragraph at lines 726--727
+/cmbx10/Purpose: /cmtt10/Write out structure information as PSF file. A simplif
+ied session log is listed
+ []
+
+
+Overfull \hbox (11.99106pt too wide) in paragraph at lines 726--727
+/cmtt10/x-plor: Use X-PLOR format (names for atom types), the default format re
+quired by NAMD. 
+ []
+
+
+Overfull \hbox (26.60258pt too wide) in paragraph at lines 742--743
+[]/cmtt10/readpsf $/cmmi10/<$/cmitt10/file name$/cmmi10/>$ $/cmr10/[$/cmtt10/pd
+b$/cmr10/]$ $[$/cmitt10/pdb file name$/cmr10/]$ $[$/cmtt10/namdbin$/cmr10/]$ $[
+$/cmitt10/namdbin file name$/cmr10/]$ $[$/cmtt10/velnamdbin$/cmr10/]$ $[$/cmitt
+10/velocity
+ []
+
+
+Overfull \hbox (51.1867pt too wide) in paragraph at lines 742--743
+/cmbx10/Purpose: /cmtt10/Read in structure information from PSF file and add it
+ to the structure. Optionally
+ []
+
+
+Overfull \hbox (11.99106pt too wide) in paragraph at lines 742--743
+/cmtt10/also read coordinates and insertion codes from a PDB file, assuming tha
+t the atom order
+ []
+
+
+Overfull \hbox (22.49097pt too wide) in paragraph at lines 742--743
+/cmtt10/is the same in both files. Optionally also read coordinates a NAMD bina
+ry file, assuming
+ []
+
+
+Overfull \hbox (11.99106pt too wide) in paragraph at lines 742--743
+/cmtt10/that the atom order is the same as the psf file. It is an error if any 
+segments in the
+ []
+
+
+Overfull \hbox (11.7968pt too wide) in paragraph at lines 742--743
+/cmmi10/<$/cmitt10/velocity file name$/cmmi10/>$/cmtt10/: NAMD binary velocity 
+file with atoms in same order as PSF file. 
+ []
+
+
+Overfull \hbox (9.18707pt too wide) in paragraph at lines 752--753
+/cmbx10/Purpose: /cmtt10/Provide translations from atom names found in PDB file
+s to proper atom names
+ []
+
+
+Overfull \hbox (6.7411pt too wide) in paragraph at lines 752--753
+/cmtt10/read in from topology definition files. Proper names from topology file
+s will be used
+ []
+
+
+Overfull \hbox (27.74092pt too wide) in paragraph at lines 752--753
+/cmtt10/in generated PSF and PDB files. This command also exists under the depr
+ecated name alias. 
+ []
+
+[14]
+Overfull \hbox (35.43684pt too wide) in paragraph at lines 768--769
+/cmbx10/Purpose: /cmtt10/Guesses coordinates of atoms for which they were not e
+xplicitly set. Calculation
+ []
+
+
+Overfull \hbox (17.24101pt too wide) in paragraph at lines 768--769
+/cmtt10/is based on internal coordinate hints contained in toplogy definition f
+iles. When these
+ []
+
+
+Overfull \hbox (11.99106pt too wide) in paragraph at lines 768--769
+/cmtt10/are insufficient, wild guesses are attempted based on bond lengths of 1
+ []A and angles of
+ []
+
+
+LaTeX Font Warning: Font shape `OMS/cmtt/m/it' undefined
+(Font)              using `OMS/cmtt/m/n' instead
+(Font)              for symbol `textbraceleft' on input line 776.
+
+LaTeX Font Info:    Font shape `OT1/cmtt/bx/n' in size <10> not available
+(Font)              Font shape `OT1/cmtt/m/n' tried instead on input line 776.
+
+Overfull \hbox (19.68698pt too wide) in paragraph at lines 776--777
+/cmbx10/Purpose: /cmtt10/WILL BE DEPRECATED AFTER VERSON 1.6 (use psfset coord 
+instead) Set coordinates
+ []
+
+
+Overfull \hbox (28.49269pt too wide) in paragraph at lines 797--798
+/cmbx10/Arguments: $/cmmi10/<$/cmitt10/attribute$/cmmi10/>$/cmtt10/:  Segment a
+ttributes: segid: the name of the segment Residue
+ []
+
+
+Overfull \hbox (11.99106pt too wide) in paragraph at lines 797--798
+/cmtt10/attributes: resname: the name of the residue Atom attributes: name: the
+ name of the
+ []
+
+
+Overfull \hbox (27.74092pt too wide) in paragraph at lines 797--798
+/cmtt10/atom, mass: the mass of the atom, charge: the charge of the atom, beta:
+ the PDB bfactor
+ []
+
+
+Overfull \hbox (6.24123pt too wide) in paragraph at lines 797--798
+/cmtt10/of the atom, coord: the coordinates of the atom as /cmsy10/f/cmtt10/x y
+ z/cmsy10/g/cmtt10/, vel: the velocity of the
+ []
+
+
+Overfull \hbox (9.18707pt too wide) in paragraph at lines 806--807
+/cmbx10/Purpose: /cmtt10/Writes PDB file containing coordinates. Atom order is 
+identical to PSF file
+ []
+
+
+Overfull \hbox (11.99106pt too wide) in paragraph at lines 806--807
+/cmtt10/generated by writepsf (unless structure has been changed). The O field 
+is set to 1 for
+ []
+
+
+Overfull \hbox (22.49097pt too wide) in paragraph at lines 806--807
+/cmtt10/atoms with known coordinates, 0 for atoms with guessed coordinates, and
+ -1 for atoms with
+ []
+
+
+Overfull \hbox (3.93712pt too wide) in paragraph at lines 815--816
+/cmbx10/Purpose: /cmtt10/Writes NAMD binary file containing coordinates. Atom o
+rder is identical to
+ []
+
+
+Overfull \hbox (17.24101pt too wide) in paragraph at lines 815--816
+/cmtt10/PSF file generated by writepsf (unless structure has been changed). Coo
+rdinates are set
+ []
+
+[15]
+Overfull \hbox (7.99084pt too wide) in paragraph at lines 820--825
+/cmtt10/The command ``writepsf'' prints a simple session log as ``REMARKS'' at 
+the beginning of the
+ []
+
+
+Overfull \hbox (7.99084pt too wide) in paragraph at lines 820--825
+/cmtt10/PSF file. The log contains information about applied patches and used t
+opology files which
+ []
+
+
+Overfull \hbox (18.49075pt too wide) in paragraph at lines 820--825
+/cmtt10/not stored in the standard records of PSF files. These informations are
+ also available after
+ []
+
+)
+Overfull \hbox (17.74089pt too wide) in paragraph at lines 846--19
+[]/cmtt10/All patches that were applied explicitely using the ``patch'' command
+ are listed following
+ []
+
+
+Overfull \hbox (7.99084pt too wide) in paragraph at lines 846--19
+/cmtt10/the keyword ``patch'', but the patches that result from default patchin
+g like the first and
+ []
+
+
+Overfull \hbox (18.49075pt too wide) in paragraph at lines 846--19
+/cmtt10/last patches of a segment are marked as ``defaultpatch''. Further the s
+egment based patching
+ []
+
+[16] (./ug.aux (./ug_title.aux) (./ug_psfgen.aux))
+
+LaTeX Font Warning: Some font shapes were not available, defaults substituted.
+
+ ) 
+Here is how much of TeX's memory you used:
+ 300 strings out of 95437
+ 3128 string characters out of 1189860
+ 48643 words of memory out of 1000001
+ 3354 multiletter control sequences out of 10000+50000
+ 6131 words of font info for 24 fonts, out of 500000 for 1000
+ 14 hyphenation exceptions out of 1000
+ 25i,5n,21p,406b,301s stack positions out of 1500i,500n,5000p,200000b,5000s
+ 84 PDF objects out of 300000
+ 0 named destinations out of 131072
+ 0 words of extra memory for PDF output out of 65536
+{/usr/local/share/texmf/dvips/tetex/bbad153f.enc}</usr/local/share/texmf/font
+s/type1/bluesky/cm/cmsy7.pfb>{/usr/local/share/texmf/dvips/tetex/aae443f0.enc}<
+/usr/local/share/texmf/fonts/type1/bluesky/cm/cmmi10.pfb>{/usr/local/share/texm
+f/dvips/tetex/f7b6d320.enc}</usr/local/share/texmf/fonts/type1/bluesky/cm/cmbx1
+0.pfb>{/usr/local/share/texmf/dvips/tetex/b6a4d7c7.enc}</usr/local/share/texmf/
+fonts/type1/bluesky/cm/cmitt10.pfb></usr/local/share/texmf/fonts/type1/bluesky/
+cm/cmsy10.pfb>{/usr/local/share/texmf/dvips/tetex/09fbbfac.enc}</usr/local/shar
+e/texmf/fonts/type1/bluesky/cm/cmtt10.pfb></usr/local/share/texmf/fonts/type1/b
+luesky/cm/cmbx12.pfb></usr/local/share/texmf/fonts/type1/bluesky/cm/cmr10.pfb><
+/usr/local/share/texmf/fonts/type1/bluesky/cm/cmr12.pfb></usr/local/share/texmf
+/fonts/type1/bluesky/cm/cmr17.pfb></usr/local/share/texmf/fonts/type1/bluesky/c
+m/cmtt12.pfb>
+Output written on ug.pdf (16 pages, 123067 bytes).

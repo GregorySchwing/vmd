@@ -1,0 +1,1895 @@
+<!--#set var="TEXT_TITLE" value="QwikMD - Integrative Molecular Dynamics Tookit for Novices and Experts"-->
+<!--#set var="TITLE" value="<a href=\"http://www.ks.uiuc.edu/Research/qwikmd/\"> <img border=0 src=\"./images/QwikMD.gif\" alt=\"QwikMD - Gateway for Easy Simulation\" width=275 height=54></a>"-->
+<!--#include virtual="/Research/vmd/include/header-vmd.shtml"-->
+
+ <!-- From odyniec.net/articles/turning-lists-into-trees/ -->
+
+ <script type="text/javascript"> window.onload = function () { var tree = document.getElementById("tree"); var lists = [ tree ]; for (var i = 0; i < tree.getElementsByTagName("ul").length; i++) lists[lists.length] = tree.getElementsByTagName("ul")[i]; for (var i = 0; i < lists.length; i++) { var item = lists[i].lastChild; while (!item.tagName || item.tagName.toLowerCase() != "li") item = item.previousSibling; item.className += " last"; } }; </script>
+
+<script type="text/javascript" src="http://latex.codecogs.com/latexit.js"></script>
+
+<div style=" max-width: 1000px">
+ <link rel="stylesheet" type="text/css" href="qwikmd.css" />
+</div>
+
+<div style=" max-width: 1000px">
+ <font size="3">
+  For QwikMD general information, updates, related publications, tutorials and QwikMD applications, please visit <a href="http://www.ks.uiuc.edu/Research/qwikmd/">QwikMD home page</a>.
+ </font>
+</div>
+
+<div style="max-width: 1000px">
+
+
+<div style=" max-width: 1000px">
+<h2>Table of Contents</h2>
+
+
+<ul>
+    <li style="margin-bottom:8px">
+        <font size="4"><strong><a href="#intro">Molecular Dynamics Simulation and QwikMD</a></strong></font>
+    </li>
+    <ul>
+    <li style="margin-bottom:4px">
+        <font size="2"><strong><a href="#intro">Molecular dynamics (MD)</a></strong></font>
+    </li>
+    <li style="margin-bottom:4px">
+        <font size="2"><strong><a href="#qwikmd">QwikMD</a></strong></font>
+    </li>
+    <ul>
+        <li style="margin-bottom:4px">
+            <font size="2"><strong><a href="#qwikmdlib">QwikMD Library</a></strong></font>
+        </li>
+    </ul>
+            
+    <li style="margin-bottom:4px">
+        <font size="2"><strong><a href="#namd">NAMD (NAnoscale Molecular Dynamics)</a></strong></font>
+    </li>
+        <ul>
+            <li style="margin-bottom:4px">
+                <font size="2"><strong><a href="#unix">For LINUX/MAC users</a></strong></font>
+            </li>
+            <li style="margin-bottom:4px">
+                <font size="2"><strong><a href="#win">For Windows users</a></strong></font>
+            </li>
+            <li style="margin-bottom:4px">
+                <font size="2"><strong><a href="#setupmd">Setting up a Molecular Dynamics Simulation</a></strong></font>
+            </li>
+            <li style="margin-bottom:4px">
+                <font size="2"><strong><a href="#pdb">The PDB files</a></strong></font>
+            </li>
+            <li style="margin-bottom:4px">
+                <font size="2"><strong><a href="#psf">The PSF files</a></strong></font>
+            </li>
+            <li style="margin-bottom:4px">
+                <font size="2"><strong><a href="#parameter">The Parameter files</a></strong></font>
+            </li>
+            <li style="margin-bottom:4px">
+                <font size="2"><strong><a href="#namdconfig">The NAMD Configuration file</a></strong></font>
+            </li>
+        </ul>
+    <li style="margin-bottom:8px">
+        <font size="2"><strong><a href="#howtocite">How to cite</a></strong></font>
+    </li>
+    </ul>   
+
+    <li style="margin-bottom:8px">
+        <font size="4"><strong><a href="#gui">Graphical User Interface</a></strong></font>
+    </li>
+    <!-- <ul>
+        <li style="margin-bottom:4px">
+            <font size="2"><strong><a href="#qwikmdlib">QwikMD Library</a></strong></font>
+        </li>
+        <li style="margin-bottom:4px">
+            <font size="2"><strong><a href="#qwikmdoutput">QwikMD Output Folder Structure</a></strong></font>
+        </li>
+    </ul> -->
+    <li style="margin-bottom:8px">
+            <font size="4"><strong><a href="#runtabs">Run Tabs</a></strong></font>
+        </li>
+        <ul>
+        <li style="margin-bottom:4px">
+            <font size="2"><strong><a href="#easyrun">Easy Run</a></strong></font>
+        </li>
+        <ul>
+            <li style="margin-bottom:4px">
+                <font size="2"><strong><a href="#easysolv">System Solvation</a></strong></font>
+            </li>
+            <li style="margin-bottom:4px">
+                <font size="2"><strong><a href="#easyprot">Protocols</a></strong></font>
+            </li>
+        </ul>
+        <li style="margin-bottom:4px">
+            <font size="2"><strong><a href="#advancedrun">Advanced Run</a></strong></font>
+        </li>
+        <ul>
+            <li style="margin-bottom:4px">
+                <font size="2"><strong><a href="#advsolv">System Solvation</a></strong></font>
+            </li>
+            <li style="margin-bottom:4px">
+                <font size="2"><strong><a href="#advprot">Protocols</a></strong></font>
+            </li>
+        </ul>
+
+        <li style="margin-bottom:4px">
+            <font size="2"><strong><a href="#structuremanipulationcheck">Structure Manipulation/Check</a></strong></font>
+            <ul>
+            <li style="margin-bottom:4px">
+                <font size="2"><strong><a href="#residtable">Residues Table</a></strong></font>
+            </li>
+            <li style="margin-bottom:4px">
+                <font size="2"><strong><a href="#tblopt">Table Manipulation Options</a></strong></font>
+            </li>
+            <li style="margin-bottom:4px">
+                <font size="2"><strong><a href="#applyclear">Apply and Clear buttons</a></strong></font>
+            </li>
+            <li style="margin-bottom:4px">
+                <font size="2"><strong><a href="#topoparam">Topology & Parameters Selection</a></strong></font>
+            </li>
+            <li style="margin-bottom:4px">
+                <font size="2"><strong><a href="#structurecheck">Structure Check</a></strong></font>
+            </li>
+            <li style="margin-bottom:4px">
+                <font size="2"><strong><a href="#membrane">Membrane</a></strong></font>
+            </li>
+            <li style="margin-bottom:4px">
+                <font size="2"><strong><a href="#patches">Modifications (Patches) List</a></strong></font>
+            </li>
+            </ul>
+        </li>
+        <li style="margin-bottom:4px">
+            <font size="2"><strong><a href="#simulationsetupcontrol">Simulation Setup & Control</a></strong></font>
+            <ul>
+            <li style="margin-bottom:6px">
+                <font size="2"><strong><a href="#qwikmdoutput">QwikMD Output folder</a></strong></font>
+            </li>
+            </ul>
+        </li>
+    </ul>   
+    <li style="margin-bottom:8px">
+        <font size="4"><strong><a href="#loadanalysis">Load Results & Analysis</a></strong></font>
+        <ul>
+            <li style="margin-bottom:4px">
+                <font size="2"><strong><a href="#loadresults">Load Results</a></strong></font>
+            </li>
+            <li style="margin-bottom:6px">
+                <font size="2"><strong><a href="#analysis">Analysis</a></strong></font>
+                <ul>
+	            <li style="margin-bottom:6px">
+	                <font size="2"><strong><a href="#basicanalysis">Basic Analysis</a></strong></font>
+	                <ul>
+	            		<li style="margin-bottom:4px">
+			                <font size="2"><strong><a href="#rmsd">Root Mean Square Deviation (RMSD)</a></strong></font>
+			            </li>
+			            <li style="margin-bottom:4px">
+			                <font size="2"><strong><a href="#energies">Energies</a></strong></font>
+			            </li>
+			            <li style="margin-bottom:4px">
+			                <font size="2"><strong><a href="#thermodynamics">Thermodynamics</a></strong></font>
+			            </li>
+	                </ul>
+	            </li>
+	            <li style="margin-bottom:6px">
+	                <font size="2"><strong><a href="#advancedanalysis">Advanced Analysis</a></strong></font>
+	                 <ul>
+	            		<li style="margin-bottom:4px">
+			                <font size="2"><strong><a href="#hbonds">Hydrogen Bonds (H Bonds)</a></strong></font>
+			            </li>
+			            <li style="margin-bottom:4px">
+			                <font size="2"><strong><a href="#smdforces">SMD Forces</a></strong></font>
+			            </li>
+			            <li style="margin-bottom:4px">
+			                <font size="2"><strong><a href="#rmsf">Root Mean Square Fluctuation (RMSF)</a></strong></font>
+			            </li>
+			            <li style="margin-bottom:4px">
+			                <font size="2"><strong><a href="#sasa">Solvent Accessible Surface Area (SASA)</a></strong></font>
+			            </li>
+			            <li style="margin-bottom:4px">
+			                <font size="2"><strong><a href="#contactarea">Contact Area</a></strong></font>
+			            </li>
+			            <li style="margin-bottom:4px">
+			                <font size="2"><strong><a href="#spcfh">Specific Heat, Temperature Distribution, Maxwell-Boltzamnn Energy Distribution, Temperature Quench</a></strong></font>
+			            </li>
+			      
+	                </ul>
+	            </li>
+            	</ul>
+            </li>
+        </ul>
+    </li>
+</ul>
+</div>
+
+<div style="max-width: 1000px">
+<table border=0 cellpadding="5">
+
+<tr bgcolor="#6667af">
+    <td valign=top>
+    <strong>
+        <font size="4" style="float: left;color:white"><a id="intro"></a><b>Molecular Dynamics Simulation and QwikMD</b></font> 
+        <font size="2" style="float: right;color:white"><u><b><a href="#" style="color:white">Top</a></b></u></font> 
+    </strong>
+    </td>
+</tr>
+<tr height="15px"></tr>
+<tr>
+    <td valign=top>
+<p align="justify">
+<b>Molecular dynamics (MD)</b> is a computer simulation of physical movements of atoms and molecules, widely used to study  biological systems. The atoms and molecules are allowed to interact, giving a view of the motion of the  atoms and consequently of protein domains in the case of protein simulations. MD has emerged as an important  research methodology covering systems to the level of millions of atoms.
+</tr>
+
+<tr>
+    <td valign=top>
+<p align="justify"><a id="qwikmd"></a>
+<b>QwikMD</b> is a VMD plugin to help to start and analyze MD simulations. The plugin helps, specially  scientists that are starting to perform MD simulations, to prepare the necessary files to run these simulations  in desktop machines all the way to large supercomputers. All the necessary steps, from the PDB to the  configuration file is created with simple procedures so the user one can use the plugin to learn how to prepare MD simulations. The live simulation option allows for the visualization and analysis of the simulation on the fly, helping new users to learn more about MD  simulations and expert users to test their simulations before submitting it to run in a supercomputer. QwikMD  integrates <a href="http://www.ks.uiuc.edu/Research/vmd/">VMD</a> and <a href="http://www.ks.uiuc.edu/Research/namd/">NAMD</a>, two widely used software developed by the <a href="http://www.ks.uiuc.edu/">Theoretical and Computational Biophysics Group</a> at University of Illinois at Urbana-Champaign.
+</tr>
+
+<tr>
+    <td align="justify">
+    <b>QwikMD Library</b><a id="qwikmdlib"></a>
+    <p></p>
+    <p>
+        QwikMD Library is created in the first time QwikMD is open and the name and location are chosen by the user. This folder contains the files used during the system preparation and MD set up and its location is saved in the file .qwikmdrc (Linux & Mac) or qwikmd.rc (Windows). Inside the <b>toppar</b> folder is located a reference table, <u>"toppartable.txt</u> listing the residues and correspondent file, <u>Topology+ParameterFiles.str</u>, containing the topology and parameters for unrecognized residues. The edition of this table and the addition of *.str files must be done through QwikMD using the "Add Topo+Param" button in the <b><a href="#structuremanipulationcheck">Structure Manipulation/Check</a></b> window. The folder <b>templates</b> contains the NAMD configuration files used to set up the simulation in the "Advanced Run". The folders <b>Vacuum</b>, <b>Implicit</b> and <b>Explicit</b> store the configuration files modified by the user for the specific solvent model to be employed. Any *.conf file added to one of these folders (Vacuum, Implicit or Explicit) will be recognized by QwikMD and can be used to set up MD simulations in the "Advanced Run". 
+        <p><i><u>WARNING</u></i>: QwikMD relies on file format and integrity. To add or change configurations files, one must keep the file format and pay special attention in case of using scripting inside the configuration file, one must open and close brackets within the same row, and the use of variables must be avoided for keyword values such "run".</p>
+    </p>
+
+    </td>
+</tr>
+<tr>
+    <td align="justify">
+        <p>QwikMD Library structure</p>
+        <ul>
+        <li style="list-style-type: none;">.qwikmdrc (Linux &#38; Mac) or qwikmd.rc (Windows)</li>
+
+        <li style="list-style-type: none;"><b>QwikMDLibraryFolder</b>
+            <ul class="tree" id="tree"> 
+                <li><b>toppar</b>
+                    <ul class="tree">
+                        <li> toppartable.txt</li>
+                            
+                        <li> Topology+ParameterFiles.str</li>
+                            
+                    </ul>
+                <!-- </li> -->
+                <li><b>templates</b>
+                    <ul class="tree">
+                        <li>Minimization.conf</li>
+                            
+                        <li>Equilibration.conf</li>
+                        <li>Annealing.conf</li>
+                        <li>MD.conf</li>
+                        <li style="margin-bottom:6px">SMD.conf</li>
+                        <li><b>Vacuum</b></li>
+                        <li><b>Implicit</b></li>
+                        <li><b>Explicit</b></li>
+                    </ul>
+                <!-- </li> -->
+            </ul>
+            </li>
+        </ul>
+    </td>
+</tr>
+
+<tr>
+    <td valign=top>
+    <strong>
+        <a id="namd"></a><font size="3" style="float: left"><b><a href="http://www.ks.uiuc.edu/Research/namd/">NAMD (NAnoscale Molecular Dynamics)</a></b></font> 
+    </strong>
+    </td>
+</tr>
+
+<tr>
+    <td align="justify">
+    Recipient of a 2002 Gordon Bell Award and a 2012 Sidney Fernbach Award, NAMD is a parallel molecular  dynamics code designed for high-performance simulation of large biomolecular systems. Based on Charm++ parallel  objects, NAMD scales to hundreds of cores for typical simulations and beyond 500,000 cores for the largest simulations.  NAMD uses the popular molecular graphics program VMD for simulation setup and trajectory analysis, but is also  file-compatible with AMBER, CHARMM, and X-PLOR. NAMD is distributed free of charge with source code. You can build  NAMD yourself or download binaries for a wide variety of platforms. To run QwikMD you need NAMD installed in your  machine and available in your path.
+    </td>
+</tr>
+<tr>
+    <td align="justify">
+    <b>For LINUX/MAC users</b><a id="unix"></a>
+    <ul>
+        <li style="margin-top:4px"> 
+            <b>Setting the Path</b>: To start to use QwikMD you will need to add the namd2 directory to your path in order for the  operational system to locate it. To perform that, add to your .bashrc (Linux) or .Profile (Mac) in your home folder  the following line: <code>export PATH =complete_path.for.namd:$PATH</code>. Where (complete.path.for.namd) is the complete path to the actual folder where the namd2 executable is available. Example: <code>export PATH =/usr/local/NAMD_2.11:$PATH</code> If you are new to Linux, visit our guide <a href="http://www.ks.uiuc.edu/Training/Tutorials/Reference/unixprimer.html ">Unix Tutorial</a>. 
+    </ul>
+    </td>
+
+    
+</tr>
+
+<tr>
+    <td align="justify">
+    <b>For Windows users</b><a id="win"></a>
+    <ul>
+        <li style="margin-top:4px"> 
+        <b>Setting the Path</b>: To start to use QwikMD you will need to add the namd2 directory to your path in order for Windows  to locate it. This can be accomplished by right-clicking Computer on the Desktop and selecting Properties - Advanced  system settings - Advanced - Environment Variables (the precise procedure may vary depending on your version of Windows).  Under System variables, scroll down and select Path and then Edit. At the end of the long line in Variable Value, add a  semi-colon ; then the full path to the directory containing namd2 (but do NOT add the executable "namd2" at the end).  Click OK. Now open a new command prompt. Regardless of the directory you are in, you should be able to type namd2 and run it. 
+    </ul>
+    </td>
+</tr>
+
+<tr><td><b>Setting up a Molecular Dynamics Simulation</b><a id="setupmd"></a></td></tr>
+<tr>
+    <td align="justify">
+    In order to run any MD simulation, NAMD requires at least four files:
+    <ol>
+        <li style="margin-top:4px"> 
+        <b>Protein Data Bank (pdb)</b> file which stores atomic coordinates and/or velocities for the system. Pdb files are available for many proteins at <a href="http://www.pdb.org">www.pdb.org</a>, or can be generated using structure modeling software.
+        <li style="margin-top:4px"> 
+        <b>Protein Structure File (psf)</b> which stores structural information of the protein, such as various types of bonding interactions.
+        <li style="margin-top:4px"> 
+        <b>Force field parameter file</b>. A force field is a mathematical expression of the potential which atoms in the system experience. CHARMM, X-PLOR, AMBER and GROMOS are four types of force fields which can be employed in NAMD. The parameter file defines bond strengths, equilibrium lengths, etc.
+        <li style="margin-top:4px"> 
+        <b>NAMD configuration file</b>, in which the user specifies all the options to be loaded into NAMD to run a simulation. The configuration file tells NAMD how to run the simulation.
+    </ul>
+    </td>
+</tr>
+
+<tr><td><b><b>The PDB files</b><a id="pdb"></a></td></tr>
+
+<tr>
+    <td align="justify">
+    <!-- <ul> -->
+        <!-- <li style="margin-top:4px">  -->
+         The term PDB can refers to the <a href="http://www.rcsb.org/pdb/">Protein Data Bank</a>, to a protein structure file stored in the webserver, or to a file following the PDB format. Files in the PDB include information such as the name of the compound, authorship and general structure publication information, amino acid sequence, stoichiometry, and the ATOM and HETATM records containing the coordinates of the protein and any water, ion, or other heterogeneous atoms in the crystal. Some PDB files include multiple sets of coordinates for some or all atoms. Due to the limits of x-ray crystallography and NMR structure analysis, the coordinates of hydrogen atoms are usually not included in the PDB. NAMD and VMD ignore everything in a PDB file except for the ATOM and HETATM records, and when writing PDB files the ATOM record type is used for all atoms in the system, including solvent and ions. If one inspects a PDB file, the fields seen in order from left to right are the record type, atom serial number, atom name, alternate location indicator, residue name, chain identifier, residue sequence number, code for insertion of residues, x, y, and z coordinates, occupancy, temperature factor (called beta), element symbol and atom charge (for more information visit <a href="http://www.wwpdb.org/documentation/file-format">PDB file format</a>).
+    <!-- </ul> -->
+    </td>
+</tr>
+
+<tr><td><b><b>The PSF files</b><a id="psf"></a></td></tr>
+
+<tr>
+    <td align="justify">
+    A PSF file, also called a protein structure file, contains all of the molecule specific information needed to apply a particular force field to a molecular system. The CHARMM force field is divided into a topology file, which is needed to generate the PSF file, and a parameter file, which supplies specific numerical values for the generic CHARMM potential function (topology and parameter file can be merged into one stream file). The topology file defines the atom types used in the force field, the atom names, types, bonds, and partial charges of each residue, and any patches necessary to link or otherwise mutate residues. The parameter file provides a mapping between bonded and non-bonded  interactions involving the various combinations of atom types found in the topology file and specific spring  constants and similar parameters for all of the bond, angle, dihedral, improper, and van der Waals terms in the CHARMM potential function.The PSF file contains six main sections of interest: atoms, bonds, angles, dihedrals, impropers (dihedral force terms used to maintain planarity), and cross-terms. After preparing initial files with QwikMD, one can inspect the PSF file from the "setup" folder in a text editor and check how a PSF file looks like. Note that this "setup" folder is located inside the folder created as working directory when pressing Prepare/Save.
+    </td>
+</tr>
+
+<tr><td><b><b>The Parameter files</b><a id="parameter"></a></td></tr>
+
+<tr>
+    <td align="justify">
+    A CHARMM force field parameter file contains all of the numerical constants needed to evaluate forces and energies, given a PSF structure and atomic coordinates files. The parameter file is closely tied to the topology file that was used to generate the PSF file, and the two are typically distributed together and given matching names. QwikMD uses CHARMM36 force field and its parameter files are available in the "run" folder located inside the folder created as working directory when pressing Prepare/Save.
+    </td>
+</tr>
+
+
+
+<tr><td><b><b>The NAMD Configuration file</b><a id="namdconfig"></a></td></tr>
+
+<tr>
+    <td align="justify">
+        The NAMD configuration file (common extensions *.conf or *.namd) is given to NAMD on the command line and specifies virtually everything about the simulation to be done. The only exceptions are details related to the parallel execution environment, which vary between platforms. Therefore, the configuration file should be portable between machines, platforms, or numbers of processors in a run, as long as the referenced input files are available. QwikMD uses a standard configuration file that uses "safe" parameters set, which will most likely work for the system prepared within QwikMD. The configuration file is available in the "run" folder located inside the created as working directory when pressing Prepare/Save.
+    </td>
+</tr>
+
+<tr>
+    <td valign=top>
+    <strong>
+        <a id="howtocite"></a><font size="3" style="float: left"><b>How To cite</b></font> 
+    </strong>
+    </td>
+</tr>
+
+<tr>
+    <td valign=top align="justify">
+    <b>When using NAMD, VMD and QwikMD please cite the following articles</b>
+    <ul>
+        <li><b><a target="_blank" href="http://www.ks.uiuc.edu/Publications/Papers/paper.cgi?tbcode=PHIL2005"> VMD - Visual Molecular Dynamics; </a></b> <i>William Humphrey, Andrew Dalke, and Klaus Schulten</i>   Journal of Molecular Graphics, 14:33-38 <b>(1996)</b> (PMC: 2486339)
+        <li><b><a target="_blank" href="http://www.ks.uiuc.edu/Publications/Papers/paper.cgi?tbcode=PHIL2005"> Scalable molecular dynamics with NAMD; </a></b> <i>James C. Phillips, Rosemary Braun, Wei Wang, James Gumbart, Emad Tajkhorshid, Elizabeth Villa, Christophe Chipot, Robert D. Skeel, Laxmikant Kale, and Klaus Schulten</i>  Journal of Computational Chemistry, 26:1781-1802 <b>(2005)</b> (PMC: 2486339)
+        <li><b><a target="_blank" href="http://www.nature.com/articles/srep26536" > QwikMD - Integrative Molecular Dynamics Toolkit for Novices and Experts; </a></b> <i>Jo&atilde;o V. Ribeiro, Rafael C. Bernardi, Till Rudack, John E. Stone, James C. Phillips, Peter L. Freddolino, and Klaus Schulten. QwikMD-integrative molecular dynamics toolkit for novices and experts. Scientific Reports, 6:26536, 2016.</i> Scientific Reports, 6, 26536110 <b>(2016)</b>
+    </ul>
+    </td>
+</tr>
+
+
+</table>
+</div>
+
+
+<div style=" max-width: 1000px">
+
+<table border=0 cellpadding="5">
+    <tr bgcolor="#6667af">
+    <td valign=top>
+    <strong>
+        <font size="4" style="float: left;color:white"><a id="gui"></a><b>Graphical User Interface</b></font> 
+        <font size="2" style="float: right;color:white"><u><b><a href="#" style="color:white">Top</a></b></u></font> 
+    </strong>
+    </td>
+</tr>
+<tr height="20px"></tr>
+<tr>
+    <td align="justify">
+        QwikMD graphical user interface (gui) offers two modes of usability, "Easy/Basic" and "Advanced" mode, depending on the user experience in preparing ("Run" tabs) and analyzing Molecular Dynamics (MD) Simulations ("Analysis" tabs). On the "Easy/Basic" mode, only basic options can be manipulated by the user, such as temperature and simulation time, whereas on the "Advanced" mode, a plethora of operations is available for experienced users to customize and adapt QwikMD default workflow and variables to their specific needs.   
+    </td>
+</tr>
+<tr height="20px"></tr>
+</table>
+</div>
+
+<div style=" max-width: 1000px">
+
+<table border=0 cellpadding="5">
+
+<tr bgcolor="#6667af">
+    <td valign=top>
+    <strong>
+        <font size="4" style="float: left;color:white"><a id="runtabs"></a><b>Run Tabs</b></font> 
+        <font size="2" style="float: right;color:white"><u><b><a href="#" style="color:white">Top</a></b></u></font> 
+    </strong>
+    </td>
+</tr>
+
+<!-- <div style="max-width: 1000px">
+    <h3 class="headarea"; style="float: left">Run Tabs</h3>
+    <h4 class="headarea"; style="float: right"><b><a href="#">Top</a></b></h4>
+</div> -->
+<!-- </div> -->
+<tr height="20px"></tr>
+<tr>
+    <td valign=top>
+<p align="justify">
+The preparation and submission of the MD simulation take place in the Run tabs (Easy and Advanced). In these tabs, one can select the segments to be simulated, and manipulate the structure to replicate the experimental conditions or to formulate the hypothesis to be tested (e.g. the effects of a point mutation in the structure dynamics). 
+</p>
+</tr>
+
+<tr>
+    <td valign=top>
+    <div class="imgmidlle">
+    <center>
+    <img src=images/qwikmd_loadandselect.png width=35% border=0/>
+    </center>
+    </div>
+</tr>
+
+<tr>
+    <td valign=top>
+    <strong>
+        <font size="3" style="float: left"><b>Selection and visualization components</b></font> 
+    </strong>
+</tr>
+<tr>
+<td valign=top>
+<ul>
+<li> 
+    <p align="justify">
+    <b>Load Initial Structure</b>: One can select the file containing the atom's coordinates in two different ways: by pressing "Browser", select a local file (.pdb, .mol2, .xyz and etc.) and press "Load"; or by typing the Protein Data Bank structure ID (4-character unique identifier code, i.g. 1kjf for HIV-1 PROTEASE) in the text entry and then press "Load" as well. During the load process, the structure is checked for possible inconsistence, such as non-parameterized residues, protein gaps and etc. (see <b><a href="#structurecheck">Structure Check</a></b>).  
+    </p>
+<li> 
+    <p align="justify">
+    <b>Selection Menus</b>: Composed by "NMR State" and "Chan/Type Selection" menus, enables the user to select the components of the structure that will be prepared for the MD simulation. For instance, structures obtained by NMR spectroscopy may contain more than one state of the protein; multiple protein chains; different molecule types assigned within the same chain identifier (e.g. protein and nucleic residues of the chain A). 
+    </p>
+    <ul>
+        <li>
+            <p align="justify">
+            <b>NMR State</b>: Select one if the NMR States (frames) available in the loaded structure. Expected values from 0 to [number of states - 1]. 
+            </p>
+        <li>
+            <p align="justify">
+            <b>Chan/Type Selection</b>: Select the residues defined by the atom's selection "Chain Identifier and Molecule Type", such as, "A and protein". User can select/deselect each segment individually or all segments at once by Chain/Type Selection &#8594; Select &#8594; All/None. 
+            </p>
+        <li>
+            <p align="justify">
+            <b>Structure Manipulation</b>: Opens the window titled "<b><a href="#structuremanipulationcheck">Structure Manipulation/Check</a></b>", where most modeling tasks available in QwikMD take place. This window is also involved in other selection tasks such SMD anchoring/pulling residues and MD simulation restraints atom selections.
+            </p>
+    </ul>
+<li> 
+    <p align="justify">
+    <b>Main Table</b> : Lists all the segments selected in the "Chain/Type Selection" menu. This table presents an overview of the system that will be prepared for the MD simulation, and enables to change the representation and coloring modes of each segment. To change representation or coloring modes, just click over the representation/color of the segment line to be changed and select the option from the drop-down menu. For more information, please visit <b><a href="http://www.ks.uiuc.edu/Research/vmd/current/ug/node55.html">Rendering methods</a></b>, <b><a href="http://www.ks.uiuc.edu/Research/vmd/current/ug/node85.html">Coloring methods</a></b> and <b><a href="http://www.ks.uiuc.edu/Research/vmd/current/ug/node90.html">Definition of Keywords and Functions</a></b>.
+    </p>
+<li> 
+    <p align="justify">
+    <b>Background</b> : Changes the color of the "VMD OpenGL Display" background. The <b>Color Scheme</b> modifies the representation color pallet. Currently only the default color scheme is available.    
+    </p>
+</td>
+
+</tr>
+
+<tr>
+    <td valign=top>
+    <p align="justify">
+    As determinant as the initial structure, the configuration options that feed the MD simulation influence greatly the outcome of the simulation. QwikMD automates the generation of the MD configuration files according to the calculation to be preformed (where known as protocols), such as non-biased MD (where known as "Molecular Dynamics"), Steered MD and MD flexible fitting. For more information regarding the different MD simulations and its specificities, please visit <b><a href="http://www.ks.uiuc.edu/Training/Tutorials/#namd">NAMD tutorials</a></b>.
+    </p>
+</tr>
+<tr bgcolor="#ffdb23">
+    
+    <td valign=top> 
+    <strong>
+        <font size="3" style="float: left"><a id="easyrun"></a><b>Easy Run</b></font> 
+        <font size="2" style="float: right"><u><b><a href="#">Top</a></b></u></font> 
+    </strong>
+    </td>
+</tr>
+
+<tr height="20px"></tr> 
+<tr>
+    <td align="justify">
+        The "Easy Run" was designed to assist MD novices, especially experimentalists, to overcome the initial learning curve barrier hindering general use of MD simulations. Within the Easy Run tab, one can prepare, execute and analyze MD simulations without the hardness of the computational minutia. The default values set in QwikMD were selected to assure robust simulations. However, QwikMD is not a black box, it rather provides the user with access to all underlying structures and NAMD configuration files and offers an opportunity to adjust them individually.  
+    </td>
+</tr>
+
+<tr>
+    <td valign=top>
+    <strong>
+        <font size="3" style="float: left"><a id="easysolv"></a><b>System Solvation</b></font> 
+        <font size="2" style="float: right"><u><b><a href="#">Top</a></b></u></font> 
+    </strong>
+    </td>
+</tr>
+
+<tr>
+    <td align="justify">
+        To perform MD simulations one has to mimic the environment of the  protein, or any other molecule of interest. The most common solvent is water and  there are two main ways to mimic the solvent effect. Either simulating all the  atoms of the solvent - explicit solvent model - or by adding dielectric constant  to the electrostatic calculation - implicit solvent model.    
+    </td>
+</tr>
+
+<tr>
+    <td>
+    <table border=0 cellpadding="5" style="float:center">
+        <tr>
+        <td align="center">
+            <img src=images/qwikmd_easysolvate.png width=40%  border=0/>
+        </td>
+        </tr>
+        <tr>
+        <td align="justify" >
+            <ul >
+            <li style="margin-bottom:6px">
+                <b>Solvents</b>: Select the solvent model to employed: Implicit or Explicit
+                <ul>
+                    <li style="margin-top:4px"> 
+                        <b>Implicit Solvent</b>: An implicit solvent model is a simulation technique that eliminates  the need for explicit water atoms by including many of the effects of solvent  in the inter-atomic force calculation. The elimination of explicit water accelerates conformational explorations and increases simulation speed at the cost of not modeling the solvent as accurately  as explicit models. QwikMD uses the <b><a href="http://www.ks.uiuc.edu/Research/namd/2.11/ug/node28.html">Generalized Born Implicit Solvent</a></b> implemented in NAMD. 
+                    <li style="margin-top:4px"> 
+                        <b>Explicit Solvent</b>: QwikMD uses <b><a href="http://www.ks.uiuc.edu/Research/vmd/plugins/solvate/">VMD solvate plugin</a></b> to generate a cubic box centered in the geometrical center of the system and box's edge is calculated by: 
+                        <p>
+                            <b>MD Protocol box </b>: <bdi lang="latex"> box_{edge} = (\sqrt{x^2+y^2+z^2}) + 15 </bdi>
+                            <p><b>SMD Protocol box </b>: <bdi lang="latex"> box_{x} = box_{y}  = (\sqrt{x^2+y^2}) + 15 </bdi> | <bdi lang="latex"> box_{z} = z + PullingDistance + 15 </bdi>.
+                        </p>, where x,y and z are the dimensions of structure in the three axis. Box dimensions in &#8491;. When preparing the simulation, the simulation is translated to the origin {0,0,0}.   
+                        <p align="justify" style="margin-top:3px">
+                        <i>Note</i>: The water box created by QwikMD is somewhat big for most studies. The big water box was adopted as a safety measure. Ideally, one should work with a box, which is large enough that the protein does not interact with its image in the next cell if periodic boundary conditions are used. The use of periodic boundary conditions involves surrounding the system under study with identical virtual unit cells. The atoms in the surrounding virtual systems interact with atoms in the real system. These modeling conditions are effective in eliminating surface interaction of the water molecules. As the standard water model for CHARMM, TIP3P is the model employed in  the simulations prepared with QwikMD.
+                        </p>
+                        
+                </ul>
+                <li style="margin-top:4px"> 
+                    <b>Salt Concentration</b>: Ions should be placed in the water to represent a more typical  biological environment. They are especially necessary if the protein being studied carries an excess charge. In that case, the number of ions should  be chosen to make the system neutral. One must set the desired salt concentration. The default Salt Concentration is 0.15 mol/L. QwikMD uses <b><a href="http://www.ks.uiuc.edu/Research/vmd/plugins/autoionize/">VMD autoionize plugin</a></b> to place the ions and even if the Salt Concentration is set to ZERO, ions will be added to neutralize the total charge of the system. In the case of the Generalized Born implicit solvent, the salt concentration is used as ion concentration parameter value (see <b><a href="http://www.ks.uiuc.edu/Research/namd/2.11/ug/node31.html">Generalized Born Implicit Solvent Configuration Parameters</a></b>).
+                    <li style="margin-top:4px"> 
+                <b>Choose Salt</b>: Salt ion pairs currently available are NaCl and KCl. 
+            </ul>
+        </td>
+        </tr>
+    </table>
+</td>
+</tr>
+
+<tr>
+    <td valign=top>
+    <strong>
+        <font size="3" style="float: left"><a id="easyprot"></a><b>Protocols</b></font> 
+        <font size="2" style="float: right"><u><b><a href="#">Top</a></b></u></font> 
+    </strong>
+    </td>
+</tr>
+
+<tr>
+    <td align="justify">
+        Within the "Easy Run", the user can set up two types of simulations: non-biased Molecular Dynamics (or just Molecular Dynamics - MD) and Steered Molecular Dynamics (SMD).    
+    </td>
+</tr>
+<tr>
+    <td>
+    <table border=0 cellpadding="5">
+        <tr>
+            <td>
+        <table border=1 cellpadding="5" style="float:center; border-collapse:collapse ; width: 100%">
+        <tr>
+        <th style="height: 30px"> MD protocol</th>
+        <th> SMD protocol</th>
+        </tr>
+        <td align="center" width="50%">
+            <img src=images/qwikmd_mdeasy.png width=80% border=0/>
+        </td>
+        <td align="center" >
+            <img src=images/qwikmd_smdeasy.png width=80% border=0/>
+        </td>
+        </tr>
+        <td align="justify" >
+            <ul >
+            <li style="margin-bottom:6px; margin-right:3% ">
+                <b>Temperature</b>: target temperature in degrees Celsius.
+            <li style="margin-bottom:6px; margin-right:3%">
+                <b>Simulation Time</b>: Total time of the "MD" step in &eta;s.
+                <p align="justify" style="margin-top:3px">
+                 <i>Note</i> : One can extend (restart) the "MD" step by pressing the "Start" button in the end of the simulation. This will start a new MD simulation from the last point of the previous step with the values of "Temperature" and "Simualtion Time" currently selected.
+            </ul>
+        </td>
+        <td align="justify">
+            <ul>
+            <li style="margin-bottom:6px; margin-right:3%">
+                <b>Temperature</b>: target temperature in degrees Celsius.
+            <li style="margin-bottom:6px; margin-right:3%">
+                <b>Pulling Residues</b>: opens the window "Select Pulling Residues". Select the residues to be pulled and then press "Apply". The pulling and anchoring residues selection cannot overlap.
+            <li style="margin-bottom:6px; margin-right:3%">
+                <b>Anchoring Residues</b>: opens the window "Select Anchoring Residues". Select the residues to be anchored and then press "Apply". The anchoring and pulling residues selection cannot overlap.
+            <li style="margin-bottom:6px; margin-right:3%">
+                <b>Pulling Distance</b>: Maximum estimated distance in &#8491; covered by the "Pulling Residues" in the end of the SMD simulation(s). This distance is used to build the water box in the structure preparation phase. Changes in this value after preparing the system will have any effect on the system or in the simulation.
+            <li style="margin-bottom:6px; margin-right:3%">
+                <b>Pulling Speed</b>: Pulling constant velocity in &#8491;/&eta;s of the "Pulling Residues". 
+            <li style="margin-bottom:6px; margin-right:3%" >
+                <b >Simulation Time</b>: Total time of the "SMD" step in &eta;s.
+                <p align="justify" style="margin-top:3px">
+                 <i>Note</i> : One can extend (restart) the "SMD" step by pressing the "Start" button in the end of the simulation. This will start a new SMD simulation from the last point of the previous step with the values of "Temperature", "Pulling Speed" and "Simualtion Time" currently selected.
+                </p>  
+            </ul>
+        </td>
+        </table>
+        </td>
+        </tr>
+    <tr>
+    <td valign=top>
+    <ul>
+    <li> 
+        <p align="justify">
+        <b>Molecular Dynamics Simulations </b>: Molecular dynamics (MD) is a computer simulation of physical movements of atoms and molecules in the context of N-body simulation. The atoms and molecules are allowed to interact for a period of time, giving a view of the motion of the atoms. In the most common version, the trajectories of atoms and molecules are determined by numerically solving the Newtons equations of motion for a system of interacting particles, where forces between the particles and potential energy are defined by interatomic potentials or molecular mechanics force fields.
+        </p>
+        <p align="justify">
+         <i>Note</i> : When running MD simulations it is very important to run more than one replica of the same system. Long trajectories usually also helps one to sample different conformations. Therefore a long simulation is important if big conformational changes are expected. If you want to learn more about sampling and molecular dynamics check the link at the bottom of this window. 
+        </p> 
+    <li> 
+        <p align="justify">
+        <b>Steered Molecular Dynamics Simulations </b>: Steered molecular dynamics (SMD) simulations, or force probe simulations, apply forces to a protein in order to manipulate its structure by pulling it along desired degrees of freedom. These experiments can be used to reveal structural changes in a protein at the atomic level. SMD is often used to simulate events such as mechanical unfolding or stretching. 
+        </p>
+        <p align="justify"> 
+         There are two typical protocols of SMD: one in which pulling velocity is held constant and one in which applied force is constant. Typically, part of the studied system (e.g. an amino acid in a protein) is restrained by a harmonic potential. Forces are then applied to specific atoms at either a constant velocity or a constant force in the direction of the pulling axis. QwikMD is set to perform constant velocity SMD.
+        </p>
+        <p align="justify"> 
+         The pulling axis is defined by the vector formed by the centers of the selections Anchoring and Pulling Residues. During the system preparation phase, the initial structure pulling axis is aligned with the z-axis and the pulling speed vector assumes only the z component.
+        </p>
+    <li> 
+        <p align="justify">
+        <b>Equilibration step</b>: This protocol step is composed by 1000 steps of Energy Minimization, a "Temperature Ramp", where the temperature in raised from 60 K to the chosen "Temperature", 1 K/&rho;s and 1.0 ns of MD simulation. During the equilibration step, the backbone atoms of protein and nucleic residue are restrained in space.
+        </p>
+        <!-- <p align="justify">
+         <i>Note</i> : Be careful with the equilibration steps. It is common that MD minimization and equilibration simulations involve more than one minimization equilibration cycle, often fixing and releasing molecules in the system. For instance, one typically minimizes the system and then equilibrates with the atoms in the protein fixed in space, and then minimizes the system again and equilibrates again, this time with the protein free to move. Fixing the protein allows the water, which typically responds much faster to forces than the protein, to do the relaxing in the first step. This saves computational effort and prevents the introduction of artifacts from an unstable starting structure. 
+        </p>  -->
+    
+    </ul>
+
+    <p align="justify">Default Configurations</p>
+    <ul>
+    <li> 
+        <p align="justify">
+        <b>Integration Step</b>: The time step used in any MD simulation should be dictated by the fastest process (i.e. movement of atoms) taking place in the system. Among the various interactions, bond stretching and angle bending are the fastest, with typical bond stretching vibrations occurring on the order of once every 10-100 femtoseconds. Using a time step of 2 fs, which is close to the vibrational period (10 fs) of linear bonds involving hydrogen (fastest vibrations, since hydrogen has small mass), requires that these bonds be fixed, and only slower vibrations may be free to move, such as dihedral angle bending. For large molecules, these slower vibrations typically govern the behavior of the molecule more than the quicker ones, so bond fixing is somewhat acceptable, but should be avoided for accurate simulations. One prefers to use an MD timestep which is ~ 1/10 of the fastest interactions in the simulation. For simulations with time step of 1 fs, one should use rigidBonds for water because water molecules have been parametrized as rigid molecules. QwikMD adopts 2 fs time step as standard.
+        </p>
+    <li> 
+        <p align="justify">
+        <b>NPT Ensemble</b> : In the isothermal-isobaric ensemble (NPT), number of atoms (N), pressure (P) and temperature (T) are conserved. To do control pressure and temperature a thermostat and a barostat are needed. The NPT ensemble corresponds most closely to laboratory conditions with a flask open to ambient temperature and pressure. Langevin dynamics is a means of controlling the kinetic energy of the system, and thus, controlling the system temperature and/or pressure. QwikMD uses standard NAMD protocols that employ Langevin dynamics.   
+    </ul>   
+    </td>
+    <!-- <td>
+    <img src=images/qwikmd_easyrun.png width=233px height=366px border=0/>
+    </td> -->
+    </tr>
+</table>
+</td>
+</tr>
+
+
+
+<tr bgcolor="#ffdb23">
+    
+    <td valign=top> 
+    <strong>
+     <font size="3" style="float: left"><a id="advancedrun"></a><b>Advanced Run</b></font> 
+     <font size="2" style="float: right"><u><b><a href="#">Top</a></b></u></font> 
+    </strong>
+    </td>
+
+</tr>
+
+<tr height="20px"></tr> 
+
+<tr>
+    <td align="justify">
+        The "Advanced Run" was designed for experienced users who want to streamline their process of preparing, setting up and preforming MD simulations. In this tab, one has access to more options for solvating the system, more built-in protocols, full access to the MD configuration files as well as the ability to design custom protocols. Selecting the "Advanded Run" tab also activates more options in the <b><a href="#structuremanipulationcheck">Structure Manipulation/Check</a></b>, such as membrane builder and molecule modifiers (CHARMM forcefield patches). 
+    </td>
+</tr>
+
+
+
+<tr>
+    <td valign=top>
+    <strong>
+        <font size="3" style="float: left"><a id="advsolv"></a><b>System Solvation</b></font> 
+        <font size="2" style="float: right"><u><b><a href="#">Top</a></b></u></font> 
+    </strong>
+    </td>
+</tr>
+
+<tr>
+    <td align="justify">
+        When solvating a particular system, one should to take into account several aspects to ensure that the system does not interact with its image in the next cell if periodic boundary conditions (pbc) are use. The following should be considered during the system solvation process (use of ): 
+        <ul>
+            <li style="margin-top:4px">
+            <b>Non-bonded interactions cut-off</b>: The distance used in QwikMD by default is 12 &#8491;, meaning that the non-bonded interactions (vdW and electrostatics) are evaluated between particles distanced up to 12 &#8491;. To avoid interactions between the system and its image in neighbor cells, one must select a solvent box big enough that pbc images are distanced more than the non-bonded cut-off distance (see <b><a href="http://www.ks.uiuc.edu/Research/namd/2.11/ug/node23.html">Non-bonded interactions</a></b>). 
+            <li style="margin-top:4px">
+            <b>Rotation/tumble</b>: Systems can rotate/tumble during simulation, which can lead to the "self interaction" with its image in the neighbor cell. Specially critical in non-globular systems elongated in one of the axis, one can easily face inconsistencies if a simple padding (buffer) distance is used surrounding the system.
+            <li style="margin-top:4px">
+            <b>Conformational Changes</b>: If simulations are carried for timescales long enough, &eta;s to &mu;s (nano to microseconds), large conformational changes can occur, expanding the area occupied by the system.     
+            
+        </ul>       
+    </td>
+</tr>
+
+<tr>
+    <td valign=top> 
+    <strong>
+        <font size="3" style="float: left"><b>System solvation options</b></font> 
+    </strong>
+    </td>
+</tr>
+
+<tr>
+    <td>
+    <table border=0 cellpadding="5" style="float:center">
+        <tr>
+        <td align="center">
+            <img src=images/qwikmd_advsolvate.png width=40%  border=0/>
+        </td>
+        </tr>
+        <tr>
+        <td align="justify" >
+            <ul >
+            <li style="margin-bottom:6px">
+                <b>Solvent</b>: Select the solvent model to employed: Vacuum, Implicit or Explicit
+                <ul>
+                    <li style="margin-top:4px"> 
+                        <b>Vacuum</b>: Absence of solvent and commonly know as simulation in gas phase. Non-bonded interactions cutoff distances are updated to: <code>cutoff: 16 &#8491;</code>, <code>switchdist: 15 &#8491;</code>, <code>pairlistdist: 18 &#8491;</code>. When selected, QwikMD also applies a dielectric constant of 80.0.
+                    <li style="margin-top:4px"> 
+                        <b>Implicit Solvent</b>: QwikMD uses the <b><a href="http://www.ks.uiuc.edu/Research/namd/2.11/ug/node28.html">Generalized Born Implicit Solvent</a></b> implemented in NAMD.  Non-bonded interactions cutoff distances are updated to: <code>cutoff: 16 &#8491;</code>, <code>switchdist: 15 &#8491;</code>, <code>pairlistdist: 18 &#8491;</code> and an <code>alphaCutoff: 18 &#8491;</code> is used. A <code>solventDielectric: 80 &#8491;</code> is used to represent water as solvent.    
+                    <li style="margin-top:4px"> 
+                        <b>Explicit Solvent</b>: QwikMD uses <b><a href="http://www.ks.uiuc.edu/Research/vmd/plugins/solvate/">VMD solvate plugin</a></b> to generate a water box centered in the geometrical center of the system and box's edge is calculated by: 
+                        <p>
+                            <b>MD/MDFF Protocol box </b>: <bdi lang="latex"> box_{edge} = (\sqrt{x^2+y^2+z^2}) + 2 * Buffer </bdi>
+                            <p><b>SMD Protocol box </b>: <bdi lang="latex"> box_{x} = box_{y}  = (\sqrt{x^2+y^2}) + 2 * Buffer </bdi> | <bdi lang="latex"> box_{z} = z + PullingDistance + 2 * Buffer </bdi>.
+                        </p>, where x,y and z are the dimensions of structure in the three axis ("Minimal Box" option off). Box dimensions in &#8491;. When preparing the simulation, the simulation cell is translated to the origin {0,0,0} <u>except in "MDFF" protocol</u>.
+
+                        <p align="justify" style="margin-top:3px">
+                        <i>Note</i>: The water box created by QwikMD is somewhat big for most studies. The big water box was adopted as a safety measure. Ideally, one should work with a box, which is large enough that the protein does not interact with its image in the next cell if periodic boundary conditions are used. The use of periodic boundary conditions involves surrounding the system under study with identical virtual unit cells. The atoms in the surrounding virtual systems interact with atoms in the real system. These modeling conditions are effective in eliminating surface interaction of the water molecules. As the standard water model for CHARMM, TIP3P is the model employed in  the simulations prepared with QwikMD.
+                        </p>
+                        
+                </ul>
+                <li style="margin-top:4px"> 
+                        <b>Minimal Box</b>: Rotate the system and apply a simple solvent box padding distance, instead of the formula described in the "MD/MDFF Protocol box" description. The usage of this option should be used carefully and the "Buffer" distance should be increased to account system rotation/tumble during the simulation (see <b><a href="http://www.ks.uiuc.edu/Research/vmd/plugins/solvate/">VMD solvate plugin</a></b>). 
+                <li style="margin-top:4px"> 
+                    <b>Salt Concentration</b>: Ions should be placed in the water to represent a more typical  biological environment. They are especially necessary if the protein being studied carries an excess charge. In that case, the number of ions should  be chosen to make the system neutral. One must set the desired salt concentration. The default Salt Concentration is 0.15 mol/L. QwikMD uses <b><a href="http://www.ks.uiuc.edu/Research/vmd/plugins/autoionize/">VMD autoionize plugin</a></b> to place the ions and even if the Salt Concentration is set to ZERO, ions will be added to neutralize the total charge of the system. In the case of the Generalized Born implicit solvent, the salt concentration is used as ion concentration parameter value (see <b><a href="http://www.ks.uiuc.edu/Research/namd/2.11/ug/node31.html">Generalized Born Implicit Solvent Configuration Parameters</a></b>).
+                    <li style="margin-top:4px"> 
+                <b>Choose Salt</b>: Salt ion pairs currently available are NaCl and KCl. 
+            </ul>
+        </td>
+        </tr>
+    </table>
+</td>
+</tr>
+<tr>
+    <td valign=top><a id="advprot"></a>
+    <strong>
+        <font size="3" style="float: left"><a id="advprot"></a><b>Protocols</b></font> 
+        <font size="2" style="float: right"><u><b><a href="#">Top</a></b></u></font>
+    </strong>
+    </td>
+</tr>
+<tr>
+    <td align="justify">
+        Within the "Advanced Run", the user can set up the following types of simulation: non-biased Molecular Dynamics (or just Molecular Dynamics - MD), Steered Molecular Dynamics (SMD) and Molecular Dynamics Flexible Fitting (MDFF).    
+    </td>
+</tr>
+<tr>
+    <td>
+    <table border=0 cellpadding="5">
+        <tr>
+            <td>
+        <table border=1 cellpadding="5" style="float:center; border-collapse:collapse ; width: 100%">
+        <tr>
+        <th style="height: 30px" colspan="2"> MD & SMD protocol</th>
+        <!-- <th> SMD protocol</th> -->
+        
+        </tr>
+        <tr >
+        <td align="center" width="100%" height="100%" colspan="2">
+            <img src=images/qwikmd_advprotocol.png width=50% border=0/>
+        </td>
+        
+        </tr>
+
+        <tr >
+        <td align="justify" colspan="2">
+            <ul>
+            <li style="margin-bottom:6px; margin-right:3%">
+                <b>Protocol</b>: name of the protocol step. To select a different protocol step, one must select the cell and choose one of the options listed in the dropdown menu. The dropdown menu is populated with the default steps: Minimization, Annealing, Equilibration and MD/SMD (depending on the protocol selected). Adding to this list are the saved protocol setps specific for the solvent model selected (see Edit button description below). The default protocol steps can be used once, with the exception of the MD and SMD steps.   
+            <li style="margin-bottom:6px; margin-right:3%">
+                <b>n Steps</b>: number of steps to be simulated.
+            <li style="margin-bottom:6px; margin-right:3%">
+                <b>Restraints</b>: atom selection where harmonic restraining forces will be applied. Upon cell selection, a dropdown menu will display pre-defined selections and also the "From List" option, where the user can select the atoms/residues from the "<b><a href="#structuremanipulationcheck">Structure Manipulation/Check</a></b>".
+            <li style="margin-bottom:6px; margin-right:3%">
+                <b>Ensemble</b>: select the thermodynamic ensemble to run the simulation: NVE,NVT or NpT.
+            <li style="margin-bottom:6px; margin-right:3%">
+                <b>Temp (C)</b>: target temperature in degrees Celsius.
+            <li style="margin-bottom:6px; margin-right:3%">
+                <b>Pressure</b>: target pressure in degrees atmospheres (atm).
+            <li style="margin-bottom:6px; margin-right:3%">
+                <b>Clear button</b>: reset the protocol steps list and the delete the files created during the protocol "Edit" process. 
+            <li style="margin-bottom:6px; margin-right:3%">
+                <b>Unlock button</b>: allow (unlock) or prevent (lock) protocol step from automatic edition by QwikMD. Locking the protocol step is specially useful for custom configuration files added by the user. Every non-default protocol step is "locked" when added to the table as well as the extension/restart steps, e.g., MD.1 MD.2.
+            <li style="margin-bottom:6px; margin-right:3%">
+                <b>Edit button</b>: edit configuration file in text mode. This button generates the configuration file where one can manually change and adapt the parameters used by QwikMD. This file is stored in the temporary folder until the preparation process, where is copied to the "run" folder in the working directory. The new generated configuration file can be stored as a template for future use by selecting the option "Save as template for future use" in the pop-up window, and the name changed to distinguish from the default protocol steps. Every created template is specific for the solvent model selected, which means that a template created for the explicit solvent will be only available for explicit solvent simulations (see <b><a href="#qwikmdlib">QwikMD Library</a></b>).
+                <ul>
+                    <li style="margin-top:4px;"> 
+                        <b>Add special configuration files</b>: Besides the manual edition of the configuration files through the "Edit button", one can add configuration files to QwikMD library. 
+                    </li>
+                    <li style="margin-top:4px;"> 
+                        <b>Manual edition</b>: special attention is requires when changing or adding configuration files:
+                        <ul>
+                            <li> In case of using scripting inside the configuration file, one must open and close brackets within the same row;
+                            <li> Must no use variables for keyword values such "run". 
+                        </ul>
+                    </li>
+                </ul>
+            <li style="margin-bottom:6px; margin-right:3%">
+                <b>"+/-" buttons</b>: Add or delete protocol steps. If the MD, SMD or a user defined step is selected before pressing the "+" button, an extension step of the selected step is created and renamed as "ProtocolStep".[order in the sequence], for example, MD MD.1 MD.2 and etc.
+            </ul>
+        </td>
+        </tr>
+        <th> SMD protocol</th>
+        <td align="justify">
+            <div align="center"><img src=images/qwikmd_advsmd.png width=40% border=0/></div>
+            <ul>
+            <li style="margin-bottom:6px; margin-right:3%">
+                <b>Pulling Residues</b>: opens the window "Select Pulling Residues". Select the residues to be pulled and then press "Apply". The pulling and anchoring residues selection cannot overlap.
+            <li style="margin-bottom:6px; margin-right:3%">
+                <b>Anchoring Residues</b>: opens the window "Select Anchoring Residues". Select the residues to be anchored and then press "Apply". The anchoring and pulling residues selection cannot overlap.
+            <li style="margin-bottom:6px; margin-right:3%">
+                <b>Pulling Distance</b>: Maximum estimated distance in &#8491; covered by the "Pulling Residues" in the end of the SMD simulation(s). This distance is used to build the water box in the structure preparation phase. Changes in this value after preparing the system will have any effect on the system or in the simulation.
+            <li style="margin-bottom:6px; margin-right:3%">
+                <b>Pulling Speed</b>: Pulling constant velocity in &#8491;/&eta;s of the "Pulling Residues". 
+            </ul>
+        </td>
+
+        </table>
+        </td>
+        </tr>
+
+        <tr>
+            <td>
+        <table border=1 cellpadding="5" style="float:center; border-collapse:collapse ; width: 100%">
+            
+        <tr><th style="height: 30px" > MDFF protocol</th></tr>
+        <tr>
+            <td align="center">
+                <img src=images/qwikmd_mdffprotocol.png width=40% border=0/>
+            </td>
+        </tr>
+
+        <tr >
+            <td align="justify" colspan="2">
+            <ul>
+            <li style="margin-bottom:6px; margin-right:3%">
+                <b>Temperature</b>: target temperature in degrees Celsius.
+            <li style="margin-bottom:6px; margin-right:3%">
+                <b>Minimization Steps</b>: number of steps for the conjugate gradient minimization calculation.
+            <li style="margin-bottom:6px; margin-right:3%">
+                <b>MDFF Steps</b>: Number of steps to be simulated (same as nSteps).
+            <li style="margin-bottom:6px; margin-right:3%">
+                <b>Fixed</b>: atom selection defining the atoms to be fixed in space.
+            <li style="margin-bottom:6px; margin-right:3%">
+                <b>Sec Structure</b>: atom selection defining the atoms to apply Secondary Structure Restraints.
+            <li style="margin-bottom:6px; margin-right:3%">
+                <b>Chirality</b>: atom selection defining the atoms to apply Chirality Restraints.
+            <li style="margin-bottom:6px; margin-right:3%">
+                <b>Cispeptide</b>: atom selection defining the atoms to apply Cispeptide Restraints.
+            <li style="margin-bottom:6px; margin-right:3%;list-style-type: none">
+                For more MDFF information please visit <b><a href="http://www.ks.uiuc.edu/Research/mdff/index.html">MDFF webpage</a></b>    
+            </ul>
+            </td>
+        </tr>
+        </table>
+        </td>
+        </tr>
+    <tr>
+    <td valign=top>
+    <ul>
+    <li> 
+        <p align="justify">
+        <b>Molecular Dynamics Flexible Fitting</b>: the Molecular Dynamics Flexible Fitting (MDFF) method can be used to flexibly fit atomic structures into density maps, specially cryo-electron microscopy (cryo-EM) maps. cryo-EM can capture large macromolecular complexes at different functional states usually inaccessible to X-ray crystallography techniques. However, the resolution of these maps are considerable lower when compared to the X-ray structures. Combine both structural data from different sources and resolutions allow the user to have a high resolution atomic structure representing the conformational state captured on the cryo-EM map.
+        </p>
+        <p align="justify">
+         <i>Note</i> : Despite of preparing the system with QwikMD, the user is redirected to the <b><a href="http://www.ks.uiuc.edu/Research/vmd/plugins/mdff/">MDFF GUI</a></b> to set up, perform and analyze the simulation.
+        </p>
+    
+    
+    </ul>
+    </td>
+
+    </tr>
+</table>
+</td>
+</tr>
+</table>
+</div>
+
+<div style=" max-width: 1000px">
+
+<table border=0 cellpadding="5">
+<tr bgcolor="#ffdb23">
+    <td valign=top>
+    <strong>
+        <font size="3" style="float: left"><a id="structuremanipulationcheck"></a><b>Structure Manipulation/Check</b></font> 
+        <font size="2" style="float: right"><u><b><a href="#">Top</a></b></u></font> 
+    </strong>
+    </td>
+</tr>
+<tr height="20px"></tr> 
+<tr>
+    <td align="justify">
+        The "Structure Manipulation" button (see <a href="#runtabs"><b>Run Tabs</b></a>) opens the window titled "Structure Manipulation/Check", where most modeling tasks available in QwikMD take place. This window is also involved in other selection tasks such SMD anchoring/pulling residues and MD simulation restraints atom selections.
+    </td>
+</tr>
+
+<tr>
+    <td align="justify">
+By selecting a residue, one can preform point mutations, assign protonation states, delete/add residues, rename the residues to match the residue's name in the topology files, modify individual atoms of one residue and change residue's type to match the proper molecule category as protein, nucleic, glycan, hetero and water residues. Topology and parameters information and new molecules types can be added in "<b><a href="#">Add Topo+Param</a></b>". In the case of protein residues, the column "type" is colored by the secondary structure correspondent to each residue (color reference in the "Sec. Struct colors" box).    
+    </td>
+</tr>
+
+<tr>
+    <td align="justify">
+The amount of options available in the "Structure Manipulation/Check" window is dependent on the level mode currently selected (Easy or Advanced Run). As shown in the image below, more options are available when the advanced mode is selected like the possibility to select residues using atom selections text, build a bilayer membrane as well as apply special molecule modifiers available on CHARMM forcefield (commonly known as patches, see <b><a href="http://www.ks.uiuc.edu/Research/vmd/plugins/psfgen/">VMD psfgen Plugin</a></b>).
+    </td>
+</tr>
+
+<tr height="20px"></tr>
+<tr>
+    <td>
+    <table border=1 cellpadding="5" style="float:center; border-collapse:collapse ; width: 100%">
+        <tr>
+        <th style="height: 30px">Invoked from Easy Run</th>
+        <th> Invoked from Advanced Run</th>
+        </tr>
+        <td align="center" width="50%">
+            <img src=images/qwikmd_structmanipulcheckeasy.png width=60% border=0/>
+        </td>
+        <td align="center" >
+            <img src=images/qwikmd_structmanipulcheckadv.png width=50% border=0/>
+        </td>
+        </tr>
+        <tr>
+        <td align="justify" colspan="2"><a id="residtable"></a>
+            <ul>
+                <li style="margin-bottom:6px; margin-right:3%">
+                    <b>Residues Table</b>: The Residues Table is main component of the "Structure Manipulation/Check" window and lists all the residues included in the selection made on "<b><a href="#runtabs">Chain/Type Selection</a></b>" menu. The residues are listed in the same order as in the "<b><a href="#runtabs">Main Table</a></b>", which is the order the residues are listed in the initial structure file. To facilitate the browsing through the residues list, one can change the sort criteria and sort the table by a specific column pressing the columns header.
+                
+                <p align="justify" style="margin-top:3px">
+                <i><u>Residues Marked in Red</u></i>: When the residue is not recognized by QwikMD, meaning that the specific residue name doesn't match the residue names contained in the Topology files loaded by QwikMD. One must add the stream file containing the topology and the parameters, rename, change the residue type or delete the residue. 
+            </ul>
+        </td>
+    	</tr>
+    	<tr>
+        <td align="justify" colspan="2"><a id="tblopt"></a>
+            <ul>
+                <li style="margin-bottom:6px; margin-right:3%">
+                    <b>Table Options</b>: The action triggered when a residue is selected on the Residues Table is determined by the table option selected. One should always select the table option first and then the residue(s) to be manipulated/visualized.</li>
+                    <ul>
+                        <li style="margin-bottom:4px; margin-right:3%">
+                            <b>Mutate</b>: Mark one residue to be mutated during the structure preparation phase. The mutations are only available for protein and nucleic residues and are dependent on the residue type, for instance, a protein residue can only be mutated to another protein residue. 
+                            </li>
+                            <p align="justify" style="margin-top:3px;margin-right:3%">
+                            <i><u>WARNING</u></i>: Even a very small number of mutations may affect the structure of a protein drastically. Be very careful when using the mutation tool of QwikMD as you might create artifacts in your simulation.
+
+                        <li style="margin-bottom:4px; margin-right:3%">
+                            <b>Prot. State</b>: Mark one residue to assign a protonation state during the structure preparation phase. Amino acids, depending on their environment, can present different protonation states. It is recommended to check the protonation state of the amino acids before an MD simulation. Several tools can be used for that. One of the most popular tools is the  <b><a href=" http://propka.org/"> PROPKA Server</a></b>.    
+                            The assignment of protonation states is only available for protein residues and the options available are dependent on the residue selected, e.g., only two options are available for the aspartic acid (ASP), neutral (ASP) or protonated (ASPP) state.  
+                        </li>
+                        <p align="justify" style="margin-top:3px;margin-right:3%">
+                            <b>Histidine Residues</b>: Of the 20 amino acids, histidine is the only one that ionizes within the physiological pH range ~7.4. This effect is characterized by the pKa of the amino acid side chain. For histidine, the value is 6.04. This leads to the possibility of different protonation states for histidine residues in a protein, and makes the consideration of the proper state important in MD simulations. The viable states are one in which the delta nitrogen of histidine is protonated - listed with residue name HSD - one in which the epsilon nitrogen of histidine is protonated - HSE - and one in which both nitrogens are protonated - HSP. If not set by the user, QwikMD uses HSD as the standard histidine protonation state.
+                        <li style="margin-bottom:4px; margin-right:3%">
+                            <b>Add</b>: Add residue(s) previously marked to be deleted. 
+                        </li>
+                        <li style="margin-bottom:4px; margin-right:3%">
+                            <b>Delete</b>: Mark residue(s) to be deleted during the preparation phase.  
+                        </li>
+                        <li style="margin-bottom:4px; margin-right:3%">
+                            <b>View</b>: Disable all manipulation options and only represent the selected residue(s).  
+                        </li>
+                        <li style="margin-bottom:4px; margin-right:3%">
+                            <b>Rename</b>: Change the residue name to match the residue names in the CHARMM forcefield topology files. The possibilities available to rename the selected residue are dependent on the residue type, such as a protein residue can only be renamed to a residue categorized as a protein residue. If the proper residue name is not available, one must add the correspondent Topology+ParameterFiles.str, change the residue type and further rename or delete the residue.
+                            </li>
+                            <p align="justify" style="margin-top:3px;margin-right:3%">
+                            <i><u>WARNING</u></i>: The structure preparation phase cannot start while the system contains unrecognized residues.
+
+                        <li style="margin-bottom:4px; margin-right:3%">
+                            <b>Type</b>: Sometimes, molecules categorization can be misleading (or even nonexistent), which hinders the correct identification of residues. For instance, if the user intends to mutate the nucleotide Adenosine Triphosphate (ATP) by another nucleotide, it would be possible to mutate to a Guanine, Adenine, Cytosine or Thymine (or Uracil in RNA), as they share the same category as nucleic residues (nucleic). To avoid such structural errors, QwikMD gives the possibility to change residues type (category), so a logical choice can be made.    
+                            </li>
+                        <li style="margin-bottom:4px; margin-right:3%">
+                            <b>Edit Atoms</b>: Residues fine grained edition, where one can change the residue number (resid), the atom's name and delete one or more atoms. Taking the example of the acetate residues in the HIV-1 protease structure (pdb entry <b><a href="http://www.rcsb.org/pdb/explore.do?structureId=1kjf">1KJF</a></b>). The residue name in the original pdb structure is ACT and is marked as unrecognized by QwikMD since the same residue is named as ACET in the CHARMM topology file. In this case, one must change the residue name from ACT to ACET, which raises another topological issue, where none of the atoms name in the pdb match the atoms name the topology. In this case, one must rename also the atoms. For reference purpose, the topology entry and a numbered molecular representation of the residue is given to user.  
+                        </li>
+                            <p align="center"> <img src=images/qwikmd_editatoms.png width=70% border=0/> </p> 
+            </ul>
+        
+            </td>
+        </tr>
+        <tr>
+        <td align="justify" colspan="2"><a id="applyclear"></a>
+            <ul>
+            <li style="margin-bottom:6px; margin-right:3%">
+                    <b>Apply/Edit button</b>: Apply residues selection during the SMD Anchoring/Pulling residues selection or open the "Edit Atoms" window when the "Edit Atoms" option is selected.
+            </li>
+            <li style="margin-bottom:6px; margin-right:3%">
+                    <b>Clear Selection</b>: Deselect the current selected residues.
+            </li>   
+            </ul>
+            </td>
+        </tr>
+        <tr>
+        <th style="height: 30px" colspan="2">
+            <font size="3" ><a id="topoparam"></a><b style="float: center">Topology & Parameters Selection</b></font> 
+            <font size="2" style="float: right"><u><b><a href="#" >Top</a></b></u></font> 
+        </th>
+        </tr>
+        <tr>
+        <td align="center" colspan="2" style="padding:20px">
+            <img src=images/qwikmd_topopar.png width=40% border=0/>
+        </td>
+        </tr>
+
+        <tr>
+            <td align="justify" colspan="2" style="padding:20px">
+                QwikMD doesn't lists all the residues present in the CHARMM 36 topology files by default for simplicity purposes, due to the vast list of residues available. If one needs to add more standard residues to QwikMD list, such as, proteins, nucleotides, carbohydrates (glycan), lipids or other standard residues, one must upload only the topology file (if the parameters are already included in the files loaded in QwikMD by the default) correspondent to the residue type and select the residue from the table.
+                <p></p>
+                If the system to be prepared includes one or more residues requiring special topologies and parameters, one must add a <u>stream file</u> (*.str) containing both residue's topology and parameters information.
+                <ul>
+                    <li style="margin-top:6px"> 
+                    <b>Default Topology files</b>:
+                    <ul style="list-style-type: none;">
+                        <li style="margin-top:4px"> top_all36_carb.rtf, top_all36_cgenff.rtf, top_all36_hybrid.inp, top_all36_lipid.rtf, top_all36_na.rtf, top_all36_prot.rtf 
+                    </ul>
+                    <li style="margin-top:6px"> 
+                    <b>Default Stream files</b>:
+                    <ul style="list-style-type: none;">
+                        <li style="margin-top:4px"> toppar_all36_carb_glycopeptide.str, toppar_water_ions_namd.str  
+                    </ul>
+                    <li style="margin-top:6px"> 
+                    <b>Default Parameters files</b>:
+                    <ul style="list-style-type: none;"> par_all36_carb.prm, par_all36_cgenff.prm, par_all36_lipid.prm, par_all36_na.prm, par_all36_prot.prm
+                        <li style="margin-top:4px"> 
+                    </ul>
+                </ul>
+                <p></p>
+                To add the information regarding a special residue, one must press the "+" button and select the *.str file. QwikMD analyzes the file and list the residues ("RESI" keyword) and stores a copy in the <b><a href="#qwikmdlib">QwikMD library folder</a></b>.
+
+                <ul>
+                    <li style="margin-top:6px"> 
+                    <b>Residue NAME</b>: name to be displayed in QwikMD residues list. Protein and nucleic residues must have the same "Residue NAME" and "CHARMM NAME", while hetero, glycan and user defined residue types can assume different residues names, such as, the acetate ion residue: "Residue NAME"=Acetate", "CHARMM NAME"= "ACET".
+                    
+                    <li style="margin-top:6px"> 
+                    <b>CHARMM NAME</b>: residue name in the CHARMM topology file. <u><i>Note</i></u>: Sometime the residues' name listed in the CHARMM topology files can be composed by more than 4 characters, which is a violation of the pdb file format. In this case, a warning message is prompted to the user and the correspondent line of the residue colored in red and one must rename the "CHARMM NAME" to a unique 4 letter residue name. The name of the residue is also updated in the file stored in the <b><a href="#qwikmdlib">QwikMD library folder</a></b>.  
+                    
+                    <li style="margin-top:6px"> 
+                    <b>Default Parameters files</b>:
+                    <ul style="list-style-type: none;"> par_all36_carb.prm, par_all36_cgenff.prm, par_all36_lipid.prm, par_all36_na.prm, par_all36_prot.prm
+                        <li style="margin-top:4px"> 
+                    </ul>
+                    <li style="margin-top:6px"> 
+                    <b>Topo & PARM File</b>: File containing the residues topology and parameters.
+                    </li>   
+                
+                </ul> 
+                <p style="margin-top:4px"><i><u>WARNING</u></i>: After all the editions to the residue's list and before leaving the "Topology & Parameters Selection" window, one must press "Apply" and reset QwikMD gui by pressing the "Reset" button in one of the Run Tabs.</p>
+            </td>
+        </tr>
+
+        <tr>
+            <th th style="height: 30px" colspan="2">
+            <font size="3" ><a id="structurecheck"></a><b style="float: center">Structure Check</b></font> 
+            <font size="2" style="float: right"><u><b><a href="#" >Top</a></b></u></font> 
+        </th>
+        </tr>
+
+        <tr>
+        <td align="center" colspan="2" style="padding:20px">
+            <img src=images/qwikmd_structurecheck.png width=20% border=0/>
+        </td>
+        </tr>
+        <tr>
+            <td align="justify" colspan="2" style="padding:20px">
+                QwikMD checks the initial structure for structural inconsistencies in 4 different tests:
+                <ul>
+                    <li style="margin-top:6px">
+                        <b>Topologies & Parameters</b>: Comparison between the residues' name in the initial structure and the residues' name in the CHARMM36 topology files. Once a mismatch is detected, the residue is marked in red in the "<b><a href="#residtable">Residues Table</a></b>" and the correspondent chain is colored as "Throb" in the "<b><a href="#runtabs">Main Table</a></b>". The system preparation phase cannot start before this warning is solved.</li>
+
+                    <li style="list-style-type: none; margin-top:4px">
+                        The easiest way to overcome the lack residue topologies and parameters is to delete the residue, which may not be desirable as the referred molecule might well be relevant. Thus, one has to provide QwikMD with the missing force field topology and parameters. If the topology and the parameters are available, i.e., in the literature, but not yet added to the force field, the user may add to QwikMD through <b><a href="#topoparam">Topology & Parameters Selection</a></b>. These parameters can also be obtained from web servers, with varying levels of accuracy, such as <b><a href="https://cgenff.paramchem.org/">CGenFF webserver</a></b>. The most accurate and recommended method for furnishing missing parameters requires advanced knowledge, namely familiarity with the <b><a href="http://www.ks.uiuc.edu/Research/vmd/plugins/fftk/">Force Field Tool Kit (FFTK)</a></b> plugin in VMD. The ffTK plugin assists with the process of parameterization, employing quantum chemistry programs.</li>
+                    <li style="margin-top:6px">
+                        <b>Chiral Centers</b>: Detection of <i>cis</i> chirality errors in protein and nucleic acid structures using the <b><a href="http://www.ks.uiuc.edu/Research/vmd/plugins/chirality/">Chirality</a></b> plugin in VMD. For more information how to fix chirality errors please follow the <b><a href="http://www.ks.uiuc.edu/Training/Tutorials/#vmd">Structure Check tutorial</a></b>.
+                        <li style="list-style-type: none; margin-top:4px">
+                        All amino acids but glycine have at least one chiral center at C&alpha;. Threonine and isoleucine have an additional chiral center at C&beta;. According to the D- / L- naming convention, naturally occurring amino acids are found in the L-configuration. Note, however, that D-amino acids do occur in biology, e. g., in cell walls of bacteria. Nucleic acids also have chiral centers. For example, in DNA the atoms C1', C3', and C4' are chiral, while RNA has an additional chiral center at C2'. Chirality is central to all molecular interactions in biological  systems. A simple experiment demonstrates the principle: try to shake someone's left hand with your right.
+                    <li style="margin-top:6px">
+                        <b>Cispetide Bond</b>: Detection of <i>cis</i> peptide bonds in protein structures using the <b><a href="http://www.ks.uiuc.edu/Research/vmd/plugins/cispeptide/">Cispeptide</a></b> plugin in VMD. For more information how to convert  fix chirality errors please follow the <b><a href="http://www.ks.uiuc.edu/Training/Tutorials/#vmd">Structure Check tutorial</a></b>.
+                    <li style="list-style-type: none; margin-top:4px">
+                        In naturally occurring proteins most peptide bonds are in the <i>trans</i> configuration. However, sometimes <i>cis</i> peptide bonds do occur. The vast majority of <i>cis</i> peptides is observed at a proline, Xaa-Pro, Xaa being any amino acid. But non-proline Xaa-non Pro cis bonds are also found in proteins, although they occur much less frequently than Xaa-Pro. The configuration of the peptide bond is central to the sort of secondary structure the protein backbone can adopt. It is easy to understand by imagining a normal &alpha;-helix and converting a <i>trans</i> peptide bond into its <i>cis</i> form. The result is that the hydrogen bond network stabilizing the helix is broken and the helix will be unstable in long simulation.
+                    <li style="margin-top:6px">
+                        <b>Sequence Gap</b>: Detection of non-consecutive numbering of the protein and nucleic residues within each chain. If the residues sequence present a gap, another test is performed to evaluate if the residues are bonded, avoiding false detection of pre-crystallization sequence deletions. Due to the complex structure of carbohydrates (glycan), this test is not performed for such molecule types.
+
+                    <li style="list-style-type: none; margin-top:4px">
+                        <b><i>PDB Insertion Codes</i></b>: Sometimes the initial structure presents insertion codes in the residues sequence. Rather than be numbered sequentially, some structures present residues numbering as 47, 47A, 47B and so on. This different numbering rises from the comparison between homologous proteins which have different chain lengths, and the authors who wants to preserve the reference among the different proteins use additional characters to identify non-matching residues between homologous sequences.
+                        <p></p> 
+                        QwikMD reorders the residues to avoid unintentional deletion of the residues presenting different insertion codes. During the loading process, the residues sequence is checked for the existence of insertion codes and new residues IDs are assigned to ensure sequential numbering. In the end of the check structure process, a warning message is prompted to the user followed by the reference table displaying the relationship between the initial and the new numbering sequence. The reference table is then saved in the "setup" folder, within the working directory during the preparation phase, in the file "<b>Renumber_Residues.txt</b>".
+                         </li>
+
+                     <li style="margin-top:6px">
+                        <b>Torsion Angles Outliers/Marginals</b>: Evaluation of the distribution of the &phi; and &psi; backbone angles. The percentage of angles consider as Outliers and Marginals are good indicators of the stereochecimal quality of the structure. QwikMD uses the command line of Torsion Plot VMD plugin to perform this evaluation. For more information, please visit the <b><a href="http://www.ks.uiuc.edu/Research/vmd/plugins/ramaplot/">Ramaplot Plugin</a></b>.    
+                    </li>
+                </ul> 
+            </td>
+        </tr>
+
+        <tr>
+            <th th style="height: 30px" colspan="2">
+            <font size="3" ><a id="membrane"></a><b style="float: center">Membrane</b></font> 
+            <font size="2" style="float: right"><u><b><a href="#" >Top</a></b></u></font> 
+        </th>
+        </tr>
+
+        <tr>
+        <td align="center" colspan="2" style="padding:20px">
+            <img src=images/qwikmd_membrane.png width=20% border=0/>
+        </td>
+        </tr>
+        <tr>
+            <td align="justify" colspan="2" style="padding:20px">
+                The "Membrane" field is activated when the <b><a href="#structuremanipulationcheck">Structure Manipulation/Check</a></b> window is invoked from the <b><a href="#advancedrun">Advanced Run</a></b>. In here, one can defined the dimensions and position of the lipid bilayer. QwikMD uses the <b><a href="http://www.ks.uiuc.edu/Research/vmd/plugins/membrane/">Membrane</a></b> VMD plugin to generate the membranes.
+                <ul>
+                    <li style="margin-top:6px">
+                        <b>Lipid</b>: Membrane lipid composition. Only two types of lipid composition are currently available:
+                        <ul>
+                            <li style="margin-top:4px">
+                                <b>POPC</b>: membrane 100% composed by 3-palmitoyl-2-oleoyl-D-glycero-1-Phosphatidylcholine
+                            </li>
+                            <li style="margin-top:4px">
+                                <b>POPE</b>: membrane 100% composed by 3-palmitoyl-2-oleoyl-D-glycero-1-Phosphatidylethanolamine
+                            </li>
+                        </ul>
+                    </li>
+                    <li style="margin-top:6px">
+                        <b>x</b>/<b>y entries</b>: membrane dimensions in the x-axis/y-axis in &#8491;. The initial position of the membrane is assigned to the center of the system currently selected.
+                    </li>
+                    <li style="margin-top:6px">
+                        <b>Box</b>: Draw the box where the membrane will be positioned. 
+                        <p align="justify" style="margin-top:3px">
+                        <i>Note</i>: Due to the slow process of building the membrane and to avoid rounding floating point arithmetic rounding errors generated during coordinates translation and rotation process, the position of the membrane is defined using a temporary box, and then the membrane is generated once. If one decides to change the position of the generated membrane, first the membrane must be deleted pressing the "Delete" button, reposition the box, and generate the membrane again.</p>
+                    </li>
+                    <li style="margin-top:6px">
+                        <b>Translate</b>/<b>Rotate</b>: the action generated by the movers "--", "-", "+" and "++". 
+                    </li>
+                    <li style="margin-top:6px">
+                        <b>x</b> / <b>y</b> / <b>z</b>: axis for translation/rotation. 
+                    </li>
+                    <li style="margin-top:6px">
+                        <b>--</b> / </b><b>++ buttons</b>: membrane temporary box movers to translate the box by -5 &#8491; or +5 &#8491;, or rotate -15&deg; or +15&deg; over the selected axis.
+                    </li>
+                    <li style="margin-top:6px">
+                        <b>-</b> / </b><b>+ buttons</b>: membrane temporary box movers to translate the box by -1 &#8491; or +1 &#8491;, or rotate -1&deg; or +1&deg; over the selected axis.
+                    </li>
+                    <li style="margin-top:6px">
+                        <b>Generate</b>: Generate the membrane according to the location and dimension of the temporary box.
+                    </li>
+                    <li style="margin-top:6px">
+                        <b>Delete</b>: Delete the previous generated membrane.
+                    </li>
+                    <li style="margin-top:6px">
+                        <b>Optimize Size</b>: Change the center and dimensions (orientation is not affected) of the membrane to ensure that the existence of at least 15 &#8491; between protein maximum and minimum coordinates and simulation cell limits in the membrane axis. 
+                        <p align="justify" style="margin-top:3px">
+                        <i>Note</i>: The periodic boundary conditions dimensions, in the membrane axis, are determined by the membrane dimensions.</p>
+                    </li>
+                </ul> 
+            </td>
+        </tr>
+
+        <tr>
+            <th th style="height: 30px" colspan="2">
+	            <font size="3" ><a id="patches"></a><b style="float: center">Modifications (Patches) List</b></font> 
+	            <font size="2" style="float: right"><u><b><a href="#" >Top</a></b></u></font> 
+        	</th>
+        </tr>
+        <tr>
+        <td align="center" colspan="2" style="padding:20px">
+            <img src=images/qwikmd_patches.png width=30% border=0/>
+        </td>
+        </tr>
+        <tr>
+            <td align="justify" colspan="2" style="padding:20px">
+                During the structure preparation, the initial structure is split into individual segments, such as, the segment containing all protein residues belonging to the chain A, protein residues of the chain B and the segment containing all water residues belonging to the chain A (see <b><a href="http://www.ks.uiuc.edu/Research/vmd/plugins/psfgen/ug.pdf">psfgen tutorial</a></b>). Often times, special modifications (patches) are necessary after the creation of the segments, such as a connection between two different protein segments, or a crosslink between an Heme group and the protein chain.
+            
+            <p align="justify" style="margin-top:3px">
+                One can apply structure modifications by listing the sequence of patches, following the specific command format, "<code>PatchName ChainID1 ResidueNumber1</code>" or in cases of 5 arguments patches "<code>PatchName ChainID1 ResidueNumber1 ChainID2 ResidueNumber2</code>". The list of modifications can be found in the CHARMM36 topology and stream files with the keyword "<b>PRES</b>".  
+            </p>
+            </td>
+        </tr>
+
+    </table>
+</td>
+</tr>
+</table>
+</div>
+
+<div style=" max-width: 1000px">
+    <table border=0 cellpadding="5">
+        <tr bgcolor="#ffdb23">
+            <td valign=top>
+            <strong>
+                <font size="3" style="float: left"><a id="simulationsetupcontrol"></a><b>Simulation Setup & Control</b></font> 
+                <font size="2" style="float: right"><u><b><a href="#">Top</a></b></u></font> 
+            </strong>
+            </td>
+        </tr>
+        <tr height="20px"></tr> 
+        <tr>
+        <td align="justify" width="100%" height="100%">
+In this section of QwikMD, one can prepare the system to be simulated, generate all the files necessary to run the MD simulation as well as perform the simulation using NAMD. To run an MD simulation with NAMD at least four files are required: a Protein Data Bank (pdb) file a Protein Structure File (psf), a force field parameter file and a configuration file. During the preparation steps, where the system might be solvated, ionized, among other procedures, several files are created. 
+        </td>
+        </tr>
+
+    <tr>
+        <td align="justify" width="100%" height="100%"><b>QwikMD Output folder</b><a id="qwikmdoutput"></a></td>
+    </tr>
+    <tr>
+        <td align="justify" width="100%" height="100%">
+            QwikMD stores the files created in the preparation step in the "<b>setup</b>" folder, while all the files necessary to run the MD simulations are stored in the "<b>run</b>" folder. These two folders are created inside the main folder defined by the user in working directory window. With the same name as the folder created by the user, a file with .qwikmd extension allows the user to restore QwikMD interface to a saved state and load the simulations already executed.
+        </td>
+    </tr>
+    <tr>
+    <td align="justify">
+        <p>QwikMD Output folder structure</p>
+        <ul>
+        <li style="list-style-type: none;">InputFileName.qwikmd</li>
+
+        <li style="list-style-type: none;"><b>InputFileName</b>
+            <ul class="tree" id="tree"> 
+                <li>InputFileName.infoMD</li>
+                <li><b>setup</b>
+                    <ul class="tree">
+                        <li> Preparation auxiliary files</li>
+                        <li> Intermediary pdb files</li>
+                        <li> Intermediary psf files</li>
+                        <li> Renumber_Residues.txt (if applicable <b><a href="#structurecheck">Structure Check</a></b>)</li>
+                        <li> TopologyFiles.rtf</li> 
+                        <li> Topology+ParameterFiles.str</li>   
+                    </ul>
+                </li>
+                <li><b>run</b>
+                    <ul class="tree">
+                        <li> NAMDConfigurationFiles.conf</li>
+                        <li> InputFileName_QwikMD.pdb</li>
+                        <li> InputFileName_QwikMD.psf</li>
+                        <li> ParameterFiles.prm</li>
+                        <li> Topology+ParameterFiles.str</li>
+                        <li> SimulationLogFiles.log</li>
+                        <li> SimulationTrajectories.dcd</li>
+                    </ul>
+                </li>
+            </ul>
+            </li>
+        </ul>
+    </td>
+</tr>
+<tr>
+    <td valign=top> 
+    <strong>
+        <font size="3" style="float: left"><b>Simulation Setup & Control options</b></font> 
+    </strong>
+    </td>
+</tr>
+    <tr>
+    <td>
+    <table border=0 cellpadding="5" style="float:center; border-collapse:collapse ; width: 100%">
+            <tr>
+        <td align="center"  style="padding:20px">
+        <img src=images/qwikmd_simulationsetup.png width=30% border=0/>
+        </td>
+    </tr>
+    <tr>
+        <td align="justify" >
+            <ul >
+            <li style="margin-bottom:6px">
+                <b>Save</b>: Save all the operations performed and options to the QwikMD input file (*.qwikmd)
+            </li>
+            <li style="margin-bottom:6px">
+                <b>Load</b>: Load a previous generated QwikMD input file. If one ore more protocol steps had been already performed, one can use the dialog window to the steps to be loaded into VMD.  
+            </li>
+            <li style="margin-bottom:6px">
+                <b>Reset</b>: Return QwikMD to the initial state and set all the options to the default value. If a simulation is being performed in "Live View" Mode, QwikMD will terminate the simulation during the reset process.
+            </li>
+            <li style="margin-bottom:6px">
+                <b>Live View</b>: Run the simulation in "Live View" Mode. Within "Live View" Mode, one can visualize the simulation while it is being calculated, useful for demonstration purpose and for quick system inspection. During the "Livew View" simulation, one can also perform live analysis, in which the properties, like Root Mean Square Deviation (RMSD) and energies components are calculated and displayed, concurrently with the simulation calculation. 
+                <p align="justify" style="margin-top:3px;margin-right:3%">
+                <i><u>WARNING</u></i>: This option <b>must be selected before</b> pressing the button "Prepare". 
+            </li>
+            <li style="margin-bottom:6px">
+                <b>Prepare</b>: Prepare the system for simulation and generate the configuration files necessary to execute NAMD. The system preparation phase is composed by the following steps: structure manipulation operations selected by the user such as point mutations and protonation state assignment; membrane insertion; system solvation and salt addition to neutralize and achieve the desired concentration (if applicable). QwikMD keeps track of every options and operations performed by the user and stores the information in two log file: the QwikMD input file and "InputFileName".infoMD.
+                 
+                <ul>
+                <li style="margin-bottom:4px">
+                 QwikMD input file (*.qwikmd) is a script compiling all the options selected and operation performed by the user and can be loaded back into QwikMD.
+                </li>
+                <li style="margin-bottom:4px">
+                 "InputFileName".infoMD is a human readable text file, where one can review all the steps taken regarding the system preparation, methods and the correspondent citation articles employed in the simulations and the analysis carried over the simulations.    
+                </li>
+            </li>
+            
+            </ul>
+            <li style="margin-bottom:6px">
+                <b>Start Simulation</b>: Execute the protocol step listed in the button text. In the case of "Live View" mode simulations, one can visualize and perform live analysis, otherwise, NAMD will be executed in the background and <u>QwikMD and VMD will be inaccessible ("froze") until the simulation is completed</u>.  
+                <p align="justify" style="margin-top:3px;margin-bottom:0px;margin-right:3%">
+                <i><u>Easy Run</u></i>: On "Easy Run" tab, one can extend the MD or SMD simulation step (depending on the current selected protocol) by pressing this button again, where a new MD or SMD simulation is started from the last point of the previous simulation. The extended simulation are numbered sequentially and latter loaded into QwikMD in the same order. 
+            
+                <p align="justify" style="margin-top:0px;margin-bottom:6px;margin-right:3%">
+                <i><u>Advanced Run</u></i>: On "Advanced Run" tab, one can extend the last simulation on the current protocol by adding an additional step to the protocol and press the this button to start the simulation from the last point of the previous simulation. The extended simulation are numbered sequentially and latter loaded into QwikMD in the same order.
+
+                <p align="justify" style="margin-top:0px;margin-bottom:6px;margin-right:3%">
+                <i><u>Run Simulations On Supercomputers</u></i>: To perform the simulations prepared with QwikMD on a supercomputer, one must copy the "<b>run</b>" folder to the the supercomputer file system and run NAMD following the procedures for the specific computer.  
+                 
+                </li>
+                <li style="margin-bottom:6px">
+                    <b>Pause</b>: Pause a "Live View" simulation
+                </li>
+                <li style="margin-bottom:6px">
+                    <b>Detach</b>: Stop a "Live View" simulation without update the coordinates. Use this button it if anything goes wrong.
+                </li>
+                <li style="margin-bottom:6px">
+                    <b>Finish</b>: Stop a "Live View" simulation and update the coordinates.
+                </li>
+                <li style="margin-bottom:6px">
+                    <b>Progress bar</b>: Display the current progress of a "Live View" simulation.
+                    <p align="justify" style="margin-top:3px;margin-bottom:0px;margin-right:3%">
+                    <i><u>Note</u></i>: During a "Live View" simulation, QwikMD gui is updated on a fix interval of simulation steps. If the simulation finishes before the completion of the interval, QwikMD can not detect the increment to update the progress bar as well as the simulation termination. In this case one must press "Finish" to enforce the update of QwikMD. The message <code>Info) IMD connection ended unexpectedly; connection terminated</code> on the VMD terminal window indicates that the simulation stopped/finished.
+                </li>   
+        </td>
+    </tr>
+    </table>
+</td>
+</tr>
+
+    </table>
+</div>
+
+
+<div style=" max-width: 1000px">
+
+<table border=0 cellpadding="5">
+    <tr bgcolor="#6667af">
+    <td valign=top>
+    <strong>
+        <font size="4" style="float: left;color:white"><a id="loadanalysis"></a><b>Load Results & Analysis</b></font> 
+        <font size="2" style="float: right;color:white"><u><b><a href="#" style="color:white">Top</a></b></u></font> 
+    </strong>
+    </td>
+    </tr>
+    <tr>
+    <tr height="20px"></tr> 
+    <td align="justify">
+        VMD is a powerful tool for analysis of structures and trajectories and should be used as a tool to think. Numerous tools for analysis are available under the VMD Main menu item Extensions - Analysis. In addition to these built-in tools, VMD users often use custom-written scripts to analyze desired properties of the simulated systems. VMD Tcl scripting capabilities are very extensive, and provide boundless opportunities for analysis. QwikMD provides the user with some of the most employed analysis tools, allowing also the analysis while performing live NAMD sections.
+    </td>
+    </tr>
+    <tr>
+    <td align="justify">
+        The combination of NAMD and VMD creates what we like to call the computational microscope. Analysis of molecular dynamics trajectories is a very important step in any study that aims to understand molecular details of protein complexes. Connecting dynamics to structural data from diverse experimental sources, molecular dynamics simulations permit the exploration of biological phenomena in unparalleled detail. Advances in simulations are moving the atomic resolution descriptions of biological systems into the million-to-billion atom regime, in which numerous cell functions reside. To read more about the advances in Molecular Dynamics simulations to study large and complex system check the link at the bottom of this window. 
+    </td>
+    </tr>
+
+</table>
+</div>
+
+<div style=" max-width: 1000px">
+
+<table border=0 cellpadding="5">
+<tr bgcolor="#ffdb23">
+    
+    <td valign=top> 
+    <strong>
+        <font size="3" style="float: left"><a id="loadresults"></a><b>Load Results</b></font> 
+        <font size="2" style="float: right"><u><b><a href="#">Top</a></b></u></font> 
+    </strong>
+    </td>
+</tr>
+<tr height="20px"></tr> 
+
+		<tr>
+    <td align="justify">
+        After executing the simulation(s), one can load and analyze the MD  trajectories. To load the  trajectories on must load the QwikMD input file (*.qwikmd) using the "<b>Load</b>" button on the <b><a href="#simulationsetupcontrol">Simulation Setup & Control</a></b> section. After load the input file, QwikMD will prompt the window "<b>Loading Trajectories</b>" where one can select the trajectories to be loaded into VMD. 
+    </td>
+    </tr>
+    <tr>
+    	<td>
+    <table border=0 cellpadding="5" style="float:center; border-collapse:collapse ; width: 100%">
+        <tr>
+            <td align="center"  style="padding:20px">
+            <img src=images/qwikmd_loadtrajectories.png width=25% border=0/>
+            </td>
+        </tr>
+        <tr>
+        <td align="justify" >
+            <ul>
+            <li style="margin-bottom:6px">
+                <b>Don't load water</b>/<b>solvent ion molecules</b> or <b>hydrogen atoms</b>: trajectory pre-load treatment to remove the water/solvent ion molecules or hydrogen atoms and therefore reduce the size of the trajectory files to be loaded into VMD. Depending on the size of the trajectory, this step may take a long time to perform, however is only performed once per combination of selected options. This pre-treatment creates a new trajectory file (*.dcd) in the "<b>run</b>" folder with a suffix "_"  In the subsequent loading  This options uses the <a href="http://www.ks.uiuc.edu/Development/MDTools/catdcd/">CatDCD program</a> only available the Unix (Linux & Mac) versions of VMD. 
+            </li>
+             <li style="margin-bottom:6px">
+                <b>Select Trajectories</b>: select the trajectories to be loaded into VMD. Only the selected trajectories will be considered for analysis as well as the correspondent simulation log files, containing the values of the energy components (bonds, angles and etc.), SMD forces, temperature, volume and pressure.
+            </li>
+            <li style="margin-bottom:6px">
+                <b>Loading Trajectory Frame Step (Stride)</b>: select every <i>Stride</i> frames from the beginning to the end of the trajectory. Default value is 1, meaning loaded all frames stored in the trajectory file. 
+            </li>
+            </ul>
+        </td>
+        </tr>
+    </table>
+		</td>
+	</tr>
+    <tr>
+    <td align="justify">
+        <b><i>WARNING</i></b>: the 32-bit version of the VMD is limited to load up to 4GB trajectory files (in total), which is the usual case of the VMD versions for Mac. To overcome this limitation, one must select a "Loading Trajectory Frame Step" greater than 1, or select the options to remove water and/or ion molecules and/or remove hydrogen atoms (if not needed for analysis). 
+    </td>
+    </tr>
+
+</table>
+</div>
+
+<div style="max-width: 1000px">
+
+<table border=0 cellpadding="5">
+
+<tr bgcolor="#ffdb23">
+    <td valign=top> 
+    <strong>
+        <font size="3" style="float: left"><a id="analysis"></a><b>Analysis</b></font> 
+        <font size="2" style="float: right"><u><b><a href="#">Top</a></b></u></font> 
+    </strong>
+    </td>
+</tr>
+
+<tr height="20px"></tr>
+		<tr>
+    <td align="justify">
+        Either during a "Live View" simulation or after load the trajectories, QwikMD allows the user to perform common analysis in two analysis tabs: "<b>Basic Analysis</b>" and "<b>Advanced Analysis</b>".  
+    </td>
+    </tr>
+
+<tr>
+    <td>
+    <table border=1 cellpadding="5" style="float:center; border-collapse:collapse ; width: 100%">
+        <tr><a id="basicanalysis"></a>
+        <th style="height: 30px" colspan="2">Basic Analysis</th>
+        </tr>
+        <tr>
+      		 <td align="justify"><a id="rmsd"></a>
+      		 	<b>Root Mean Square Deviation (RMSD)</b>: is the measure of the average distance between the atoms (usually the backbone atoms) of superimposed proteins. In the study of globular protein conformations, one customarily measures the similarity in three-dimensional structure by the RMSD of the C&alpha; atomic coordinates after optimal rigid body superposition. 
+      		 	
+      		 	<ul>
+      		 		<li style="margin-bottom:3px; margin-right:3%">
+      		 			<b>Region selection</b>: the first atom selection regards the structure region where the RMSD will be calculated. One can use the drop-down menu to select the pre-defined selection <u>OR</u> type the atom selection in the text entry, using <b><a href="http://www.ks.uiuc.edu/Research/vmd/vmd-1.9.2/ug/node199.html">VMD atomselection syntax</a></b>. 
+      		 		</li>
+      		 		<li style="margin-bottom:3px; margin-right:3%">
+      		 			<b> Align Structure</b>: align each frame with the first frame loaded into VMD. Like the "Region Selection", one can select the alignment target region using the drop-down menu <u>OR</u> typing the atom selection in the text entry, using <b><a href="http://www.ks.uiuc.edu/Research/vmd/vmd-1.9.2/ug/node199.html">VMD atomselection syntax</a></b>.  
+      		 		</li>
+      		 	</ul>
+      		 	<p align="justify" style="margin-top:3px">
+      		 		More advanced options for RMSD analysis can be done with VMD plugins available in VMD Main menu item Extensions - Analysis. To read more about VMD and its plugins check the <b><a href="http://www.ks.uiuc.edu/Research/vmd/plugins/">VMD plugins webpage</a></b>. 
+      		 	</p>
+      		 </td>
+        
+        <td align="center" width="50%">
+            <img src=images/qwikmd_rmsd.png width=90% border=0/>
+        </td>
+    	</tr>
+
+        <tr>
+      		 <td align="justify"><a id="energies"></a>
+      		 	<b>Energies</b>: QwikMD provides an easy-to-use interface to plot the energies reported in the NAMD log files during a simulation. Here one can plot the sum of all Potential energies (bonds, angles, dihedrals, impropers, electrostatics and VDW); Kinetic energy (atoms energy of motion) and the Total energy (sum of the Potential and Kinetic energies).  
+      		 </td>
+        
+        <td align="center" width="50%">
+            <img src=images/qwikmd_energies.png width=90% border=0/>
+        </td>
+    	</tr>
+
+    	<tr>
+      		 <td align="justify"><a id="thermodynamics"></a>
+      		 	<b>Thermodynamics</b>: To track the evaluation/equilibrium of the MD simulation is current practice to analyze the Temperature, Pressure and the Volume values. These values are calculated by NAMD and reported in the log file and can be easily plot by QwikMD. As the default MD simulations performed in qwikmd are carried in the isothermal-isobaric ensemble (NpT), the number of atoms (N), pressure (p) and temperature (T) are kept constant by employing thermostat and barostat, it is interesting to observe small variation of T and p values around the user defined values. As in the example image on the right, when the simulation is prepared to run in Implicit Solvent model or in vacuum, the values of "Pressure" and "Volume" are not available since there is not an explicit definition of simulation box. 
+      		 </td>
+        
+        <td align="center" width="50%">
+            <img src=images/qwikmd_thermodynamics.png width=90% border=0/>
+        </td>
+    	</tr>
+
+    </table>
+	</td>
+</tr>
+
+<tr>
+    <td>
+    <table border=1 cellpadding="5" style="float:center; border-collapse:collapse ; width: 100%">
+        <tr><a id="advancedanalysis"></a>
+        <th style="height: 30px" colspan="2">Advanced Analysis</th>
+        </tr>
+        <tr>
+      		 <td align="justify"><a id="hbonds"></a>
+      		 	<b>Hydrogen Bonds (H bonds)</b>: The Hydrogen bonds window shows the number of hydrogen bonds formed throughout a trajectory. A hydrogen bond is formed between an atom with a hydrogen bonded to it (the donor, D) and another atom (the acceptor, A) provided that the distance D-A is less than the cut-off distance (3.5 Angstroms) and the angle D-H-A is less than the cut-off angle (30 degrees). Only the polar atoms (Fluorine, Oxygen, Nitrogen and Sulfur) are considers during the hydrogen bonds calculation. QwikMD allows the user to count the number of hydrogen bonds on the fly per each step. The hydrogen bonds can be calculated for the internal hydrogen bonds of the protein, between solute (usually protein) and water molecules, or between two atom selection. For more information, please visit <b><a href="http://www.ks.uiuc.edu/Research/vmd/plugins/hbonds/">VMD HBonds plugin</a></b>.  
+      		 </td>
+        
+        <td align="center" width="50%">
+            <img src=images/qwikmd_hbonds.png width=80% border=0/>
+        </td>
+    	</tr>
+    	<tr>
+      		 <td align="justify"><a id="smdforces"></a>
+      		 	<b>SMD Forces</b>: There are two typical protocols of SMD: one in which pulling velocity is held constant and one in which applied force is constant. Typically, part of the studied system (e.g. an atom in a protein) is restrained by a harmonic potential. Forces are then applied to specific atoms at either a constant velocity or a constant force. Here one user can plot the Force vs Time and Force vs Distance graphics. The Force profiles can be compared with single-molecule force spectroscopy (SMFS) experiments, which are usually performed with optical tweezers and/or atomic force microscopes (AFM).   
+      		 </td>
+        
+        <td align="center" width="50%">
+            <img src=images/qwikmd_smd.png width=80% border=0/>
+        </td>
+    	</tr>
+        <tr>
+      		 <td align="justify"><a id="rmsf"></a>
+      		 	<b>Root Mean Square Fluctuation (RMSF)</b>: When a dynamical system fluctuates about some well-defined average position, the RMSD from the average over time can be referred to as the RMSF or root mean square fluctuation. The size of this fluctuation can be measured, for example using M&ouml;ssbauer spectroscopy or nuclear magnetic resonance, and can provide important physical information. The options available for the RMSF calculation are very similar to the ones in the RMSD, where in the RMSD, one can select the frame range to be included in the calculation. 
+      		 </td>
+        
+        <td align="center" width="50%">
+            <img src=images/qwikmd_rmsf.png width=80% border=0/>
+        </td>
+    	</tr>
+
+    	<tr>
+      		 <td align="justify"><a id="sasa"></a>
+      		 	<b>Solvent Accessible Surface Area (SASA)</b>: Calculation of the Solvent-Accessible Surface Area (SASA) of the selection defined in "Atom Selection" during the simulation, presenting only the values for the selection defined in the "Restriction Selection". The <i>#S</i> value in the table represents the total SASA value, while the rest of the table is populated with SASA values for each selected residue. SASA calculation is based on the <code>measure sasa</code> command. For more information, please visit the <b><a href="https://www-s.ks.uiuc.edu/Research/vmd/current/ug/node138.html">measure command</a></b> webpage.
+      		 </td>
+        
+        <td align="center" width="50%">
+            <img src=images/qwikmd_sasa.png width=80% border=0/>
+        </td>
+    	</tr>
+
+    	<tr>
+      		 <td align="justify"><a id="contactarea"></a>
+      		 	<b>Contact Area</b>: Based on the SASA calculation, the contact area is calculated based on the surface area of the "Selection 1" exposed to the "Selection 2" and <i>vice-versa</i>. The calculation of the contact area is performed in two steps, where the SASA is calculated for the residues of the "Selection 1" distanced 5 &#8491; of the "Selection 2" in the absence and presence of the "Selection 2". The difference between the two will give the surface area of the "Selection 1" exposed to the "Selection 2" (<i>#S1</i>). The same calculation is performed, but in this case for the Selection 2 (<i>#S2</i>).  
+      		 </td>
+        
+        <td align="center" width="50%">
+            <img src=images/qwikmd_contactingarea.png width=80% border=0/>
+        </td>
+    	</tr>
+
+    	<tr>
+      		 <td align="justify" colspan="2"><a id="spcfh"></a>
+      		 	<b>Specific Heat, Temperature Distribution, Maxwell-Boltzamnn Energy Distribution, Temperature Quench</b>: These analysis illustrate four examples of statistical mechanics properties that can be calculated from an MD simulation trajectory. For more information, please follow the analysis section of the <b><a href="http://www.ks.uiuc.edu/Training/Tutorials/namd/namd-tutorial-unix-html/node13.html">namd tutorial</a></b>.  
+      		 </td>
+        
+        
+    	</tr>
+
+    </table>
+	</td>
+</tr>
+
+
+</table>
+</div>
+
+<!-- 
+<p align="justify">
+The preparation and submission of the MD simulation take place in the Run tabs (Easy and Advanced). In these tabs, one can has to select the structure segments to be simulated, and manipulate the structure in order to match with the experimental conditions or with the hypothesis to be tested. These manipulations can be point mutations, change protonation state, atoms/residues deletions and etc. 
+</p>
+
+<table border=0 cellpadding="5">
+
+</table>
+</div>
+
+<div style=" max-width: 1000px; height:50px">
+
+<div style="max-width: 1000px">
+    <h2 style="float: left">Run Tab</h2>
+    <h4 style="float: right"><b><a href="#">Top</a></b></h4>
+</div>
+</div>
+
+<div style=" max-width: 1000px">
+
+<div class="imgmidlle">
+    <center>
+    <img alt="qwikmd"
+       src=images/qwikmd_runtab.png width=50% height=50% border=0/>
+    </center>
+    </div>
+    
+<p>
+
+<p align="justify">
+The preparation and submission of the MD simulation take place in the Run tabs (Easy and Advanced). In these tabs, one can has to select the structure segments to be simulated, and manipulate the structure in order to match with the experimental conditions or with the hypothesis to be tested. These manipulations can be point mutations, change protonation state, atoms/residues deletions and etc. 
+</p>
+
+<p id="loadpdb"></p>
+<div style=" max-width: 1000px; height:50px">
+<div style="max-width: 1000px">
+    <h3 style="float: left">Load Initial Structure</h3>
+    <h4 style="float: right"><b><a href="#">Top</a></b></h4>
+</div>
+</div>  
+    
+<div class="imgmidlle">
+    <center>
+    <img alt="qwikmd"
+       src=images/loadpdb_opt.png width=50% heigth=50% border=0/>
+    </div>
+    </center>
+<p>
+    
+<p align="justify">
+The fundamental prerequisite of MD simulations is a complete three-dimensional structure at atomic resolution. The user can select the file containing the atom's coordinates in two different ways: by pressing "Browser", select a local file (.pdb, .mol2, .xyz and etc.) and press "Load"; or by typing the Protein Data Bank structure ID (4-character unique identifier code, i.g. 1kjf for HIV-1 PROTEASE) in the text entry and then press "Load" as well. During the load process, the structure is evaluated to identify possible future issues, such as non-parameterized residues, protein gaps and etc. (see <b><a href="#">Structure Check</a></b>).  
+</p>
+
+<p id="selectmanipulation"></p>
+<div style=" max-width: 1000px; height:50px">
+<div style="max-width: 1000px">
+    <h3 style="float: left">Selection and Manipulation</h3>
+    <h4 style="float: right"><b><a href="#">Top</a></b></h4>
+</div>
+</div>  
+
+<div class="imgmidlle">
+    <center>
+    <img alt="qwikmd"
+       src=images/strselection.png width=50% heigth=50% border=0/>
+    </center>
+    </div>
+    
+<p>
+
+<p align="justify">
+In the "Selection and Manipulation" section of QwikMD gui, the user can select the components of the structure that will be prepared for the MD simulation. For example, structures obtained by NMR spectroscopy usually contain more than one state of the protein, in which one must be selected; multiple protein chains; different molecule types assigned within the same chain identifier (e.g. protein and nucleic residues of the chain A). Using "NMR State" and "Chan/Type Selection" menus, one can select the NMR state and the segments, such as chains. 
+</p>
+<p align="justify">
+The "Structure Manipulation" button generates a window listing the residues of the segments selected in the "Chan/Type Selection" menu and allows the user to preform a fine grained selection, such as select or delete residues of one particular chain. In this new window, one can also manipulate the structure by marking residues to be mutated, assign protonation state, add lipid bilayer and other specific tasks associated with the CHARMM forcefield employed in the MD simulation (see <b><a href="#structuremanipulationcheck">Structure Manipulation/Check</a></b>).
+</p>
+<p>
+<p id="nmrstate"></p>
+<div style=" max-width: 1000px">
+<p>
+<div style=" max-width: 1000px; height:30px">
+<div style="max-width: 1000px">
+    <b style="float: left">NMR States</b>
+    <b style="float: right"><b><a href="#">Top</a></b></b>
+</div>
+</div>  
+<p>
+<!--    <p align="justify">
+Nuclear magnetic resonance spectroscopy of proteins, usually abbreviated as protein NMR, is a field of structural biology in which NMR spectroscopy is used to obtain information of the structure and dynamics of proteins, nucleic acids, and their complexes. NMR structure in the PDB usually have multiple steps represented as multiple frames when loaded into VMD. In order to start an MD simulation, one has to select one of the steps (frames) as the initial coordinates. It is common practice to preform multiple MD simulations of the same system starting with different initial states to improve sampling of the conformations allowed to the structure in study.
+    </p> -->
+<!--    <p align="justify">
+Select one if the NMR States (frames) available in the loaded structure. Expected values from 0 to [number of states - 1]. 
+    </p>
+<p>
+</div>
+
+<p id="chaintypesel"></p>
+<div style=" max-width: 1000px">
+<p>
+<div style=" max-width: 1000px; height:50px">
+<div style="max-width: 1000px">
+    <b style="float: left">Chan/Type Selection</b>
+    <b style="float: right"><b><a href="#">Top</a></b></b>
+</div>
+</div>  
+<p>
+    <div class="imgmidlle">
+    <center>
+    <img alt="qwikmd"
+       src=images/qwikmd_chaintypesel.png width=50% heigth=50% border=0/>
+        </center>
+    </div>
+    
+<p>
+    <p align="justify">
+Select the residues defined by the atom's selection "Chain Identifier and Molecule Type", such as, "A and protein". User can select/deselect each segment individually or all segments at once by selecting the options "All" or "None" respectively from the "Select" menu in end of the segments list.  
+    </p>
+<p>
+
+<p id="maintable"></p>  
+<div style=" max-width: 1000px; height:50px">
+<div style="max-width: 1000px">
+    <h3 style="float: left">Main Table</h3>
+    <h4 style="float: right"><b><a href="#">Top</a></b></h4>
+</div>
+</div>  
+<div class="imgmidlle">
+    <center>
+    <img alt="qwikmd"
+       src=images/qwikmd_maintablecom.png width=35% height=35% border=0/>
+        </center>
+    </div>
+<p>
+
+<p align="justify">
+QwikMD "Main Table" lists all the segments selected in the "<b><a href="#chaintypesel">Chain/Type Selection</a></b>" Menu. In this table one can have an overview of the system that will be prepared for the MD simulation, as well as changing the representation and coloring modes of each segment. By default, protein and nucleic residues are represented in "NewCartoon" mode (see <b><a href="http://www.ks.uiuc.edu/Research/vmd/current/ug/node55.html">Rendering methods </a></b>) and colored with increasing values of "ColorID" indexes (see <b><a href="http://www.ks.uiuc.edu/Research/vmd/current/ug/node85.html">Coloring methods</a></b>), "glycan" and "hetero" residues are represented in "Licorice" and colored in "Name" mode and crystal water molecule in "VDW" and "Name" mode. For more information about atoms selection keywords, please visit <b><a href="http://www.ks.uiuc.edu/Research/vmd/current/ug/node90.html">Definition of Keywords and Functions</a></b>. 
+</p>
+<p align="justify">
+During the loading process, the initial structure is checked for possible inconsistencies, in particular for residues recognition. If one or more residues cannot be identified, the correspondent segment is colored as "Throb" to facilitate the visualization and identification in the "VMD OpenGL Display" (visualization window) and the residue is marked in the <b><a href="#structuremanipulationcheck">Structure Manipulation/Check</a></b> window. Residues identification and structure check procedures are described in <b><a href="#">Structure Check</a></b>.
+</p>
+
+<p id="structuremanipulationcheck"></p> 
+<div style=" max-width: 1000px; height:50px">
+<div style="max-width: 1000px">
+    <h3 style="float: left">Structure Manipulation/Check</h3>
+    <h3 style="float: right"><b><a href="#">Top</a></b></h3>
+</div>
+</div>  
+<div class="imgmidlle">
+    <center>
+    <img alt="qwikmd"
+       src=images/qwikmd_strcmanpulcheck.png width=70% height=70% border=0/>
+        </center>
+    </div>
+<p>
+<p align="justify">
+The "Structure Manipulation" button opens the window titled "Structure Manipulation/Check", where most modeling tasks available in QwikMD take place. As you will notice further in the documentation, this window is also involved in other selection tasks such SMD anchoring/pulling residues and MD simulation restraints atom selections. 
+</p>
+<p align="justify">
+By selecting a residue, one can preform point mutations, assign protonation states, delete/add residues, rename the residues to match the residue's name in the topology files, modify individual atoms of one residue and change residue's type to match the proper molecule category as protein, nucleic, glycan, hetero and water residues. Topology and parameters information and new molecules types can be added in "<b><a href="#">Add Topo+Param</a></b>". In the case of protein residues, the column "type" is colored by the secondary structure correspondent to each residue (color reference in the "Sec. Struct colors" box).    
+</p> 
+
+<p align="justify">
+The amount of options available in the "Structure Manipulation/Check" window is dependent on the level mode currently selected (Easy or Advanced Run). As shown in the above image (left hand figure - Easy mode; right hand figure - Advanced mode), more options are available when the advanced mode is selected like the possibility to select residues using atom selections text, build a bilayer membrane as well as apply special molecule modifiers available on CHARMM forcefield (commonly known as patches, see <b><a href="http://www.ks.uiuc.edu/Research/vmd/plugins/psfgen/">VMD psfgen Plugin</a></b>). The differences between the two modes for each window component.
+</p>
+
+<div style=" max-width: 1000px; height:50px">
+<div style="max-width: 1000px">
+    <h4 style="float: left">Residues Table</h4>
+    <h4 style="float: right"><b><a href="#">Top</a></b></h4>
+</div>
+</div>
+<p>
+<p align="justify">
+The main component of the "<b><a href="#structuremanipulationcheck">Structure Manipulation/Check</a></b>" window is the table listing all the residues included in the selection made on "<b><a href="#chaintypesel">Chain/Type Selection</a></b>" menu. The residues are listed in the same order as in the "<b><a href="#maintable">Main Table</a></b>", which is the order the residues are listed in the initial structure file. To facilitate the browsing through the residues list, one can change the sort criteria and sort the table by a specific column pressing the columns header.
+
+</p>    
+
+<!-- <p align="justify">
+ 
+</p> -->
+
+<!-- <div style=" max-width: 1000px; height:50px">
+<div style="max-width: 1000px">
+    <h4 style="float: left">Table Manipulation Options</h4>
+    <h4 style="float: right"><b><a href="#">Top</a></b></h4>
+</div>
+</div>
+<!-- <p> -->
+<!-- <div class="imgmidlle">
+    <center>
+    <img alt="qwikmd"
+       src=images/qwikmd_tablemode.png width=30% height=30% border=0/>
+        </center>
+</div>
+<p>
+<p align="justify">
+The main component of the "<b><a href="#structuremanipulationcheck">Structure Manipulation/Check</a></b>" window is the table listing all the residues included in the selection made in "Chain/Type Selection" menu. The residues appear in this table in the same order as in the "Main table" which is the residues order of the initial structure file. The table can be sorted by each column by pressing the column's header. In the case of protein residues, the column "type" is colored by the secondary structure type correspondent to each residue (color legend in the "Sec Struct colors" box). 
+</p>    
+<p>
+
+<p>
+<b>QwikMD Main Window</b>
+<p>
+    <p align="justify">
+In the main window of QwikMD, every chain is separated by type of molecule forming a group - chain/type. VMD has several types of molecules, including: protein, nucleic, lipids, water, among others. The user can select different Representations for each of the groups and also different colors.
+    </p>
+<p>
+
+
+<p>
+<h3>QwikMD Output Files</h3>
+<p align="justify">
+To run molecular dynamics simulations with NAMD at least four files are required: a Protein Data Bank (pdb) file a Protein Structure File (psf), a force field parameter file and a configuration file. During the preparation steps, where the system might be solvated, ionized, among other procedures, several files are created. QwikMD separates the files created in the preparation step in a SETUP folder, while files needed to run the MD simulations are in a RUN folder. These two folders are created inside the folder defined by the user in working directory window. With the same name as the folder created by the user, a file with .QwikMD extension allows the user to load simulations performed with QwikMD and also previously created preparation steps, like amino acid residues mutations or salt concentration.
+    </p>
+
+<p>
+To run a simulation prepared with QwikMD in a computer cluster or supercomputer, one needs to copy only the RUN folder.
+
+<p>
+
+<p>
+    <p align="justify">
+To learn more about MD simulations check the list of 
+<a href="http://www.ks.uiuc.edu/Publications/Papers/Review/">reviews</a>
+ published by our group.
+ </p>
+<p>
+
+   
+<p>
+<h3>Simulation Controls</h3>
+    <p align="justify">
+QwikMD helps the user to prepare NAMD input files to run in a range of computers, from the largest supercomputers with high-end parallel platforms to the smallest laptop computers. QwikMD also allow, through the Interactive Molecular Dynamics interface of NAMD, to run live simulations where the user can look and analyze the trajectories while they are being created.
+    </p>
+
+<p>
+
+<p>
+<b>Preparing simulations with QwikMD</b>
+<p>
+    <p align="justify">
+When the Prepare button is pressed, scripts to perform all the steps required by the settings selected by user. Two folders will be created in the Working directory: files created in the preparation step in a SETUP folder, while files needed to run the MD simulations are in a RUN folder.
+    </p>
+<p>
+
+
+<p>
+<b>Running NAMD Live</b>
+<p>
+    <p align="justify">
+If you want to run Live Simulation, make sure you have the corresponding box checked before you click Prepare and then just press Start for a live simulation.
+    </p>
+<p>
+
+<p>
+<b>WARNING:</b>
+<p>
+    <p align="justify">
+Always click to FINISH your simulation before leaving VMD or closing QwikMD window. NAMD activities started from VMD will continue to run in background for all the steps requested unless you make sure the simulation was aborted before leaving QwikMD.
+    </p>
+<p>    
+
+<p>
+<b>Running NAMD in a Supercomputer</b>
+<p>
+    <p align="justify">
+To run NAMD in a supercomputer copy the RUN folder to your folder in the supercomputer file system and run NAMD following the procedures for the specific computer.
+    </p>
+<p>
+
+
+<h2>Analysis Tab</h2>
+
+
+<p align="justify">
+VMD is a powerful tool for analysis of structures and trajectories and should be used as a tool to think. Numerous tools for analysis are available under the VMD Main menu item Extensions - Analysis. In addition to these built-in tools, VMD users often use custom-written scripts to analyze desired properties of the simulated systems. VMD Tcl scripting capabilities are very extensive, and provide boundless opportunities for analysis. QwikMD provides the user with some of the most employed analysis tools, allowing also the analysis while performing live NAMD sections.
+</p>
+
+<table border=0>
+<tr>
+<td valign=top>
+<p>
+<b>Analysis Available within QwikMD</b>
+<ul>
+<li> 
+    <p align="justify">
+    Root-Mean-Square Deviation (RMSD): measure of the average distance between the atoms (usually the backbone atoms) of superimposed proteins. In the study of globular protein conformations, one customarily measures the similarity in three-dimensional structure by the RMSD of the C&alpha; atomic coordinates after optimal rigid body superposition. When a dynamical system fluctuates about some well-defined average position, the RMSD from the average over time can be referred to as the RMSF or root mean square fluctuation. The size of this fluctuation can be measured, for example using M&ouml;ssbauer spectroscopy or nuclear magnetic resonance, and can provide important physical information.
+    </p>
+<li> 
+    <p align="justify">
+    Hydrogen Bonds: the Hydrogen bonds window shows the number of hydrogen bonds formed throughout a trajectory. A hydrogen bond is formed between an atom with a hydrogen bonded to it (the donor, D) and another atom (the acceptor, A) provided that the distance D-A is less than the cut-off distance (3.5 Angstroms) and the angle D-H-A is less than the cut-off angle (30 degrees).
+    </p>
+<li> 
+    <p align="justify">
+    MD Simulation Energies : QwikMD provides an easy-to-use interface to plot the energies reported in the NAMD log files during a simulation. Here the user can plot the sum of all Potential energies (bonds, angles, dihedrals, impropers, electrostatics and vdW); Kinetic energy (atoms energy of motion) and the Total energy (sum of the Potential and Kinetic energies).
+    </p>
+<li> 
+    <p align="justify">
+    MD Temperature, Pressure and Volume: to track the evaluation/equilibrium of the MD simulation is current practice to analyze the Temperature, Pressure and the Volume dimensions. These values are calculated by NAMD and reported in the log file and can be easily plot by QwikMD. As the default MD simulations performed in QwikMD are carried in the isothermal-isobaric ensemble (NPT), the number of atoms (N), pressure (P) and temperature (T) are kept constant employing thermostat and barostat, it is interesting to observe small variation of T and P values around the user defined values.    
+    </p>
+<p> 
+
+</td>
+<td>
+<img src=images/qwikmd_analysis_gui.png width=271x height=350px border=0/>
+</td>
+</tr>
+</table> -->
+
+
+
+<!--#include virtual="/Research/vmd/include/footer-vmd.shtml"-->

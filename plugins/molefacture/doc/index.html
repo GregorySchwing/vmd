@@ -1,0 +1,328 @@
+<!--#set var="TITLE" value="Molefacture Plugin, Version 2.0"-->
+<!--#include virtual="/Research/vmd/include/header-vmd.shtml"-->
+
+<img src="molefacture.png" align="right" alt="molefacture figure" height=960px border=0 hspace=2px margin-top=2px>
+
+
+<p>The molefacture plugin provides VMD users with an interface to create and edit molecules. This includes the ability to add, delete, or manipulate their structure at an atomic level, and to build new components from a library of common fragments. 
+
+
+<h2>Opening Molefacture</h2>
+<p>
+Molefacture is located in the VMD Extensions -> Modeling -> Molefacture. 
+</p>
+
+<h2>The Molefacture Graphical User Interface</h2>
+
+<p>
+Most operations in Molefacture are controlled in the "Action" section buttons (icon buttons on the top right section). These actions can be toggled in the VMD OpenGL by using the shortcuts. 
+
+<table border=0 cellpadding="5">
+
+<tr>
+    <td valign=left>
+    <img src="icons/add_atom.png" height=60px alt="add_atom" border=0 >
+    </td>
+    <td valign=left  style="word-wrap: break-word">
+        Add new atom. This button add a new atom of the element selected in the "Element:".
+        <br>
+        Shortcut: Control-a
+    </td>
+</tr>
+
+<tr>
+    <td valign=left >
+    <img src="icons/del_atom.png" height=60px alt="del_atom" border=0 >
+    </td>
+    <td valign=left  style="word-wrap: break-word">
+        Delete atom. 
+        <br>
+        Shortcut: Shift-a
+    </td>
+</tr>
+
+
+<tr>
+    <td valign=left>
+    <img src="icons/select_atom.png" height=60px alt="select_atom" border=0 >
+    </td>
+    <td valign=left  style="word-wrap: break-word">
+        Select one or more atoms. Press and hold the "Shift" key to select multiple atoms in the OpenGL window. 
+        Select the residues directly in the table of atoms has the same effect.
+        <br>
+        Shortcut: Control-s
+    </td>
+</tr>
+
+<tr>
+    <td valign=left>
+    <img src="icons/rotate.png" height=60px alt="rotate" border=0 >
+    </td>
+    <td valign=left  style="word-wrap: break-word">
+        Rotate the view/scene. No coordinate is affected when the view changes.
+        <br>
+        Shortcut: r
+    </td>
+</tr>
+
+<tr>
+    <td valign=left>
+    <img src="icons/translate.png" height=60px alt="translate" border=0 >
+    </td>
+    <td valign=left  style="word-wrap: break-word">
+        Translate the view/scene. No coordinate is affected when the view changes.
+        <br>
+        Shortcut: t
+    </td>
+</tr>
+
+<tr>
+    <td valign=left>
+     <img src="icons/move_frag.png" height=60px alt="move_frag" border=0 >
+    </td>
+    <td valign=left  style="word-wrap: break-word">
+        Move Fragment. Press and hold "Shift" to for Rotation. This action changes the coordinates of the molecule.
+        <br>
+        Shortcut: Control-m
+    </td>
+</tr>
+
+<tr>
+    <td valign=left>
+    <img src="icons/move_atom.png" height=60px alt="move_atom" border=0 >
+    </td>
+    <td valign=left  style="word-wrap: break-word">
+        Move Atom. This action changes the coordinates of the atom.
+        <br>
+        Shortcut: 5
+    </td>
+</tr>
+
+<tr>
+    <td valign=left>
+     <img src="icons/add_bond.png" height=60px alt="add_bond" border=0 >
+    </td>
+    <td valign=left  style="word-wrap: break-word">
+        Bond two atoms together. This is a single time operation. First select two
+        atoms and then press this button. 
+        <br>
+        To use this action in multiple pair of atoms,
+        press "Control-b" (activate bond mode). Until this mode is turned off, the bond is
+        created if "Shift" is pressed when the second atom is selected.
+        <br>
+        Shortcut: Control-b
+    </td>
+</tr>
+
+<tr>
+    <td valign=left>
+    <img src="icons/del_bond.png" height=60px alt="del_bond" border=0 >
+    </td>
+    <td valign=left  style="word-wrap: break-word">
+        Delete bond between two atoms. This is a single time operation. First select two
+        atoms and then press this button. 
+        <br>
+        To use this action in multiple pair of atoms,
+        press "Shift-b" (activate delete bond mode). Until this mode is turned off, a bond is
+        deleted if Shift is pressed when the second atom is selected.
+        <br>
+        Shortcut: Shift-b
+    </td>
+</tr>
+
+<tr>
+    <td valign=left>
+    <img src="icons/bond_order.png" height=60px alt="bond_order" border=0 >
+    </td>
+    <td valign=left  style="word-wrap: break-word">
+        Change bond order (single, double, and triple). First select two bonded atoms, then
+        select the target bond order.
+        <br>
+        Shortcut:
+        <ul style=" Margin: 0;">
+
+            <li> Raise Bond Order (Control + i) </li>
+            <li> Lower Bond Order (Shift + i)</li>
+        </ul>
+    </td>
+</tr>
+
+<tr>
+    <td valign=left>
+    <img src="icons/add_hydrogen.png" height=60px alt="add_hydrogen" border=0 >
+    </td>
+    <td valign=left  style="word-wrap: break-word">
+        Add Hydrogens to: 
+        <ul style=" Margin: 0;">
+            <li>the whole structure, if no atom is selected;</li>
+            <li>or to the selected atoms. </li>
+        </ul> 
+        The number of Hydrogen atoms to be added to each atom is based on the open valency
+        of the atom, which can be modified by changing the oxidation state.
+        <br>
+        Shortcut: Control-h
+    </td>
+</tr>
+
+<tr>
+    <td valign=left>
+    <img src="icons/duplicate_sel.png" height=60px alt="duplicate_sel" border=0 >
+    </td>
+    <td valign=left  style="word-wrap: break-word">
+        Duplicate the selected atoms. 
+        <br>
+        Shortcut: Control-d
+    </td>
+</tr>
+
+
+</table>
+
+<h2>Additional Shortcuts</h2>
+
+Similar to the shortcuts listed above, the following key combinations are effective only if the VMD OpenGL
+window is active and selected:
+
+<ul>
+    <li> Clear atom selection: Control-c </li>
+    <li> Undo: Control-z </li>
+    <li> Change the selected atom's element to:</li>
+    <ul>
+        <li>Oxygen: Shift-o</li>
+        <li>Carbon: Shift-c</li>
+        <li>Nitrogen: Shift-n</li>
+        <li>Hydrogen: Shift-h</li>
+        <li>Sulfur: Shift-s</li>
+        <li>Phosphorus: Shift-p</li>
+    </ul>
+</ul> 
+
+<h3>Add Skeleton</h3>
+
+This function creates skeleton molecules composed by carbon atoms in form of ring or chain, with the number of atoms defined in the drop-down menu (N. Atoms). If an atom(s) is selected, the new skeleton will be bond to the selected atom.
+
+<p></p>
+<b>Force Planar</b> - Force an atom with 3 or fewer bonds into a planar geometry.* 
+<br>
+<b>Force Tetrahedral</b> - Force an atom with 4 or fewer bonds into a tetrahedral geometry*
+<br>
+*Only the Hydrogen atoms move to form the desirable geometry.
+
+<p></p>
+<b>Select All</b> - Select all the atoms in the table.
+<br>
+<b>Clear Selection</b> - Clean the atom selection.
+
+<h3>Atoms & Bonds</h3>
+
+The element of the atoms can be selected from the drop-down menu "Element." In case of the default list of elements doesn't include the target element, one can choose the option "Other...", and select the elements from an interactive periodic table (represented above).
+
+<p></p>
+<b>Oxidation State</b> - Increase or decrease the oxidation state of the selected atom(s) to allow more or less number of bonds. This oxidation state is especially important during the addition of the Hydrogen atoms to the whole structure. The oxidation state can also be set in the table of atoms column "OxiState".
+<br>
+<b>Bond Distance</b> - Increase or decrease the bond distance of two selected bonded atoms. Distance in &#8491;ngestroms.
+<br>
+
+<h3>Angles and Dihedrals</h3>
+
+Increase or decrease the angles formed by the selected atoms. The molecule is mapped into two groups that will move to allow the angle to change. A <b>General Rule</b> with these two groups, "Group 2" is the group containing less number of atoms in most cases.
+<p></p>
+
+
+<h3>Edit Molecule</h3>
+
+Edit molecule's attributes Residue Name, Chain, ResID, and Segment Name all at once. If no atom is selected, all the atoms will be affected by these changes. Otherwise, only the selected atoms are affected when the button "Apply" is pressed.
+
+<h3>Minimize</h3>
+
+Use Open Babel or NAMD to clean the structure conformation (please see the "Topology & Parameters" section below).
+
+<h2>Menus</h2>
+<h3>File Menu</h3>
+<ul>
+    <li> <b>New molecule</b>. Start editing a new molecule:</li>
+        <ul>
+            <li> from the beginning (New Molecule -> From scratch); </li>
+            <li> based on an atom selection of a top molecule previously loaded into VMD (New Molecule -> From selection). In this case, one needs to enter a valid atom selection (please see <a target="_blank" href="https://www.ks.uiuc.edu/Research/vmd/current/ug/node122.html">atom selection's reference</a>) representing the molecule or a set of molecules (e.g. "resname GTP"). ;</li>
+        </ul>
+
+    <li> <b>Apply Changes to parent</b>. In the case of starting editing a molecule based on an atom selection, this action will replace the original atom selection by the molecules being edited in Molefacture. </li>
+        <ul>
+            <li> <b>QwikMD</b>: if Molefacture was invoked by QwikMD during the process of generating topology for an unparameterized molecule, this action will send the molecule and the topology back to QwikMD. </li>
+        </ul>
+    <li> <b>Write MOL2 file</b>. Export the molecule to a MOL2 file format. This MOL2 file format is a modified version of what VMD usually produces. In this case, the element is set as atom type and the comment "#generated by VMD" is placed at the end of the file.</li>
+    <li> <b>Write XYZ file</b>. Export the molecule to a XYZ file format</li>
+    <li> <b>Write top/str file</b>. Export the topology(top) or stream(str) file.</li>
+    <li> <b>Write psf and pdb file</b>. Export the psf and pdb file pair, along with all the topology files used during the preparation of the files. 
+        These additional topologies are selected on the menu Settings -> Default Topologies</li>
+</ul>
+</p>
+
+<h3>Build Menu</h3>
+
+The Build Menu provides a number of options for construction and atom typing of the new molecules.
+
+<h4>Topology & Parameters</h4>
+
+    It is in this menu that the topology of the molecule being edited is assigned. Molefacture prepares structures to be simulated using the <a href="http://mackerell.umaryland.edu/charmm_ff.shtml">CHARMM36 Force Filed</a>. Although it is not mandatory to assign any atom type to model a molecule, if one wants to clean/minimize the structure conformation using a more rigorous method, Molefacture will invoke <a href="http://www.ks.uiuc.edu/Research/namd/">NAMD</a> minimizer using CHARMM36 as force field. Otherwise, Molefacture invokes <a href="http://openbabel.org/wiki/Main_Page">Open Babel</a> (<a href="https://openbabel.org/wiki/Obminimize">obminimize</a>) using the Universal Force Field (UFF).
+
+<p>
+<p>
+    <b>Export and Import topologies to <a href="https://cgenff.umaryland.edu/">CGenFF</a></b>. Using this menu, the user can export MOL2 files to be submitted to the server or local executable of CGenFF. The submission can be done automatically if the username and password of the CGenFF Server is defined (please see Settings), or if the path to the local executable is defined. *The user authentication in the direct communication of VMD and the CGenFF Server is still being developed by the developers team. We will update this information once this process is finalized. 
+</p>
+
+<p>
+    <b>Guess Bond Order</b> (using IDATM VMD plugin). IDATM provides a method for automatically typing atoms in a molecule based on geometric information. When run, it can apply atom types and, in combination with molefacture, properly add Hydrogen atoms when necessary. IDATM is based on the algorithm presented by Meng and Lewis (JCC 12(7):891-898), with a few minor modifications. The guessing of the bond order is performed automatically when the molecule is loaded, in the case the "New Molecule -> From selection".
+</p>
+
+
+<h4>Fragments and fragment addition</h4>
+
+Most molecular editing in molefacture can be done at the level of fragments: small, predefined moieties which can be combined to create most molecules of interest. Fine-tuning can be done at the level of adding individual atoms or bonds when the fragment libraries are not sufficient. The fragments can be appended to an existing molecule using the <b>Replace atom with fragment</b> menu, or add an independent fragment, using the 
+<b>Add independent fragment</b>.
+
+<p>
+Molefacture comes with a variety of fragments predefined and in the next Molefacture versions, the user will be able to extend the fragment library with user-defined molecules.
+
+<p>
+<b>Duplicate Selected Atoms</b>. Performs the same function as the "Duplicate" button in the "Action" section.
+
+
+<h4>Protein Builder</h4>
+
+Interactive peptide chains modeling. When adding the individual residues, the user can assign the &Phi; (phi) and &Psi; (psi) backbone angles. The modeling process can be done by adding one residue at the time, or based on a sequence of the single-letter amino acid code.
+
+<h3>Settings Menu</h3>
+
+This menu controls essentially two aspects of Molefacture:
+
+<ul>
+    <li> CGenFF Settings:</li> Here the user can define the username and password of the <a href="https://cgenff.umaryland.edu/">CGenFF Server</a>, or the Path to the local copy of the CGenFF program executable. These variables can be stored in the <b>.vmdrc</b> (Linux and Mac) or <b>vmd.rc</b> (Windows) to be used every time VMD is launched.
+    <ul>
+        
+        <ul>
+            <li><b>env(CGENFF)</b> - This variable can have 2 possible values (local and server) and indicates to Molefacture, which CGenFF to execute;</li>
+            <li><b>env(CGENFFUSERNAME)</b> - CGenFF Server account username;</li>
+            <li><b>env(CGENFFPASSWORD)</b> - CGenFF Server account password;</li>
+            <li><b>env(CGENFFPATH)</b> - The full path to the CGenFF program executable.</li>
+        </ul>
+    </ul>
+    <li> Default Topologies:</li> Select the CHARMM36 topologies to use during the preparation of the psf and pdb files. The topologies previously added to QwikMD will also be included in this list. The inclusion/exclusion of topologies should be done before starting the editing/creation process of molecules. 
+</ul> 
+
+
+<h3>Contributors</h3>
+<ul>
+<li>Jo&atilde;o Ribeiro, Theoretical and Computational Biophysics Group, 
+    University of Illinois at Urbana-Champaign 
+<li>Peter Freddolino, Theoretical and Computational Biophysics Group, 
+    University of Illinois at Urbana-Champaign 
+    <li> Johan Strumpfer, Theoretical and Computational Biophysics Group, University of Illinois at Urbana-Champaign
+<li>Paratool-related: Jan Saam, Theoretical and Computational Biophysics Group,
+    University of Illinois at Urbana-Champaign
+<li>FEP section:
+Chris Chipot, Centre National de la Recherche Scientifique, Nancy
+University and Theoretical and Computational Biophysics Group,
+University of Illinois at Urbana-Champaign
+</ul>
+<!--#include virtual="/Research/vmd/include/footer-vmd.shtml"-->

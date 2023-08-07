@@ -1,0 +1,107 @@
+# QwikFold plugin v 0.7
+
+The QwikFold plugin provides a graphical user interface for AlphaFold, making it easier to perform protein folding predictions from within VMD.
+QwikFold allow predictions both Monomer and Multimer, and provides quick access to model quality metrics.
+
+## Software Requirements:
+To start jobs from the QwikFold plugin, AlphaFold and its companion software must be installed locally. One should follow the Step-by-Step intructions bellow to properly install a local copy.
+
+## Download Requirements
+Alphafold uses large sequence databases for genetic search. The download scripts are included in the github distribution.
+Total: ~ 2.2 TB (download: 438 GB)
+
+## Using the Plugin.
+In addition to the FASTA sequence to model, one should provide a Job ID, paths to alphafold installation, downloaded databases, and path to outputs.
+
+### Configure:
+Job ID: Unique identifier for the job. 
+Path : Path to AlphaFold cloned from GitHub.
+Databases: Path to sequence databases downloaded for the genetic search
+Output folder: Path to output results
+
+### FASTA Sequence
+Paste or load a sequence, with or without header.
+One may insert path to a file or load from disk.
+
+## Submit and Analysis (Buttons)
+"Read config"  - not implemented.
+"Write config" - Write a script to run alphafold
+"FOLD !"       - Run alphafold
+"Load Models"  - Load all generated models
+"Align Models" - Perform structural alignment of loaded models
+
+
+## Instructions to install AlphaFold locally.
+Follow this Step-by-Step guide to installing alphafold using the conda environment
+
+### Step 1 - Create a new, clean conda environment.
+conda create -n alphafold python=3.8 -y --no-default-packages
+
+### Step 2 - activate the environment
+conda activate alphafold
+
+### Step 3 - Clone alphafold from it's github repository
+git clone https://github.com/deepmind/alphafold
+
+### Step 4 - Go to AlphaFold folder and export alphafold_path
+cd alphafold
+export ALPHAFOLD_PATH=$PWD
+
+### Step 5 - Download chemical properties to the "common" folder
+wget -q -P alphafold/common/ https://git.scicore.unibas.ch/schwede/openstructure/-/raw/7102c63615b64735c4941278d92b554ec94415f8/modules/mol/alg/src/stereo_chemical_props.txt
+
+### Step 6 - Install required software for AlphaFold 2  (follow this order)
+
+  # Step 6.1 - AlphaFold requirements using conda
+  conda install -y -c nvidia cudnn==8.0.4
+  conda install -y -c conda-forge openmm=7.5.1 pdbfixer=1.7 pip
+  conda install -y -c bioconda hmmer=3.3.2 hhsuite==3.3.0 kalign2=2.04
+
+  # Step 6.2 - AlphaFold requirements using PIP.
+  pip3 install --upgrade pip
+  pip3 install -r ./requirements.txt
+
+  # Step 6.3 - QwikFold requirements using conda.
+  conda install -y matplotlib
+
+### Step 7 - Instal JAX. Adjust compatibility to CUDA drivers on local machine.
+pip3 install --upgrade "jax[cuda111]" jaxlib==0.1.72+cuda111 -f https://storage.googleapis.com/jax-releases/jax_releases.html
+
+### Step 8 - Apply patches
+
+  # Step 8.1 Patches to OpenMM
+  python_path=$(which python)
+  cd $(dirname $(dirname ${python_path}))/lib/python3.8/site-packages
+  patch -p0 < ${ALPHAFOLD_PATH}/docker/openmm.patch
+  cd ${ALPHAFOLD_PATH}
+
+  # Step 8.2 - Apply QwikFold Patches to AlphaFold.
+    # Step 9.2.2 - Fix path issue for stereo_chemical_props.txt
+#    patch -u ${ALPHAFOLD_PATH}/alphafold/common/residue_constants.py -i /usr/local/lib/vmd/plugins/noarch/tcl/qwikfold0.6/patches/residue_constants.py.patch
+
+    # Step 8.2.3 (optional) - Set CUDA as openMM platform.
+    patch -u ${ALPHAFOLD_PATH}/alphafold/relax/amber_minimize.py -i /usr/local/lib/vmd/plugins/noarch/tcl/qwikfold0.6/patches/amber_minimize.py.patch
+
+### Step 9 - Install alphafold to your conda environment.
+cd ${ALPHAFOLD_PATH}
+python setup.py install
+
+# You're all set !
+
+
+################################
+# Download AlphaFold databases #
+################################
+
+# Set path to dowload databases
+ALPHAFOLD_DATA=/home/user/alphafold_dbs/
+
+# Go to Alphafold folder
+cd ${ALPHAFOLD_PATH}
+
+# Run script to download the databases
+bash scripts/download_all_data.sh ${ALPHAFOLD_DATA} reduced_dbs
+
+# or Download Alphafold full datasets ( ~2.2Tb )
+bash scripts/download_all_data.sh ${ALPHAFOLD_DATA}
+

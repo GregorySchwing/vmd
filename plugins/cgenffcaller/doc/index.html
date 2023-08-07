@@ -1,0 +1,99 @@
+<!--#set var="TITLE" value="CgenFFCaller Plugin, Version 1.0"-->
+<!--#include virtual="/Research/vmd/include/header-vmd.shtml"-->
+
+<img src="cgenffcaller_logo.png" align="right" alt="molefacture figure" 
+height=300px border=0 hspace=2px margin-top=2px>
+
+
+<p>
+CGenFFCaller plugin automates the fetching of CHARMM topology and
+parameters from the CGenFF server (<a href="https://cgenff.umaryland.edu/">
+https://cgenff.umaryland.edu/</a>).
+</p>
+
+<p>
+Commands:
+
+<ul>
+
+<li> <b>cgenffcaller callcgenff</b> -molfiles &ltList of Files&gt -username 
+    &ltCGenFF Username&gt -method &ltFetching Tool&gt
+
+<p><p>
+
+List of Options:
+<ul>
+    <li> -molfiles &ltList of Files&gt: List of files to be submitted to CGenFF Server. Mol2 and PDB formats supported
+    <li> -username &ltCGenFF Server Username&gt: CGenFF Server Account Username
+    <li> -method &ltWeb Server Fetching Tool&gt: Tool to use to fetch the information from the CGenFF Server.
+    <p> <b>Note</b>:
+     The tool automatically select whatever is available. Linux and Mac use "wget" and "curl";
+     Windows machines use "curl" executed inside the powershell (Windows 10 only). This flag enforces
+     the use the specified tool (for testing and debugging). A python script is executed if the 
+     mechanism mentioned so far fail. The last fall-back is to use the TCL packages HTTP and TLS, 
+     which their availability can not be guaranteed.
+</ul>
+<p><p>
+Description: 
+<p>. Fetch the topology and parameters for the molecule files in the 
+-molfiles list, and store them in a stream file (str).
+The stream files are stored internally, and can be accessed executing the 
+command "callcgenff getstr &ltstream index&gt".
+
+<li><b>cgenffcaller savemol</b> -sel &ltatom selection object&gt -output &ltoutput file name&gt -format &ltfile format: mol2, xyz, or pdb&gt
+<p><p>
+Description: 
+<p> Save the the atom selection object (created using the "atomselect" command) 
+to a file, and enforce the assignment of atoms' element as atoms' type to ensure 
+compatibility with the CgenFF webserver. In the case of the mol2 file format, 
+the bond order need to be set prior to the execution of the command.
+
+<li><b>cgenffcaller numstr</b>
+<p><p>
+Description: 
+<p> Returns the number of stream files obtained from the CGenFF server.
+
+<li><b>cgenffcaller getstr</b> &ltindex of the stream&gt
+<p><p>
+Description: 
+<p> Returns the stream file stored at the index-th position. The indexes from 
+0 to [cgenffcaller numstr] -1 are valid. The order of the stream files follows
+the order of the "-molfiles" list option. 
+<p><b>"null" Result</b> : A successful communication between VMD and CGenFF that 
+didn't result in a stream file will return a "null" result.
+
+<li><b>cgenffcaller getsubcount</b>
+<p><p>
+Description: 
+<p>  Returns the number of submissions performed by the user. This command only 
+works after the one submission had been performed.
+
+</ul>
+<h3>Example</h3>
+
+<p>Assuming a list of molecule files a.pdb b.pdb c.mol2:
+<p>
+<code>cgenffcaller callcgenff -molfiles {a.pdb b.pdb c.mol2} -username myusername</code>
+<p>
+<p>
+<code>cgenffcaller numstr</code> - This should return "3"
+<p>
+
+<p>
+<code>cgenffcaller getstr 0</code> - This should return the stream file for "a.pdb"
+<p>
+
+<p>
+<code>cgenffcaller getstr 1</code> - This should return the stream file for "b.pdb"
+<p>
+
+<p>
+<code>cgenffcaller getstr 2</code> - This should return the stream file for "c.pdb"
+<p>
+
+<h3>Contributors</h3>
+<ul>
+<li>Jo&atilde;o Ribeiro, Theoretical and Computational Biophysics Group, 
+    University of Illinois at Urbana-Champaign
+</ul>
+<!--#include virtual="/Research/vmd/include/footer-vmd.shtml"-->
