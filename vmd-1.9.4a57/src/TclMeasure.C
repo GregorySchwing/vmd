@@ -2009,10 +2009,10 @@ static int vmd_measure_sr(VMDApp *app, int argc, Tcl_Obj * const objv[], Tcl_Int
   int rc;
 
   // argument error message
-  const char *argerrmsg = "<sel1> <sel2> [delta <value>] [rmax <value>] [usepbc <bool>] [selupdate <bool>] [first <first>] [last <last>] [step <step>]";
+  const char *argerrmsg = "<sel1> <sel2> <sel3> <sel4> [delta <value>] [rmax <value>] [usepbc <bool>] [selupdate <bool>] [first <first>] [last <last>] [step <step>]";
 
   // Two atom selections and optional keyword/value pairs.
-  if ((argc < 3) || (argc > 17) || (argc % 2 == 0) )  {
+  if ((argc < 5) || (argc > 17) || (argc % 2 == 0) )  {
     Tcl_WrongNumArgs(interp, 2, objv-1, (char *)argerrmsg);
     return TCL_ERROR;
   }
@@ -2020,18 +2020,30 @@ static int vmd_measure_sr(VMDApp *app, int argc, Tcl_Obj * const objv[], Tcl_Int
   // check atom selections
   AtomSel *sel1 = tcl_commands_get_sel(interp, Tcl_GetStringFromObj(objv[1], NULL));
   if (!sel1) {
-    Tcl_AppendResult(interp, "measure rdf: invalid first atom selection", NULL);
+    Tcl_AppendResult(interp, "measure sr: invalid first atom selection", NULL);
     return TCL_ERROR;
   }
 
   AtomSel *sel2 = tcl_commands_get_sel(interp, Tcl_GetStringFromObj(objv[2], NULL));
   if (!sel2) {
-    Tcl_AppendResult(interp, "measure rdf: invalid second atom selection", NULL);
+    Tcl_AppendResult(interp, "measure sr: invalid second atom selection", NULL);
+    return TCL_ERROR;
+  }
+
+  AtomSel *sel3 = tcl_commands_get_sel(interp, Tcl_GetStringFromObj(objv[3], NULL));
+  if (!sel3) {
+    Tcl_AppendResult(interp, "measure sr: invalid third atom selection", NULL);
+    return TCL_ERROR;
+  }
+
+  AtomSel *sel4 = tcl_commands_get_sel(interp, Tcl_GetStringFromObj(objv[4], NULL));
+  if (!sel4) {
+    Tcl_AppendResult(interp, "measure sr: invalid fourth atom selection", NULL);
     return TCL_ERROR;
   }
 
   // parse optional arguments
-  for (i=3; i<argc; i+=2) {
+  for (i=5; i<argc; i+=2) {
     const char *opt = Tcl_GetStringFromObj(objv[i], NULL);
     if (i==(argc-1)) {
       Tcl_WrongNumArgs(interp, 2, objv-1, (char *)argerrmsg);
