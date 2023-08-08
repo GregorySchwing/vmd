@@ -238,16 +238,15 @@ extern int  measure_rdf(VMDApp *app,
                         int first, int last, int step, int *framecntr,
                         int usepbc, int selupdate);
 
-extern int  measure_sr(VMDApp *app, 
-                        AtomSel *sel1, AtomSel *sel2,
-                        AtomSel *sel3, AtomSel *sel4,
-                        MoleculeList *mlist, 
-                        const int count_h, double *gofr, 
-                        double *Gkr, double *avgcos, 
-                        double *numint, 
-                        double *histog, const float delta, 
-                        int first, int last, int step, int *framecntr,
-                        int usepbc, int selupdate);
+extern int measure_sr(VMDApp *app,
+                AtomSel *sel1, AtomSel *sel2, 
+                AtomSel *sel3, AtomSel *sel4,
+                MoleculeList *mlist,
+                const int count_h, double *gofr, 
+                double *numint, double *histog,
+                double *Gkr, double *avgcos, 
+                const float delta, int first, int last, int step, 
+                int *framecntr, int usepbc, int selupdate);
 
 
 int measure_geom(MoleculeList *mlist, int *molid, int *atmid, ResizeArray<float> *gValues,
