@@ -2095,7 +2095,7 @@ static int vmd_measure_sr(VMDApp *app, int argc, Tcl_Obj * const objv[], Tcl_Int
 
   // do the gofr calculation
   rc = measure_sr(app, sel1, sel2, sel3, sel4, app->moleculeList,
-                   count_h, gofr, Gkr, avgcos, numint, histog,
+                   count_h, gofr, numint, histog, Gkr, avgcos, 
                    (float) delta,
                    first, last, step, framecntr,
                    usepbc, selupdate);
