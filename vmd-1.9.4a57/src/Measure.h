@@ -240,8 +240,11 @@ extern int  measure_rdf(VMDApp *app,
 
 extern int  measure_sr(VMDApp *app, 
                         AtomSel *sel1, AtomSel *sel2,
+                        AtomSel *sel3, AtomSel *sel4,
                         MoleculeList *mlist, 
-                        const int count_h, double *gofr, double *numint, 
+                        const int count_h, double *gofr, 
+                        double *Gkr, double *avgcos, 
+                        double *numint, 
                         double *histog, const float delta, 
                         int first, int last, int step, int *framecntr,
                         int usepbc, int selupdate);

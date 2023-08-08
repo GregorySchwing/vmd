@@ -375,6 +375,7 @@ int measure_sr(VMDApp *app,
                 MoleculeList *mlist,
                 const int count_h, double *gofr, 
                 double *numint, double *histog,
+                double *Gkr, double *avgcos, 
                 const float delta, int first, int last, int step, 
                 int *framecntr, int usepbc, int selupdate) {
   int i, j, frame;
@@ -469,7 +470,6 @@ int measure_sr(VMDApp *app,
 
   const float *q = mymol->charge();
   const float *m = mymol->mass();
-
   // pre-allocate coordinate buffers of the max size we'll
   // ever need, so we don't have to reallocate if/when atom
   // selections are updated on-the-fly
@@ -713,6 +713,7 @@ int measure_sr(VMDApp *app,
     }
 
     // XXX for orthogonal boxes, we can reduce this to rmax < sqrt(0.5)*smallest side
+    double GkrSum = 0.0;
     for (i=0; i<h_max; ++i) {
       // radius of inner and outer sphere that form the spherical slice
       double r_in  = delta * (double)i;
@@ -744,15 +745,19 @@ int measure_sr(VMDApp *app,
 
       double normf = pair_dens / slice_vol;
       double histv = (double) lhist[i];
-      gofr[i] += normf * histv;
-      all     += histv;
+
+      gofr[i]   += normf * histv;
+      GkrSum    += lhist_dipoles[i];
+      Gkr[i]    += GkrSum;
+      avgcos[i] += normf * lhist_dipoles[i];
+      all       += histv;
       if (sel1->selected) {
         numint[i] += all / (double)(sel1->selected);
       }
       histog[i] += histv;
     }
   }
-  
+
   delete [] sel1coords;
   delete [] sel2coords;
   delete [] sel3coords;
@@ -776,11 +781,16 @@ int measure_sr(VMDApp *app,
   delete [] lhist;
   delete [] lhist_dipoles;
 
+  int ngrp = sel1->num_atoms;
   double norm = 1.0 / (double) nframes;
+  double normMol = 1.0 / ((double) nframes * (double) ngrp);
+
   for (i=0; i<count_h; ++i) {
     gofr[i]   *= norm;
     numint[i] *= norm;
     histog[i] *= norm;
+    Gkr[i] *= normMol;
+    avgcos[i] *= norm;
   }
 
   return MEASURE_NOERR;

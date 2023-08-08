@@ -2087,13 +2087,15 @@ static int vmd_measure_sr(VMDApp *app, int argc, Tcl_Obj * const objv[], Tcl_Int
   // allocate and initialize histogram arrays
   int    count_h = (int)(rmax / delta + 1.0);
   double *gofr   = new double[count_h];
+  double *Gkr   = new double[count_h];
+  double *avgcos   = new double[count_h];
   double *numint = new double[count_h];
   double *histog = new double[count_h];
   int *framecntr = new int[3];
 
   // do the gofr calculation
-  rc = measure_sr(app, sel1, sel2, app->moleculeList,
-                   count_h, gofr, numint, histog,
+  rc = measure_sr(app, sel1, sel2, sel3, sel4, app->moleculeList,
+                   count_h, gofr, Gkr, avgcos, numint, histog,
                    (float) delta,
                    first, last, step, framecntr,
                    usepbc, selupdate);
@@ -2136,6 +2138,8 @@ static int vmd_measure_sr(VMDApp *app, int argc, Tcl_Obj * const objv[], Tcl_Int
   Tcl_SetObjResult(interp, tcl_result);
 
   delete [] gofr;
+  delete [] Gkr;
+  delete [] avgcos;
   delete [] numint;
   delete [] histog;
   delete [] framecntr;
