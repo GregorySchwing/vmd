@@ -1994,6 +1994,142 @@ static int vmd_measure_rdf(VMDApp *app, int argc, Tcl_Obj * const objv[], Tcl_In
 }
 
 
+// measure s(r) for two selections, with delta, rmax, usepbc, first/last/step 
+// frame parameters the code will compute the normalized histogram.
+// Returns the distance dependence of the Kirkwood factor, GK(r), 
+// and the radial distribution of the dipole ordering, s(r).
+static int vmd_measure_sr(VMDApp *app, int argc, Tcl_Obj * const objv[], Tcl_Interp *interp) {
+  int i;
+  // initialize optional arguments to default values
+  double rmax=10.0;
+  double delta=0.1;
+  int usepbc=0;
+  int selupdate=0;
+  int first=-1, last=-1, step=1;
+  int rc;
+
+  // argument error message
+  const char *argerrmsg = "<sel1> <sel2> [delta <value>] [rmax <value>] [usepbc <bool>] [selupdate <bool>] [first <first>] [last <last>] [step <step>]";
+
+  // Two atom selections and optional keyword/value pairs.
+  if ((argc < 3) || (argc > 17) || (argc % 2 == 0) )  {
+    Tcl_WrongNumArgs(interp, 2, objv-1, (char *)argerrmsg);
+    return TCL_ERROR;
+  }
+
+  // check atom selections
+  AtomSel *sel1 = tcl_commands_get_sel(interp, Tcl_GetStringFromObj(objv[1], NULL));
+  if (!sel1) {
+    Tcl_AppendResult(interp, "measure rdf: invalid first atom selection", NULL);
+    return TCL_ERROR;
+  }
+
+  AtomSel *sel2 = tcl_commands_get_sel(interp, Tcl_GetStringFromObj(objv[2], NULL));
+  if (!sel2) {
+    Tcl_AppendResult(interp, "measure rdf: invalid second atom selection", NULL);
+    return TCL_ERROR;
+  }
+
+  // parse optional arguments
+  for (i=3; i<argc; i+=2) {
+    const char *opt = Tcl_GetStringFromObj(objv[i], NULL);
+    if (i==(argc-1)) {
+      Tcl_WrongNumArgs(interp, 2, objv-1, (char *)argerrmsg);
+      return TCL_ERROR;
+    }
+    if (!strcmp(opt, "delta")) {
+      if (Tcl_GetDoubleFromObj(interp, objv[i+1], &delta) != TCL_OK)
+        return TCL_ERROR;
+      if (delta <= 0.0) {
+        Tcl_AppendResult(interp, "measure rdf: invalid 'delta' value", NULL);
+        return TCL_ERROR;
+      }
+    } else if (!strcmp(opt, "rmax")) {
+      if (Tcl_GetDoubleFromObj(interp, objv[i+1], &rmax) != TCL_OK)
+        return TCL_ERROR;
+      if (rmax <= 0.0) {
+        Tcl_AppendResult(interp, "measure rdf: invalid 'rmax' value", NULL);
+        return TCL_ERROR;
+      }
+    } else if (!strcmp(opt, "usepbc")) {
+      if (Tcl_GetBooleanFromObj(interp, objv[i+1], &usepbc) != TCL_OK)
+        return TCL_ERROR;
+    } else if (!strcmp(opt, "selupdate")) {
+      if (Tcl_GetBooleanFromObj(interp, objv[i+1], &selupdate) != TCL_OK)
+        return TCL_ERROR;
+    } else if (!strcmp(opt, "first")) {
+      if (Tcl_GetIntFromObj(interp, objv[i+1], &first) != TCL_OK)
+        return TCL_ERROR;
+    } else if (!strcmp(opt, "last")) {
+      if (Tcl_GetIntFromObj(interp, objv[i+1], &last) != TCL_OK)
+        return TCL_ERROR;
+    } else if (!strcmp(opt, "step")) {
+      if (Tcl_GetIntFromObj(interp, objv[i+1], &step) != TCL_OK)
+        return TCL_ERROR;
+    } else { // unknown keyword.
+      Tcl_AppendResult(interp, "unknown keyword '", opt, "'. usage: measure rdf ", argerrmsg, NULL);
+      return TCL_ERROR;
+    }
+  }
+
+  // allocate and initialize histogram arrays
+  int    count_h = (int)(rmax / delta + 1.0);
+  double *gofr   = new double[count_h];
+  double *numint = new double[count_h];
+  double *histog = new double[count_h];
+  int *framecntr = new int[3];
+
+  // do the gofr calculation
+  rc = measure_sr(app, sel1, sel2, app->moleculeList,
+                   count_h, gofr, numint, histog,
+                   (float) delta,
+                   first, last, step, framecntr,
+                   usepbc, selupdate);
+
+  // XXX: this needs a 'case' structure to provide more meaninful error messages.
+  if (rc != MEASURE_NOERR) { 
+    Tcl_AppendResult(interp, "measure rdf: error during rdf calculation.", NULL);
+    return TCL_ERROR;
+  }
+
+  // convert the results of the lowlevel call to tcl lists
+  // and build a list from them as return value.
+  Tcl_Obj *tcl_result = Tcl_NewListObj(0, NULL);
+  Tcl_Obj *tcl_rlist  = Tcl_NewListObj(0, NULL);
+  Tcl_Obj *tcl_gofr   = Tcl_NewListObj(0, NULL);
+  Tcl_Obj *tcl_numint = Tcl_NewListObj(0, NULL);
+  Tcl_Obj *tcl_histog = Tcl_NewListObj(0, NULL);
+  Tcl_Obj *tcl_frames = Tcl_NewListObj(0, NULL);
+
+  // build lists with results ready for plotting
+  for (i=0; i<count_h; i++) { 
+    Tcl_ListObjAppendElement(interp, tcl_rlist,  Tcl_NewDoubleObj(delta * ((double)i + 0.5)));
+    Tcl_ListObjAppendElement(interp, tcl_gofr,   Tcl_NewDoubleObj(gofr[i]));
+    Tcl_ListObjAppendElement(interp, tcl_numint, Tcl_NewDoubleObj(numint[i]));
+    Tcl_ListObjAppendElement(interp, tcl_histog, Tcl_NewDoubleObj(histog[i]));
+  }
+
+  // build list with number of frames: 
+  // total, skipped and processed (one entry for each algorithm).
+  Tcl_ListObjAppendElement(interp, tcl_frames, Tcl_NewIntObj(framecntr[0]));
+  Tcl_ListObjAppendElement(interp, tcl_frames, Tcl_NewIntObj(framecntr[1]));
+  Tcl_ListObjAppendElement(interp, tcl_frames, Tcl_NewIntObj(framecntr[2]));
+
+  // build final list-of-lists as return value
+  Tcl_ListObjAppendElement(interp, tcl_result, tcl_rlist);
+  Tcl_ListObjAppendElement(interp, tcl_result, tcl_gofr);
+  Tcl_ListObjAppendElement(interp, tcl_result, tcl_numint);
+  Tcl_ListObjAppendElement(interp, tcl_result, tcl_histog);
+  Tcl_ListObjAppendElement(interp, tcl_result, tcl_frames);
+  Tcl_SetObjResult(interp, tcl_result);
+
+  delete [] gofr;
+  delete [] numint;
+  delete [] histog;
+  delete [] framecntr;
+  return TCL_OK;
+}
+
 /// do cluster analysis for one selection.
 static int vmd_measure_cluster(VMDApp *app, int argc, Tcl_Obj * const objv[], Tcl_Interp *interp) {
   int i,j;
@@ -4605,6 +4741,8 @@ int obj_measure(ClientData cd, Tcl_Interp *interp, int argc,
     return vmd_measure_gofr(app, argc-1, objv+1, interp);
   else if (!strupncmp(argv1, "rdf", CMDLEN))
     return vmd_measure_rdf(app, argc-1, objv+1, interp);
+  else if (!strupncmp(argv1, "sr", CMDLEN))
+    return vmd_measure_sr(app, argc-1, objv+1, interp);
   else if (!strupncmp(argv1, "hbonds", CMDLEN))
     return vmd_measure_hbonds(app, argc-1, objv+1, interp);
   else if (!strupncmp(argv1, "inverse", CMDLEN)) 
