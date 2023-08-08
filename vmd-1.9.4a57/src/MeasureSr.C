@@ -217,6 +217,70 @@ void dipole_cpu(int natoms1,  // array of the number of atoms in
 }
 
 
+/*! \brief Calculate 1.0/sqrt(x) in double precision, but single range
+ *
+ * \param  x  Positive value to calculate inverse square root for, must be
+ *            in the input domain valid for single precision.
+ *
+ * For now this is implemented with std::sqrt(x). However, we might
+ * decide to use instrinsics or compiler-specific functions in the future, and
+ * then we want to have the freedom to do the first step in single precision.
+ *
+ * \return 1.0/sqrt(x)
+ */
+static inline double invsqrt(double x)
+{
+    return 1.0 / std::sqrt(x);
+}
+
+/* WARNING:
+ * Do _not_ use these routines to calculate the angle between two vectors
+ * as acos(cos_angle(u,v)). While it might seem obvious, the acos function
+ * is very flat close to -1 and 1, which will lead to accuracy-loss.
+ * Instead, use the new gmx_angle() function directly.
+ */
+static inline float cos_angle(const float * a, const float * b)
+{
+    /*
+     *                  ax*bx + ay*by + az*bz
+     * cos-vec (a,b) =  ---------------------
+     *                      ||a|| * ||b||
+     */
+    float   cosval;
+    int    m;
+    double aa, bb, ip, ipa, ipb, ipab; /* For accuracy these must be double! */
+
+    ip = ipa = ipb = 0.0;
+    for (m = 0; (m < 3); m++) /* 18 */
+    {
+        aa = a[m];
+        bb = b[m];
+        ip += aa * bb;
+        ipa += aa * aa;
+        ipb += bb * bb;
+    }
+    ipab = ipa * ipb;
+    if (ipab > 0)
+    {
+        cosval = static_cast<float>(ip * invsqrt(ipab)); /*  7 */
+    }
+    else
+    {
+        cosval = 1;
+    }
+    /* 25 TOTAL */
+    if (cosval > 1.0)
+    {
+        return 1.0;
+    }
+    if (cosval < -1.0)
+    {
+        return -1.0;
+    }
+
+    return cosval;
+}
+
 void sr_cpu(int natoms1,     // array of the number of atoms in
                               // selection 1 in each frame. 
              float* xyz,      // coordinates of first selection.
@@ -241,10 +305,10 @@ void sr_cpu(int natoms1,     // array of the number of atoms in
   int iatom, jatom, ibin;
   float rij, rxij, rxij2, x1, y1, z1, x2, y2, z2;
   float cellx, celly, cellz;
-  int *ihist = new int[maxbin];
-
+  float cos_theta;
   for (ibin=0; ibin<maxbin; ibin++) {
-    ihist[ibin]=0;
+    hist[ibin]=0;
+    hist_d[ibin]=0;
   }
 
   cellx = cell[0];
@@ -292,13 +356,14 @@ void sr_cpu(int natoms1,     // array of the number of atoms in
       rij = sqrtf(rij);
 
       ibin = (int)floorf((rij-rmin)/delr);
+      cos_theta = cos_angle(&dipoles3[3L*iatom],&dipoles4[3L*jatom]);
       if (ibin<maxbin && ibin>=0) {
-        ++ihist[ibin];
+        ++hist[ibin];
+        hist_d[ibin]+=cos_theta;
       }
     }
   }
 
-  delete [] ihist;
 }
 
 
@@ -564,7 +629,7 @@ int measure_sr(VMDApp *app,
       int rc=-1;
 #if defined(VMDCUDA)
       if (!getenv("VMDNOCUDA") && (app->cuda != NULL)) {
-//        msgInfo << "Running multi-GPU sr calc..." << sendmsg;
+        msgInfo << "Running multi-GPU sr calc..." << sendmsg;
         rc=rdf_gpu(app->cuda->get_cuda_devpool(),
                    usepbc,
                    sel1->selected, sel1coords,
@@ -577,7 +642,7 @@ int measure_sr(VMDApp *app,
       } 
 #endif
       if (rc != 0) {
-//        msgInfo << "Running single-core CPU sr calc..." << sendmsg;
+        msgInfo << "Running single-core CPU sr calc..." << sendmsg;
         dipole_cpu(sel1->selected, sel2->selected,
                     sel3->selected, sel3coords,
                     sel4->selected, sel4coords,
@@ -597,6 +662,7 @@ int measure_sr(VMDApp *app,
                 count_h,
                 rmin,
                 delta);
+        lhist[0] -= duplicates;
       }
 
       ++framecntr[2]; // frame processed with sr algorithm
@@ -686,9 +752,27 @@ int measure_sr(VMDApp *app,
       histog[i] += histv;
     }
   }
+  
   delete [] sel1coords;
   delete [] sel2coords;
   delete [] sel3coords;
+  delete [] sel4coords;
+  delete [] sel3q;
+  delete [] sel4q;
+  delete [] sel3m;
+  delete [] sel4m;
+  delete [] sel3rvec;
+  delete [] sel3qrvec;
+  delete [] sel3mrvec;
+  delete [] sel3totalq;
+  delete [] sel3totalm;
+  delete [] sel4rvec;
+  delete [] sel4qrvec;
+  delete [] sel4mrvec;
+  delete [] sel4totalq;
+  delete [] sel4totalm;
+  delete [] sel3dipoles;
+  delete [] sel4dipoles;
   delete [] lhist;
   delete [] lhist_dipoles;
 

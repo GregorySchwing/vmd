@@ -65,10 +65,9 @@ void rdf_cpu(int natoms1,     // array of the number of atoms in
   int iatom, jatom, ibin;
   float rij, rxij, rxij2, x1, y1, z1, x2, y2, z2;
   float cellx, celly, cellz;
-  int *ihist = new int[maxbin];
 
   for (ibin=0; ibin<maxbin; ibin++) {
-    ihist[ibin]=0;
+    hist[ibin]=0;
   }
 
   cellx = cell[0];
@@ -117,12 +116,11 @@ void rdf_cpu(int natoms1,     // array of the number of atoms in
 
       ibin = (int)floorf((rij-rmin)/delr);
       if (ibin<maxbin && ibin>=0) {
-        ++ihist[ibin];
+        ++hist[ibin];
       }
     }
   }
 
-  delete [] ihist;
 }
 
 
@@ -316,7 +314,7 @@ int measure_rdf(VMDApp *app,
       int rc=-1;
 #if defined(VMDCUDA)
       if (!getenv("VMDNOCUDA") && (app->cuda != NULL)) {
-//        msgInfo << "Running multi-GPU RDF calc..." << sendmsg;
+        msgInfo << "Running multi-GPU RDF calc..." << sendmsg;
         rc=rdf_gpu(app->cuda->get_cuda_devpool(),
                    usepbc,
                    sel1->selected, sel1coords,
@@ -329,7 +327,7 @@ int measure_rdf(VMDApp *app,
       } 
 #endif
       if (rc != 0) {
-//        msgInfo << "Running single-core CPU RDF calc..." << sendmsg;
+        msgInfo << "Running single-core CPU RDF calc..." << sendmsg;
         rdf_cpu(sel1->selected, sel1coords,
                 sel2->selected, sel2coords, 
                 pbccell,
@@ -337,6 +335,7 @@ int measure_rdf(VMDApp *app,
                 count_h,
                 rmin,
                 delta);
+        lhist[0] -= duplicates;
       }
 
       ++framecntr[2]; // frame processed with rdf algorithm
@@ -344,16 +343,6 @@ int measure_rdf(VMDApp *app,
       ++framecntr[1]; // frame skipped
     }
     ++framecntr[0];   // total frames.
-
-#if 0
-    // XXX elimination of duplicates is now handled within the 
-    //     GPU kernels themselves, so we do not need to subtract them
-    //     off during the histogram normalization calculations.
-    // Correct the first histogram slot for the number of atoms that are
-    // present in both lists. they'll end up in the first histogram bin.
-    // we subtract only from the first thread histogram which is always defined.
-    lhist[0] -= duplicates;
-#endif
 
     // in case of going 'into the edges', we should cut
     // off the part that is not properly normalized to
