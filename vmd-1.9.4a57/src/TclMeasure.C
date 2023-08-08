@@ -2114,6 +2114,8 @@ static int vmd_measure_sr(VMDApp *app, int argc, Tcl_Obj * const objv[], Tcl_Int
   Tcl_Obj *tcl_numint = Tcl_NewListObj(0, NULL);
   Tcl_Obj *tcl_histog = Tcl_NewListObj(0, NULL);
   Tcl_Obj *tcl_frames = Tcl_NewListObj(0, NULL);
+  Tcl_Obj *tcl_Gkr   = Tcl_NewListObj(0, NULL);
+  Tcl_Obj *tcl_avgcos   = Tcl_NewListObj(0, NULL);
 
   // build lists with results ready for plotting
   for (i=0; i<count_h; i++) { 
@@ -2121,6 +2123,8 @@ static int vmd_measure_sr(VMDApp *app, int argc, Tcl_Obj * const objv[], Tcl_Int
     Tcl_ListObjAppendElement(interp, tcl_gofr,   Tcl_NewDoubleObj(gofr[i]));
     Tcl_ListObjAppendElement(interp, tcl_numint, Tcl_NewDoubleObj(numint[i]));
     Tcl_ListObjAppendElement(interp, tcl_histog, Tcl_NewDoubleObj(histog[i]));
+    Tcl_ListObjAppendElement(interp, tcl_Gkr, Tcl_NewDoubleObj(Gkr[i]));
+    Tcl_ListObjAppendElement(interp, tcl_avgcos, Tcl_NewDoubleObj(avgcos[i]));
   }
 
   // build list with number of frames: 
@@ -2132,6 +2136,8 @@ static int vmd_measure_sr(VMDApp *app, int argc, Tcl_Obj * const objv[], Tcl_Int
   // build final list-of-lists as return value
   Tcl_ListObjAppendElement(interp, tcl_result, tcl_rlist);
   Tcl_ListObjAppendElement(interp, tcl_result, tcl_gofr);
+  Tcl_ListObjAppendElement(interp, tcl_result, tcl_Gkr);
+  Tcl_ListObjAppendElement(interp, tcl_result, tcl_Gkr);
   Tcl_ListObjAppendElement(interp, tcl_result, tcl_numint);
   Tcl_ListObjAppendElement(interp, tcl_result, tcl_histog);
   Tcl_ListObjAppendElement(interp, tcl_result, tcl_frames);
