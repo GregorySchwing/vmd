@@ -116,6 +116,7 @@ void dipole_cpu(int natoms1,  // array of the number of atoms in
     totalM3[iatom/moleculeSize3]+=m3[iatom];
 
   }
+  msgInfo << "Finished sel3 dipoles..." << sendmsg;
 
   int moleculeSize4 = natoms4/natoms2;
   for (iatom=0; iatom<natoms4; iatom++) {
@@ -138,6 +139,7 @@ void dipole_cpu(int natoms1,  // array of the number of atoms in
     totalM4[iatom/moleculeSize4]+=m4[iatom];
 
   }
+  msgInfo << "Finished sel4 dipoles..." << sendmsg;
 
   switch (usecenter) {
       case 1:
@@ -653,6 +655,7 @@ int measure_sr(VMDApp *app,
                     sel4rvec,sel4qrvec,sel4mrvec,
                     sel4totalq,sel4totalm,
                     sel3dipoles,sel4dipoles,1);
+        msgInfo << "Return from dipoles_cpu..." << sendmsg;
         sr_cpu(sel1->selected, sel1coords,
                 sel2->selected, sel2coords,
                 sel3dipoles,sel4dipoles,
@@ -663,6 +666,7 @@ int measure_sr(VMDApp *app,
                 rmin,
                 delta);
         lhist[0] -= duplicates;
+        msgInfo << "Return from sr_cpu..." << sendmsg;
       }
 
       ++framecntr[2]; // frame processed with sr algorithm
