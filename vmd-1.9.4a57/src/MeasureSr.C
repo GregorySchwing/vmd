@@ -513,7 +513,7 @@ int measure_sr(VMDApp *app,
       sel2->which_frame = frame;
       sel3->which_frame = frame;
       sel4->which_frame = frame;
-      ts1 = ts2 = ts3 =mymol->get_frame(frame); // requires sels from same mol
+      ts1 = ts2 = ts3 = ts4 = mymol->get_frame(frame); // requires sels from same mol
     }
 
     if (usepbc) {
