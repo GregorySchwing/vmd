@@ -467,9 +467,8 @@ int measure_sr(VMDApp *app,
 
   // clear the result arrays
   for (i=0; i<count_h; ++i) {
-    gofr[i] = numint[i] = histog[i] = 0.0;
+    gofr[i] = Gkr[i] = avgcos[i] = numint[i] = histog[i] = 0.0;
   }
-
   const float *q = mymol->charge();
   const float *m = mymol->mass();
   // pre-allocate coordinate buffers of the max size we'll
@@ -715,7 +714,7 @@ int measure_sr(VMDApp *app,
           ((double)sel1->selected * (double)sel2->selected - (double)duplicates);
       }
     }
-
+    msgInfo << "Accumulating results..." << sendmsg;
     // XXX for orthogonal boxes, we can reduce this to rmax < sqrt(0.5)*smallest side
     double GkrSum = 0.0;
     for (i=0; i<h_max; ++i) {
@@ -760,7 +759,10 @@ int measure_sr(VMDApp *app,
       }
       histog[i] += histv;
     }
+    msgInfo << "Finished accumulating results..." << sendmsg;
+
   }
+  msgInfo << "Deleting arrays..." << sendmsg;
 
   delete [] sel1coords;
   delete [] sel2coords;
@@ -788,6 +790,7 @@ int measure_sr(VMDApp *app,
   int ngrp = sel1->num_atoms;
   double norm = 1.0 / (double) nframes;
   double normMol = 1.0 / ((double) nframes * (double) ngrp);
+  msgInfo << "Normalizing results..." << sendmsg;
 
   for (i=0; i<count_h; ++i) {
     gofr[i]   *= norm;
@@ -796,6 +799,7 @@ int measure_sr(VMDApp *app,
     Gkr[i] *= normMol;
     avgcos[i] *= norm;
   }
+  msgInfo << "Returning results..." << sendmsg;
 
   return MEASURE_NOERR;
 }
