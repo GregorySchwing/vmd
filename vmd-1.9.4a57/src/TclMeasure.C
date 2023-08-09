@@ -2137,7 +2137,7 @@ static int vmd_measure_sr(VMDApp *app, int argc, Tcl_Obj * const objv[], Tcl_Int
   Tcl_ListObjAppendElement(interp, tcl_result, tcl_rlist);
   Tcl_ListObjAppendElement(interp, tcl_result, tcl_gofr);
   Tcl_ListObjAppendElement(interp, tcl_result, tcl_Gkr);
-  Tcl_ListObjAppendElement(interp, tcl_result, tcl_Gkr);
+  Tcl_ListObjAppendElement(interp, tcl_result, tcl_avgcos);
   Tcl_ListObjAppendElement(interp, tcl_result, tcl_numint);
   Tcl_ListObjAppendElement(interp, tcl_result, tcl_histog);
   Tcl_ListObjAppendElement(interp, tcl_result, tcl_frames);

@@ -177,6 +177,7 @@ VMD_CCPP      =	OpenGLDisplayDevice.C \
 		MeasureCluster.C \
 		MeasurePBC.C \
 		MeasureRDF.C \
+		MeasureSr.C \
 		MeasureQCP.C \
 		MeasureSurface.C \
 		MeasureSymmetry.C \
