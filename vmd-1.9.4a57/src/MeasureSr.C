@@ -763,28 +763,71 @@ int measure_sr(VMDApp *app,
 
   }
   msgInfo << "Deleting arrays..." << sendmsg;
+  msgInfo << "Deleting sel1coords..." << sendmsg;
 
   delete [] sel1coords;
+    msgInfo << "Deleting sel2coords..." << sendmsg;
+
   delete [] sel2coords;
+      msgInfo << "Deleting sel3coords..." << sendmsg;
+
   delete [] sel3coords;
+        msgInfo << "Deleting sel4coords..." << sendmsg;
+
   delete [] sel4coords;
+        msgInfo << "Deleting sel3q..." << sendmsg;
+
   delete [] sel3q;
+        msgInfo << "Deleting sel4q..." << sendmsg;
+
   delete [] sel4q;
+        msgInfo << "Deleting sel3m..." << sendmsg;
+
   delete [] sel3m;
+        msgInfo << "Deleting sel4m..." << sendmsg;
+
   delete [] sel4m;
+        msgInfo << "Deleting sel3rvec..." << sendmsg;
+
   delete [] sel3rvec;
+        msgInfo << "Deleting sel3qrvec..." << sendmsg;
+
   delete [] sel3qrvec;
+        msgInfo << "Deleting sel3mrvec..." << sendmsg;
+
   delete [] sel3mrvec;
+        msgInfo << "Deleting sel3totalq..." << sendmsg;
+
   delete [] sel3totalq;
+        msgInfo << "Deleting sel3totalm..." << sendmsg;
+
   delete [] sel3totalm;
+        msgInfo << "Deleting sel4rvec..." << sendmsg;
+
   delete [] sel4rvec;
+        msgInfo << "Deleting sel4qrvec..." << sendmsg;
+
   delete [] sel4qrvec;
+        msgInfo << "Deleting sel4mrvec..." << sendmsg;
+
   delete [] sel4mrvec;
+        msgInfo << "Deleting sel4totalq..." << sendmsg;
+
   delete [] sel4totalq;
+        msgInfo << "Deleting sel4totalm..." << sendmsg;
+
   delete [] sel4totalm;
+        msgInfo << "Deleting sel3dipoles..." << sendmsg;
+
   delete [] sel3dipoles;
+        msgInfo << "Deleting sel4dipoles..." << sendmsg;
+
   delete [] sel4dipoles;
+        msgInfo << "Deleting lhist..." << sendmsg;
+
   delete [] lhist;
+        msgInfo << "Deleting lhist_dipoles..." << sendmsg;
+
   delete [] lhist_dipoles;
   msgInfo << "Finished deleting arrays..." << sendmsg;
 
