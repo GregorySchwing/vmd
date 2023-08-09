@@ -587,9 +587,9 @@ int measure_sr(VMDApp *app,
         sel3coords[j    ] = framepos[a    ];
         sel3coords[j + 1] = framepos[a + 1];
         sel3coords[j + 2] = framepos[a + 2];
+        sel3q[j/3]=q[i];
+        sel3m[j/3]=m[i];
         j+=3;
-        sel3q[j]=q[i];
-        sel3m[j]=m[i];
       }
     }
     framepos = ts4->pos;
@@ -599,9 +599,9 @@ int measure_sr(VMDApp *app,
         sel4coords[j    ] = framepos[a    ];
         sel4coords[j + 1] = framepos[a + 1];
         sel4coords[j + 2] = framepos[a + 2];
+        sel4q[j/3]=q[i];
+        sel4m[j/3]=m[i];
         j+=3;
-        sel4q[j]=q[i];
-        sel4m[j]=m[i];
       }
     }
     // copy unit cell information
