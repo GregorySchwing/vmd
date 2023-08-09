@@ -2089,13 +2089,14 @@ static int vmd_measure_sr(VMDApp *app, int argc, Tcl_Obj * const objv[], Tcl_Int
   double *gofr   = new double[count_h];
   double *Gkr   = new double[count_h];
   double *avgcos   = new double[count_h];
+  double *hOO   = new double[count_h];
   double *numint = new double[count_h];
   double *histog = new double[count_h];
   int *framecntr = new int[3];
 
   // do the gofr calculation
   rc = measure_sr(app, sel1, sel2, sel3, sel4, app->moleculeList,
-                   count_h, gofr, numint, histog, Gkr, avgcos, 
+                   count_h, gofr, numint, histog, Gkr, avgcos, hOO,
                    (float) delta,
                    first, last, step, framecntr,
                    usepbc, selupdate);
@@ -2117,6 +2118,7 @@ static int vmd_measure_sr(VMDApp *app, int argc, Tcl_Obj * const objv[], Tcl_Int
   Tcl_Obj *tcl_frames = Tcl_NewListObj(0, NULL);
   Tcl_Obj *tcl_Gkr   = Tcl_NewListObj(0, NULL);
   Tcl_Obj *tcl_avgcos   = Tcl_NewListObj(0, NULL);
+  Tcl_Obj *tcl_hOO   = Tcl_NewListObj(0, NULL);
   msgInfo << "Created tcl_objs..." << sendmsg;
 
   // build lists with results ready for plotting
@@ -2127,6 +2129,7 @@ static int vmd_measure_sr(VMDApp *app, int argc, Tcl_Obj * const objv[], Tcl_Int
     Tcl_ListObjAppendElement(interp, tcl_histog, Tcl_NewDoubleObj(histog[i]));
     Tcl_ListObjAppendElement(interp, tcl_Gkr, Tcl_NewDoubleObj(Gkr[i]));
     Tcl_ListObjAppendElement(interp, tcl_avgcos, Tcl_NewDoubleObj(avgcos[i]));
+    Tcl_ListObjAppendElement(interp, tcl_hOO, Tcl_NewDoubleObj(hOO[i]));
   }
   msgInfo << "Filled tcl_objs..." << sendmsg;
 
@@ -2141,6 +2144,7 @@ static int vmd_measure_sr(VMDApp *app, int argc, Tcl_Obj * const objv[], Tcl_Int
   Tcl_ListObjAppendElement(interp, tcl_result, tcl_gofr);
   Tcl_ListObjAppendElement(interp, tcl_result, tcl_Gkr);
   Tcl_ListObjAppendElement(interp, tcl_result, tcl_avgcos);
+  Tcl_ListObjAppendElement(interp, tcl_result, tcl_hOO);
   Tcl_ListObjAppendElement(interp, tcl_result, tcl_numint);
   Tcl_ListObjAppendElement(interp, tcl_result, tcl_histog);
   Tcl_ListObjAppendElement(interp, tcl_result, tcl_frames);
@@ -2150,6 +2154,7 @@ static int vmd_measure_sr(VMDApp *app, int argc, Tcl_Obj * const objv[], Tcl_Int
   delete [] gofr;
   delete [] Gkr;
   delete [] avgcos;
+  delete [] hOO;
   delete [] numint;
   delete [] histog;
   delete [] framecntr;

@@ -244,7 +244,7 @@ extern int measure_sr(VMDApp *app,
                 MoleculeList *mlist,
                 const int count_h, double *gofr, 
                 double *numint, double *histog,
-                double *Gkr, double *avgcos, 
+                double *Gkr, double *avgcos, double * hOO,
                 const float delta, int first, int last, int step, 
                 int *framecntr, int usepbc, int selupdate);
 

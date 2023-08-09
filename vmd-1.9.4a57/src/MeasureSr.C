@@ -377,7 +377,7 @@ int measure_sr(VMDApp *app,
                 MoleculeList *mlist,
                 const int count_h, double *gofr, 
                 double *numint, double *histog,
-                double *Gkr, double *avgcos, 
+                double *Gkr, double *avgcos, double * hOO, 
                 const float delta, int first, int last, int step, 
                 int *framecntr, int usepbc, int selupdate) {
   int i, j, frame;
@@ -757,7 +757,8 @@ int measure_sr(VMDApp *app,
       gofr[i]   += normf * histv;
       GkrSum    += lhist_dipoles[i];
       Gkr[i]    += GkrSum;
-      avgcos[i] += normf * lhist_dipoles[i] / histv;
+      avgcos[i] += lhist_dipoles[i] / histv;
+      hOO[i]    += 3.0 * normf * lhist_dipoles[i];
       all       += histv;
       if (sel1->selected) {
         numint[i] += all / (double)(sel1->selected);
