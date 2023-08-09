@@ -2046,7 +2046,7 @@ static int vmd_measure_sr(VMDApp *app, int argc, Tcl_Obj * const objv[], Tcl_Int
   for (i=5; i<argc; i+=2) {
     const char *opt = Tcl_GetStringFromObj(objv[i], NULL);
     if (i==(argc-1)) {
-      Tcl_WrongNumArgs(interp, 2, objv-1, (char *)argerrmsg);
+      Tcl_WrongNumArgs(interp, 4, objv-1, (char *)argerrmsg);
       return TCL_ERROR;
     }
     if (!strcmp(opt, "delta")) {

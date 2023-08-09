@@ -397,7 +397,7 @@ int measure_sr(VMDApp *app,
 
   // First round of sanity checks.
   // neither list can be undefined
-  if (!sel1 || !sel2 ) {
+  if (!sel1 || !sel2 || !sel3 || !sel4) {
     return MEASURE_ERR_NOSEL;
   }
 
@@ -542,6 +542,11 @@ int measure_sr(VMDApp *app,
       if (sel4->change(NULL, mymol) != AtomSel::PARSE_SUCCESS)
         msgErr << "measure sr: failed to evaluate atom selection update";
     }
+
+  msgInfo << "Sel1 numatoms..." <<  sel1->num_atoms << sendmsg;
+  msgInfo << "Sel2 numatoms..." <<  sel2->num_atoms << sendmsg;
+  msgInfo << "Sel3 numatoms..." <<  sel3->num_atoms << sendmsg;
+  msgInfo << "Sel4 numatoms..." <<  sel4->num_atoms << sendmsg;
 
     // check for duplicate atoms in the two lists, as these will have
     // to be subtracted back out of the first histogram slot
