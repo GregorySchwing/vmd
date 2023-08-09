@@ -757,7 +757,11 @@ int measure_sr(VMDApp *app,
       gofr[i]   += normf * histv;
       GkrSum    += lhist_dipoles[i];
       Gkr[i]    += GkrSum;
-      avgcos[i] += lhist_dipoles[i] / histv;
+      if (histv > 0.0){
+        avgcos[i] += lhist_dipoles[i] / histv;
+      } else {
+        avgcos[i] += 0.0;
+      }
       hOO[i]    += 3.0 * normf * lhist_dipoles[i];
       all       += histv;
       if (sel1->selected) {
