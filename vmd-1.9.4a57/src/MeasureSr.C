@@ -786,6 +786,7 @@ int measure_sr(VMDApp *app,
   delete [] sel4dipoles;
   delete [] lhist;
   delete [] lhist_dipoles;
+  msgInfo << "Finished deleting arrays..." << sendmsg;
 
   int ngrp = sel1->num_atoms;
   double norm = 1.0 / (double) nframes;
