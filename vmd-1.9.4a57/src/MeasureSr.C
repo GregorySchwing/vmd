@@ -545,12 +545,7 @@ int measure_sr(VMDApp *app,
       if (sel4->change(NULL, mymol) != AtomSel::PARSE_SUCCESS)
         msgErr << "measure sr: failed to evaluate atom selection update";
     }
-
-  msgInfo << "Sel1 numatoms..." <<  sel1->num_atoms << sendmsg;
-  msgInfo << "Sel2 numatoms..." <<  sel2->num_atoms << sendmsg;
-  msgInfo << "Sel3 numatoms..." <<  sel3->num_atoms << sendmsg;
-  msgInfo << "Sel4 numatoms..." <<  sel4->num_atoms << sendmsg;
-
+    
     // check for duplicate atoms in the two lists, as these will have
     // to be subtracted back out of the first histogram slot
     if (sel2->molid() == sel1->molid()) {
@@ -638,7 +633,7 @@ int measure_sr(VMDApp *app,
       int rc=-1;
 #if defined(VMDCUDA)
       if (!getenv("VMDNOCUDA") && (app->cuda != NULL)) {
-        msgInfo << "Running multi-GPU sr calc..." << sendmsg;
+        // msgInfo << "Running multi-GPU sr calc..." << sendmsg;
         rc=rdf_gpu(app->cuda->get_cuda_devpool(),
                    usepbc,
                    sel1->selected, sel1coords,
@@ -651,7 +646,7 @@ int measure_sr(VMDApp *app,
       } 
 #endif
       if (rc != 0) {
-        msgInfo << "Running single-core CPU sr calc..." << sendmsg;
+        // msgInfo << "Running single-core CPU sr calc..." << sendmsg;
         dipole_cpu(sel1->selected, sel2->selected,
                     sel3->selected, sel3coords,
                     sel4->selected, sel4coords,
@@ -662,7 +657,6 @@ int measure_sr(VMDApp *app,
                     sel4rvec,sel4qrvec,sel4mrvec,
                     sel4totalq,sel4totalm,
                     sel3dipoles,sel4dipoles,1);
-        msgInfo << "Return from dipoles_cpu..." << sendmsg;
         sr_cpu(sel1->selected, sel1coords,
                 sel2->selected, sel2coords,
                 sel3dipoles,sel4dipoles,
@@ -673,7 +667,6 @@ int measure_sr(VMDApp *app,
                 rmin,
                 delta);
         lhist[0] -= duplicates;
-        msgInfo << "Return from sr_cpu..." << sendmsg;
       }
 
       ++framecntr[2]; // frame processed with sr algorithm
@@ -722,7 +715,6 @@ int measure_sr(VMDApp *app,
           ((double)sel1->selected * (double)sel2->selected - (double)duplicates);
       }
     }
-    msgInfo << "Accumulating results..." << sendmsg;
     // XXX for orthogonal boxes, we can reduce this to rmax < sqrt(0.5)*smallest side
     double GkrSum = 0.0;
     for (i=0; i<h_max; ++i) {
@@ -772,82 +764,33 @@ int measure_sr(VMDApp *app,
       }
       histog[i] += histv;
     }
-    msgInfo << "Finished accumulating results..." << sendmsg;
-
   }
-  msgInfo << "Deleting arrays..." << sendmsg;
-  msgInfo << "Deleting sel1coords..." << sendmsg;
-
   delete [] sel1coords;
-    msgInfo << "Deleting sel2coords..." << sendmsg;
-
   delete [] sel2coords;
-      msgInfo << "Deleting sel3coords..." << sendmsg;
-
   delete [] sel3coords;
-        msgInfo << "Deleting sel4coords..." << sendmsg;
-
   delete [] sel4coords;
-        msgInfo << "Deleting sel3q..." << sendmsg;
-
   delete [] sel3q;
-        msgInfo << "Deleting sel4q..." << sendmsg;
-
   delete [] sel4q;
-        msgInfo << "Deleting sel3m..." << sendmsg;
-
   delete [] sel3m;
-        msgInfo << "Deleting sel4m..." << sendmsg;
-
   delete [] sel4m;
-        msgInfo << "Deleting sel3rvec..." << sendmsg;
-
   delete [] sel3rvec;
-        msgInfo << "Deleting sel3qrvec..." << sendmsg;
-
   delete [] sel3qrvec;
-        msgInfo << "Deleting sel3mrvec..." << sendmsg;
-
   delete [] sel3mrvec;
-        msgInfo << "Deleting sel3totalq..." << sendmsg;
-
   delete [] sel3totalq;
-        msgInfo << "Deleting sel3totalm..." << sendmsg;
-
   delete [] sel3totalm;
-        msgInfo << "Deleting sel4rvec..." << sendmsg;
-
   delete [] sel4rvec;
-        msgInfo << "Deleting sel4qrvec..." << sendmsg;
-
   delete [] sel4qrvec;
-        msgInfo << "Deleting sel4mrvec..." << sendmsg;
-
   delete [] sel4mrvec;
-        msgInfo << "Deleting sel4totalq..." << sendmsg;
-
   delete [] sel4totalq;
-        msgInfo << "Deleting sel4totalm..." << sendmsg;
-
   delete [] sel4totalm;
-        msgInfo << "Deleting sel3dipoles..." << sendmsg;
-
   delete [] sel3dipoles;
-        msgInfo << "Deleting sel4dipoles..." << sendmsg;
-
   delete [] sel4dipoles;
-        msgInfo << "Deleting lhist..." << sendmsg;
-
   delete [] lhist;
-        msgInfo << "Deleting lhist_dipoles..." << sendmsg;
-
   delete [] lhist_dipoles;
-  msgInfo << "Finished deleting arrays..." << sendmsg;
 
   int ngrp = sel1->num_atoms;
   double norm = 1.0 / (double) nframes;
   double normMol = 1.0 / ((double) nframes * (double) ngrp);
-  msgInfo << "Normalizing results..." << sendmsg;
 
   for (i=0; i<count_h; ++i) {
     gofr[i]   *= norm;
