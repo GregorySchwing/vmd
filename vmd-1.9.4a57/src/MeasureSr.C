@@ -467,7 +467,7 @@ int measure_sr(VMDApp *app,
 
   // clear the result arrays
   for (i=0; i<count_h; ++i) {
-    gofr[i] = Gkr[i] = avgcos[i] = numint[i] = histog[i] = 0.0;
+    gofr[i] = Gkr[i] = avgcos[i] = hOO[i] = numint[i] = histog[i] = 0.0;
   }
   const float *q = mymol->charge();
   const float *m = mymol->mass();
