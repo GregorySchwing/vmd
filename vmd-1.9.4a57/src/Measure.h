@@ -229,6 +229,16 @@ extern int measure_gofr(AtomSel *sel1, AtomSel *sel2,
                         int first, int last, int step, int *framecntr,
                         int usepbc, int selupdate);
 
+// calculate g(r), GKr, avgcos, s(r) for two selections
+int measure_gofr_sr(AtomSel *sel1, AtomSel *sel2, 
+                 AtomSel *sel3, AtomSel *sel4, 
+                 MoleculeList *mlist,
+                 const int count_h, double *gofr, 
+                 double *gkr, double *avgcos, double *hOO, 
+                 double *numint, double *histog,
+                 const float delta, int first, int last, int step, int *framecntr,
+                 int usepbc, int selupdate);
+
 // calculate g(r) for two selections
 extern int  measure_rdf(VMDApp *app, 
                         AtomSel *sel1, AtomSel *sel2,

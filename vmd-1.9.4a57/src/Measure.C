@@ -1941,7 +1941,27 @@ typedef struct {
   int curframe;
   int maxframe;
 } gofrparms_t;
-    
+  
+typedef struct {
+  int threadid;
+  int threadcount;
+  int count_o_start;
+  int count_o_end;
+  const float *olist;
+  int count_i;
+  const float *ilist;
+  int count_h;
+  int *hlist;
+  float delta;
+  const float *boxby2;
+  wkfmsgtimer *msgtp;
+  int curframe;
+  int maxframe;
+  float *olist_dipoles;
+  float *ilist_dipoles;
+  float *hlist_dipoles;
+} gofrparms_sr_t;
+
 // calculate the non-normalized pair-distribution function
 // for two lists of atom coordinates and store the resulting
 // histogram in the hlist array. orthogonal cell version.
@@ -2357,6 +2377,551 @@ int measure_gofr(AtomSel *sel1, AtomSel *sel2, MoleculeList *mlist,
   return MEASURE_NOERR;
 }
 
+
+// main entry point for 'measure gofr_sr'.
+// tasks:
+// - sanity check on arguments.
+// - select proper algorithm for PBC treatment.
+int measure_gofr_sr(AtomSel *sel1, AtomSel *sel2, 
+                 AtomSel *sel3, AtomSel *sel4, 
+                 MoleculeList *mlist,
+                 const int count_h, double *gofr, 
+                 double *gkr, double *avgcos, double *hOO, 
+                 double *numint, double *histog,
+                 const float delta, int first, int last, int step, int *framecntr,
+                 int usepbc, int selupdate) {
+  int i, j, frame;
+  float a, b, c, alpha, beta, gamma;
+  int isortho=0;    // orthogonal unit cell not assumed by default.
+  int duplicates=0; // counter for duplicate atoms in both selections.
+
+  // initialize a/b/c/alpha/beta/gamma to arbitrary defaults to please the compiler.
+  a=b=c=9999999.0;
+  alpha=beta=gamma=90.0;
+
+  // reset counter for total, skipped, and _orth processed frames.
+  framecntr[0]=framecntr[1]=framecntr[2]=0;
+
+  // First round of sanity checks.
+  // neither list can be undefined
+  if (!sel1 || !sel2 || !sel3 || !sel4) {
+    return MEASURE_ERR_NOSEL;
+  }
+
+  // make sure that both selections are from the same molecule
+  // so that we know that PBC unit cell info is the same for both
+  if (sel2->molid() != sel1->molid()) {
+    return MEASURE_ERR_MISMATCHEDMOLS;
+  }
+
+  Molecule *mymol = mlist->mol_from_id(sel1->molid());
+  int maxframe = mymol->numframes() - 1;
+  int nframes = 0;
+
+  if (last == -1)
+    last = maxframe;
+
+  if ((last < first) || (last < 0) || (step <=0) || (first < -1)
+      || (maxframe < 0) || (last > maxframe)) {
+      msgErr << "measure gofr: bad frame range given." 
+             << " max. allowed frame#: " << maxframe << sendmsg;
+    return MEASURE_ERR_BADFRAMERANGE;
+  }
+
+  // test for non-orthogonal PBC cells, zero volume cells, etc.
+  if (usepbc) { 
+    for (isortho=1, nframes=0, frame=first; frame <=last; ++nframes, frame += step) {
+      const Timestep *ts;
+
+      if (first == -1) {
+        // use current frame only. don't loop.
+        ts = sel1->timestep(mlist);
+        frame=last;
+      } else {
+        ts = mymol->get_frame(frame);
+      }
+      // get periodic cell information for current frame
+      a = ts->a_length;
+      b = ts->b_length;
+      c = ts->c_length;
+      alpha = ts->alpha;
+      beta = ts->beta;
+      gamma = ts->gamma;
+
+      // check validity of PBC cell side lengths
+      if (fabsf(a*b*c) < 0.0001) {
+        msgErr << "measure gofr: unit cell volume is zero." << sendmsg;
+        return MEASURE_ERR_GENERAL;
+      }
+
+      // check PBC unit cell shape to select proper low level algorithm.
+      if ((alpha != 90.0) || (beta != 90.0) || (gamma != 90.0)) {
+        isortho=0;
+      }
+    }
+  } else {
+    // initialize a/b/c/alpha/beta/gamma to arbitrary defaults
+    isortho=1;
+    a=b=c=9999999.0;
+    alpha=beta=gamma=90.0;
+  }
+
+  // until we can handle non-orthogonal periodic cells, this is fatal
+  if (!isortho) {
+    msgErr << "measure gofr: only orthorhombic cells are supported (for now)." << sendmsg;
+    return MEASURE_ERR_GENERAL;
+  }
+
+  float *lhist_dipoles = new float[count_h];
+  const float *q = mymol->charge();
+  const float *m = mymol->mass();
+  // clear the result arrays
+  for (i=0; i<count_h; ++i) {
+    gofr[i] = numint[i] = histog[i] = 0.0;
+    lhist_dipoles[i] = gkr[i] = avgcos[i] = hOO[i] = 0.0;
+  }
+
+  // pre-allocate coordinate buffers of the max size we'll
+  // ever need, so we don't have to reallocate if/when atom
+  // selections are updated on-the-fly
+  float *sel1coords = new float[3L*sel1->num_atoms];
+  float *sel2coords = new float[3L*sel2->num_atoms];
+
+  // Dipole arrays
+  float *sel3coords = new float[3L*sel3->num_atoms];
+  float *sel4coords = new float[3L*sel4->num_atoms];
+
+  float *sel3q = new float[sel3->num_atoms];
+  float *sel4q = new float[sel4->num_atoms];
+  float *sel3m = new float[sel3->num_atoms];
+  float *sel4m = new float[sel4->num_atoms];
+  float *sel4totalq = new float[sel3->num_atoms];
+  float *sel4totalm = new float[sel4->num_atoms];
+
+  float *sel3rvec = new float[3L*sel3->num_atoms];
+  float *sel3qrvec = new float[3L*sel4->num_atoms];
+  float *sel3mrvec = new float[3L*sel3->num_atoms];
+  float *sel3totalq = new float[sel3->num_atoms];
+  float *sel3totalm = new float[sel4->num_atoms];
+  float *sel4rvec = new float[3L*sel4->num_atoms];
+  float *sel4qrvec = new float[3L*sel3->num_atoms];
+  float *sel4mrvec = new float[3L*sel4->num_atoms];
+
+  float *sel3dipoles = new float[3L*sel3->num_atoms];
+  float *sel4dipoles = new float[3L*sel4->num_atoms];
+  // Dipole arrays
+
+
+  // setup status message timer
+  wkfmsgtimer *msgt = wkf_msg_timer_create(5);
+
+  // threading setup.
+  wkf_thread_t *threads;
+  gofrparms_sr_t  *parms;
+#if defined(VMDTHREADS)
+  int numprocs = wkf_thread_numprocessors();
+#else
+  int numprocs = 1;
+#endif
+
+  threads = new wkf_thread_t[numprocs];
+  memset(threads, 0, numprocs * sizeof(wkf_thread_t));
+
+  // allocate and (partially) initialize array of per-thread parameters
+  parms = new gofrparms_sr_t[numprocs];
+  for (i=0; i<numprocs; ++i) {
+    parms[i].threadid = i;
+    parms[i].threadcount = numprocs;
+    parms[i].delta = (float) delta;
+    parms[i].msgtp = NULL;
+    parms[i].count_h = count_h;
+    parms[i].hlist = new int[count_h];
+    parms[i].hlist_dipoles = new float[count_h];
+  }
+
+  msgInfo << "measure gofr: using multi-threaded implementation with " 
+          << numprocs << ((numprocs > 1) ? " CPUs" : " CPU") << sendmsg;
+
+  for (nframes=0,frame=first; frame <=last; ++nframes, frame += step) {
+    const Timestep *ts1, *ts2, *ts3, *ts4;
+
+    if (frame  == -1) {
+      // use current frame only. don't loop.
+      ts1 = sel1->timestep(mlist);
+      ts2 = sel2->timestep(mlist);
+      ts3 = sel3->timestep(mlist);
+      ts4 = sel4->timestep(mlist);
+      frame=last;
+    } else {
+      sel1->which_frame = frame;
+      sel2->which_frame = frame;
+      ts1 = ts2 = ts3 = ts4 = mymol->get_frame(frame); // requires sels from same mol
+    }
+
+    if (usepbc) {
+      // get periodic cell information for current frame
+      a     = ts1->a_length;
+      b     = ts1->b_length;
+      c     = ts1->c_length;
+      alpha = ts1->alpha;
+      beta  = ts1->beta;
+      gamma = ts1->gamma;
+    }
+
+    // compute half periodic cell size
+    float boxby2[3];
+    boxby2[0] = 0.5f * a;
+    boxby2[1] = 0.5f * b;
+    boxby2[2] = 0.5f * c;
+
+    // update the selections if the user desires it
+    if (selupdate) {
+      if (sel1->change(NULL, mymol) != AtomSel::PARSE_SUCCESS)
+        msgErr << "measure gofr: failed to evaluate atom selection update";
+      if (sel2->change(NULL, mymol) != AtomSel::PARSE_SUCCESS)
+        msgErr << "measure gofr: failed to evaluate atom selection update";
+      if (sel3->change(NULL, mymol) != AtomSel::PARSE_SUCCESS)
+        msgErr << "measure gofr: failed to evaluate atom selection update";
+      if (sel4->change(NULL, mymol) != AtomSel::PARSE_SUCCESS)
+        msgErr << "measure gofr: failed to evaluate atom selection update";
+    }
+
+    // check for duplicate atoms in the two lists, as these will have
+    // to be subtracted back out of the first histogram slot
+    if (sel2->molid() == sel1->molid()) {
+      int i;
+      for (i=0, duplicates=0; i<sel1->num_atoms; ++i) {
+        if (sel1->on[i] && sel2->on[i])
+          ++duplicates;
+      }
+    }
+
+    // copy selected atoms to the two coordinate lists
+    // requires that selections come from the same molecule
+    const float *framepos = ts1->pos;
+    for (i=0, j=0; i<sel1->num_atoms; ++i) {
+      if (sel1->on[i]) {
+        long a = i*3L;
+        sel1coords[j    ] = framepos[a    ];
+        sel1coords[j + 1] = framepos[a + 1];
+        sel1coords[j + 2] = framepos[a + 2];
+        j+=3;
+      }
+    }
+    framepos = ts2->pos;
+    for (i=0, j=0; i<sel2->num_atoms; ++i) {
+      if (sel2->on[i]) {
+        long a = i*3L;
+        sel2coords[j    ] = framepos[a    ];
+        sel2coords[j + 1] = framepos[a + 1];
+        sel2coords[j + 2] = framepos[a + 2];
+        j+=3;
+      }
+    }
+    framepos = ts3->pos;
+    for (i=0, j=0; i<sel3->num_atoms; ++i) {
+      if (sel3->on[i]) {
+        long a = i*3L;
+        sel3coords[j    ] = framepos[a    ];
+        sel3coords[j + 1] = framepos[a + 1];
+        sel3coords[j + 2] = framepos[a + 2];
+        sel3q[j/3]=q[i];
+        sel3m[j/3]=m[i];
+        j+=3;
+      }
+    }
+    framepos = ts4->pos;
+    for (i=0, j=0; i<sel4->num_atoms; ++i) {
+      if (sel4->on[i]) {
+        long a = i*3L;
+        sel4coords[j    ] = framepos[a    ];
+        sel4coords[j + 1] = framepos[a + 1];
+        sel4coords[j + 2] = framepos[a + 2];
+        sel4q[j/3]=q[i];
+        sel4m[j/3]=m[i];
+        j+=3;
+      }
+    }
+
+    // Clear intermediate arrays for dipoles
+    // Clear intermediate arrays
+    memset(sel3rvec, 0, 3L*sel3->num_atoms * sizeof(float));
+    memset(sel3qrvec, 0, 3L*sel3->num_atoms * sizeof(float));
+    memset(sel3mrvec, 0, 3L*sel3->num_atoms * sizeof(float));
+    memset(sel3totalq, 0, sel3->num_atoms * sizeof(float));
+    memset(sel3totalm, 0, sel3->num_atoms * sizeof(float));
+
+    memset(sel4rvec, 0, 3L*sel4->num_atoms * sizeof(float));
+    memset(sel4qrvec, 0, 3L*sel4->num_atoms * sizeof(float));
+    memset(sel4mrvec, 0, 3L*sel4->num_atoms * sizeof(float));
+    memset(sel4totalq, 0, sel4->num_atoms * sizeof(float));
+    memset(sel4totalm, 0, sel4->num_atoms * sizeof(float));
+
+    memset(sel3dipoles, 0, 3L*sel3->num_atoms * sizeof(float));
+    memset(sel4dipoles, 0, 3L*sel4->num_atoms * sizeof(float));
+
+
+    // clear the histogram for this frame
+    // and set up argument structure for threaded execution.
+    int maxframe = (int) ((last - first + 1) / ((float) step));
+    for (i=0; i<numprocs; ++i) {
+      memset(parms[i].hlist, 0, count_h * sizeof(int));
+      memset(parms[i].hlist_dipoles, 0, count_h * sizeof(int));
+      parms[i].boxby2 = boxby2;
+      parms[i].curframe = frame;
+      parms[i].maxframe = maxframe;
+    }
+    parms[0].msgtp = msgt;
+    
+    if (isortho && sel1->selected && sel2->selected) {
+      int count_o = sel1->selected;
+      int count_i = sel2->selected;
+      const float *olist = sel1coords;
+      const float *ilist = sel2coords;
+      // make sure the outer loop is the longer one to have 
+      // better threading efficiency and cache utilization.
+      if (count_o < count_i) {
+        count_o = sel2->selected;
+        count_i = sel1->selected;
+        olist = sel2coords;
+        ilist = sel1coords;
+      }
+
+      // distribute outer loop across threads in fixed size chunks.
+      // this should work very well for small numbers of threads.
+      // thrdelta is the chunk size and we need it to be at least 1 
+      // _and_ numprocs*thrdelta >= count_o.
+      int thrdelta = (count_o + (numprocs-1)) / numprocs;
+      int o_min = 0;
+      int o_max = thrdelta;
+      for (i=0; i<numprocs; ++i, o_min += thrdelta, o_max += thrdelta) {
+        if (o_max >  count_o)  o_max = count_o; // curb loop to max
+        if (o_min >= count_o)  o_max = - 1;     // no work for this thread. too little data.
+        parms[i].count_o_start = o_min;
+        parms[i].count_o_end   = o_max;
+        parms[i].count_i       = count_i;
+        parms[i].olist         = olist;
+        parms[i].ilist         = ilist;
+      }
+      
+      // do the gofr calculation for orthogonal boxes.
+      // XXX. non-orthogonal box not supported yet. detected and handled above.
+#if defined(VMDTHREADS)
+      for (i=0; i<numprocs; ++i) {
+        wkf_thread_create(&threads[i], measure_gofr_orth, &parms[i]);
+      }
+      for (i=0; i<numprocs; ++i) {
+        wkf_thread_join(threads[i], NULL);
+      } 
+#else
+      measure_gofr_orth((void *) &parms[0]);
+#endif
+      ++framecntr[2]; // frame processed with _orth algorithm
+    } else {
+      ++framecntr[1]; // frame skipped
+    }
+    ++framecntr[0];   // total frames.
+
+    // correct the first histogram slot for the number of atoms that are 
+    // present in both lists. they'll end up in the first histogram bin. 
+    // we subtract only from the first thread histogram which is always defined.
+    parms[0].hlist[0] -= duplicates;
+
+    // in case of going 'into the edges', we should cut 
+    // off the part that is not properly normalized to 
+    // not confuse people that don't know about this.
+    int h_max=count_h;
+    float smallside=a;
+    if (isortho && usepbc) {
+      if(b < smallside) {
+        smallside=b;
+      }
+      if(c < smallside) {
+        smallside=c;
+      }
+      h_max=(int) (sqrtf(0.5f)*smallside/delta) +1;
+      if (h_max > count_h) {
+        h_max=count_h;
+      }
+    }
+    // compute normalization function.
+    double all=0.0;
+    double pair_dens = 0.0;
+    if (sel1->selected && sel2->selected) {
+      if (usepbc) {
+        pair_dens = a * b * c / ((double)sel1->selected * (double)sel2->selected - (double)duplicates);
+      } else { // assume a particle volume of 30 \AA^3 (~ 1 water).
+        pair_dens = 30.0 * (double)sel1->selected / 
+          ((double)sel1->selected * (double)sel2->selected - (double)duplicates);
+      }
+    }
+    
+    // XXX for orthogonal boxes, we can reduce this to rmax < sqrt(0.5)*smallest side
+    for (i=0; i<h_max; ++i) {
+      // radius of inner and outer sphere that form the spherical slice
+      double r_in  = delta * (double)i;
+      double r_out = delta * (double)(i+1);
+      double slice_vol = 4.0 / 3.0 * VMD_PI
+        * ((r_out * r_out * r_out) - (r_in * r_in * r_in));
+
+      if (isortho && usepbc) {
+        // add correction for 0.5*box < r <= sqrt(0.5)*box
+        if (r_out > boxby2[0]) {
+          slice_vol -= 2.0 * spherical_cap(r_out, boxby2[0]);
+        }
+        if (r_out > boxby2[1]) {
+          slice_vol -= 2.0 * spherical_cap(r_out, boxby2[1]);
+        }
+        if (r_out > boxby2[2]) {
+          slice_vol -= 2.0 * spherical_cap(r_out, boxby2[2]);
+        }
+        if (r_in > boxby2[0]) {
+          slice_vol += 2.0 * spherical_cap(r_in, boxby2[0]);
+        }
+        if (r_in > boxby2[1]) {
+          slice_vol += 2.0 * spherical_cap(r_in, boxby2[1]);
+        }
+        if (r_in > boxby2[2]) {
+          slice_vol += 2.0 * spherical_cap(r_in, boxby2[2]);
+        }
+      }
+
+      double normf = pair_dens / slice_vol;
+      double histv = 0.0;
+      for (j=0; j<numprocs; ++j) {
+        histv += (double) parms[j].hlist[i];
+      }
+      gofr[i] += normf * histv;
+      all     += histv;
+      if (sel1->selected) {
+        numint[i] += all / (double)(sel1->selected);
+      }
+      histog[i] += histv;
+    }
+  }
+  delete [] sel1coords;
+  delete [] sel2coords;
+
+  // dipole arrays
+  delete [] sel3coords;
+  delete [] sel4coords;
+  delete [] sel3q;
+  delete [] sel4q;
+  delete [] sel3m;
+  delete [] sel4m;
+  delete [] sel3rvec;
+  delete [] sel3qrvec;
+  delete [] sel3mrvec;
+  delete [] sel3totalq;
+  delete [] sel3totalm;
+  delete [] sel4rvec;
+  delete [] sel4qrvec;
+  delete [] sel4mrvec;
+  delete [] sel4totalq;
+  delete [] sel4totalm;
+  delete [] sel3dipoles;
+  delete [] sel4dipoles;
+  delete [] lhist_dipoles;
+  // dipole arrays
+
+  double norm = 1.0 / (double) nframes;
+  for (i=0; i<count_h; ++i) {
+    gofr[i]   *= norm;
+    numint[i] *= norm;
+    histog[i] *= norm;
+  }
+  wkf_msg_timer_destroy(msgt);
+
+  // release thread-related storage
+  for (i=0; i<numprocs; ++i) {
+    delete [] parms[i].hlist;
+  }
+  delete [] threads;
+  delete [] parms;
+
+  return MEASURE_NOERR;
+}
+
+
+int measure_geom(MoleculeList *mlist, int *molid, int *atmid, ResizeArray<float> *gValues,
+		 int frame, int first, int last, int defmolid, int geomtype) {
+  int i, ret_val;
+  for(i=0; i < geomtype; i++) {
+    // make sure an atom is not repeated in this list
+    if(i > 0 && molid[i-1]==molid[i] && atmid[i-1]==atmid[i]) {
+      printf("measure_geom: %i/%i %i/%i\n", molid[i-1],atmid[i-1],molid[i],atmid[i]);
+      return MEASURE_ERR_REPEATEDATOM;
+    }
+  }
+
+  float value;
+  int max_ts, orig_ts;
+
+  // use the default molecule to determine which frames to cycle through
+  Molecule *mol = mlist->mol_from_id(defmolid);
+  if( !mol )
+    return MEASURE_ERR_NOMOLECULE;
+  
+  // get current frame number and make sure there are frames
+  if((orig_ts = mol->frame()) < 0)
+    return MEASURE_ERR_NOFRAMES;
+  
+  // get the max frame number and determine frame range
+  max_ts = mol->numframes()-1;
+  if (frame<0) {
+    if (first<0 && last<0) first = last = orig_ts; 
+    if (last<0 || last>max_ts) last = max_ts;
+    if (first<0) first = 0;
+  } else {
+    if (frame>max_ts) frame = max_ts;
+    first = last = frame; 
+  }
+  
+  // go through all the frames, calculating values
+  for(i=first; i <= last; i++) {
+    mol->override_current_frame(i);
+    switch (geomtype) {
+    case MEASURE_BOND:
+      if ((ret_val=calculate_bond(mlist, molid, atmid, &value))<0)
+	return ret_val;
+      gValues->append(value);
+      break;
+    case MEASURE_ANGLE:
+      if ((ret_val=calculate_angle(mlist, molid, atmid, &value))<0)
+	return ret_val;
+      gValues->append(value);
+      break;
+    case MEASURE_DIHED:
+      if ((ret_val=calculate_dihed(mlist, molid, atmid, &value))<0)
+	return ret_val;
+      gValues->append(value);
+      break;
+    }
+  }
+  
+  // reset the current frame
+  mol->override_current_frame(orig_ts);
+  
+  return MEASURE_NOERR;
+}
+  
+  
+// calculate the value of this geometry, and return it
+int calculate_bond(MoleculeList *mlist, int *molid, int *atmid, float *value) {
+
+  // get coords to calculate distance 
+  int ret_val;
+  float pos1[3], pos2[3];
+  if ((ret_val=normal_atom_coord(mlist->mol_from_id(molid[0]), atmid[0], pos1))<0)
+    return ret_val;
+  if ((ret_val=normal_atom_coord(mlist->mol_from_id(molid[1]), atmid[1], pos2))<0)
+    return ret_val;
+  
+  vec_sub(pos2, pos2, pos1);
+  *value = norm(pos2);
+
+  return MEASURE_NOERR;
+}
 
 int measure_geom(MoleculeList *mlist, int *molid, int *atmid, ResizeArray<float> *gValues,
 		 int frame, int first, int last, int defmolid, int geomtype) {
