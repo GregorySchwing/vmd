@@ -116,7 +116,6 @@ void dipole_cpu(int natoms1,  // array of the number of atoms in
     totalM3[iatom/moleculeSize3]+=m3[iatom];
 
   }
-  msgInfo << "Finished sel3 dipoles..." << sendmsg;
 
   int moleculeSize4 = natoms4/natoms2;
   for (iatom=0; iatom<natoms4; iatom++) {
@@ -139,7 +138,6 @@ void dipole_cpu(int natoms1,  // array of the number of atoms in
     totalM4[iatom/moleculeSize4]+=m4[iatom];
 
   }
-  msgInfo << "Finished sel4 dipoles..." << sendmsg;
 
   switch (usecenter) {
       case 1:
