@@ -673,7 +673,7 @@ int measure_sr(VMDApp *app,
       ++framecntr[1]; // frame skipped
     }
     ++framecntr[0];   // total frames.
-    printf("\rFrame %d/%d", framecntr[1]+framecntr[2],framecntr[0]);
+    printf("\rFrame %d/%d", framecntr[0],last);
     fflush(stdout);
 #if 0
     // XXX elimination of duplicates is now handled within the 
