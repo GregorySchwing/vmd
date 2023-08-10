@@ -705,7 +705,8 @@ int measure_sr(VMDApp *app,
     // compute normalization function.
     double all=0.0;
     double pair_dens = 0.0;
-    
+    double ngrp = ((double)sel1->selected * (double)sel2->selected) - (double)duplicates;
+
     if (sel1->selected && sel2->selected) {
       if (usepbc) {
         pair_dens = a * b * c / ((double)sel1->selected * (double)sel2->selected - (double)duplicates);
@@ -716,6 +717,10 @@ int measure_sr(VMDApp *app,
     }
     // XXX for orthogonal boxes, we can reduce this to rmax < sqrt(0.5)*smallest side
     double GkrSum = 0.0;
+    double ggg = 0.0;
+    double fac = 1.0 / (double)ngrp;
+    double rho = pair_dens;
+
     for (i=0; i<h_max; ++i) {
       // radius of inner and outer sphere that form the spherical slice
       double r_in  = delta * (double)i;
@@ -749,14 +754,15 @@ int measure_sr(VMDApp *app,
       double histv = (double) lhist[i];
 
       gofr[i]   += normf * histv;
-      GkrSum    += lhist_dipoles[i];
+      ggg        = lhist_dipoles[i]*fac;
+      GkrSum    += ggg;
       Gkr[i]    += GkrSum;
       if (histv > 0.0){
         avgcos[i] += lhist_dipoles[i] / histv;
       } else {
         avgcos[i] += 0.0;
       }
-      hOO[i]    += 3.0 * normf * lhist_dipoles[i];
+      hOO[i]    += 3.0 * ggg / (rho * slice_vol);
       all       += histv;
       if (sel1->selected) {
         numint[i] += all / (double)(sel1->selected);
@@ -787,15 +793,13 @@ int measure_sr(VMDApp *app,
   delete [] lhist;
   delete [] lhist_dipoles;
 
-  int ngrp = sel1->num_atoms;
   double norm = 1.0 / (double) nframes;
-  double normMol = 1.0 / ((double) nframes * (double) ngrp);
 
   for (i=0; i<count_h; ++i) {
     gofr[i]   *= norm;
     numint[i] *= norm;
     histog[i] *= norm;
-    Gkr[i] *= normMol;
+    Gkr[i]    *= norm;
     avgcos[i] *= norm;
   }
   msgInfo << "Returning results..." << sendmsg;
