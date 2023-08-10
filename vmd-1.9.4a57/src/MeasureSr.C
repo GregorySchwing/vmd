@@ -667,6 +667,7 @@ int measure_sr(VMDApp *app,
                 rmin,
                 delta);
         lhist[0] -= duplicates;
+        lhist_dipoles[0] -= duplicates;
       }
 
       ++framecntr[2]; // frame processed with sr algorithm
