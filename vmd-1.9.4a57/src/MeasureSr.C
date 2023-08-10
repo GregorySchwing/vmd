@@ -478,10 +478,14 @@ int measure_sr(VMDApp *app,
   float *sel2coords = new float[3L*sel2->num_atoms];
   float *sel3coords = new float[3L*sel3->num_atoms];
   float *sel4coords = new float[3L*sel4->num_atoms];
-  float *sel3q = new float[3L*sel3->num_atoms];
-  float *sel4q = new float[3L*sel4->num_atoms];
-  float *sel3m = new float[3L*sel3->num_atoms];
-  float *sel4m = new float[3L*sel4->num_atoms];
+
+  float *sel3q = new float[sel3->num_atoms];
+  float *sel4q = new float[sel4->num_atoms];
+  float *sel3m = new float[sel3->num_atoms];
+  float *sel4m = new float[sel4->num_atoms];
+  float *sel4totalq = new float[sel3->num_atoms];
+  float *sel4totalm = new float[sel4->num_atoms];
+
   float *sel3rvec = new float[3L*sel3->num_atoms];
   float *sel3qrvec = new float[3L*sel4->num_atoms];
   float *sel3mrvec = new float[3L*sel3->num_atoms];
@@ -490,10 +494,9 @@ int measure_sr(VMDApp *app,
   float *sel4rvec = new float[3L*sel4->num_atoms];
   float *sel4qrvec = new float[3L*sel3->num_atoms];
   float *sel4mrvec = new float[3L*sel4->num_atoms];
-  float *sel4totalq = new float[sel3->num_atoms];
-  float *sel4totalm = new float[sel4->num_atoms];
-  float *sel3dipoles = new float[sel3->num_atoms];
-  float *sel4dipoles = new float[sel4->num_atoms];
+
+  float *sel3dipoles = new float[3L*sel3->num_atoms];
+  float *sel4dipoles = new float[3L*sel4->num_atoms];
   float *lhist = new float[count_h];
   float *lhist_dipoles = new float[count_h];
 
@@ -626,8 +629,8 @@ int measure_sr(VMDApp *app,
     memset(sel4totalq, 0, sel4->num_atoms * sizeof(float));
     memset(sel4totalm, 0, sel4->num_atoms * sizeof(float));
 
-    memset(sel3dipoles, 0, sel3->num_atoms * sizeof(float));
-    memset(sel4dipoles, 0, sel4->num_atoms * sizeof(float));
+    memset(sel3dipoles, 0, 3L*sel3->num_atoms * sizeof(float));
+    memset(sel4dipoles, 0, 3L*sel4->num_atoms * sizeof(float));
 
     if (isortho && sel1->selected && sel2->selected) {
       // do the sr calculation for orthogonal boxes.
