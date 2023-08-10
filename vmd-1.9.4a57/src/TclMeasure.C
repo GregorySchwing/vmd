@@ -2100,7 +2100,6 @@ static int vmd_measure_sr(VMDApp *app, int argc, Tcl_Obj * const objv[], Tcl_Int
                    (float) delta,
                    first, last, step, framecntr,
                    usepbc, selupdate);
-  msgInfo << "Returned from measure_sr..." << sendmsg;
 
   // XXX: this needs a 'case' structure to provide more meaninful error messages.
   if (rc != MEASURE_NOERR) { 
@@ -2119,7 +2118,6 @@ static int vmd_measure_sr(VMDApp *app, int argc, Tcl_Obj * const objv[], Tcl_Int
   Tcl_Obj *tcl_Gkr   = Tcl_NewListObj(0, NULL);
   Tcl_Obj *tcl_avgcos   = Tcl_NewListObj(0, NULL);
   Tcl_Obj *tcl_hOO   = Tcl_NewListObj(0, NULL);
-  msgInfo << "Created tcl_objs..." << sendmsg;
 
   // build lists with results ready for plotting
   for (i=0; i<count_h; i++) { 
@@ -2131,7 +2129,6 @@ static int vmd_measure_sr(VMDApp *app, int argc, Tcl_Obj * const objv[], Tcl_Int
     Tcl_ListObjAppendElement(interp, tcl_avgcos, Tcl_NewDoubleObj(avgcos[i]));
     Tcl_ListObjAppendElement(interp, tcl_hOO, Tcl_NewDoubleObj(hOO[i]));
   }
-  msgInfo << "Filled tcl_objs..." << sendmsg;
 
   // build list with number of frames: 
   // total, skipped and processed (one entry for each algorithm).
@@ -2149,7 +2146,6 @@ static int vmd_measure_sr(VMDApp *app, int argc, Tcl_Obj * const objv[], Tcl_Int
   Tcl_ListObjAppendElement(interp, tcl_result, tcl_histog);
   Tcl_ListObjAppendElement(interp, tcl_result, tcl_frames);
   Tcl_SetObjResult(interp, tcl_result);
-  msgInfo << "built list of tcl_objs..." << sendmsg;
 
   delete [] gofr;
   delete [] Gkr;
@@ -2159,7 +2155,6 @@ static int vmd_measure_sr(VMDApp *app, int argc, Tcl_Obj * const objv[], Tcl_Int
   delete [] histog;
   delete [] framecntr;
   return TCL_OK;
-  msgInfo << "Finished vmd wrapper..." << sendmsg;
 
 }
 

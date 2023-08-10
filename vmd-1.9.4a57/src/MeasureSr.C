@@ -673,7 +673,8 @@ int measure_sr(VMDApp *app,
       ++framecntr[1]; // frame skipped
     }
     ++framecntr[0];   // total frames.
-
+    printf("\rFrame %d/%d", framecntr[1]+framecntr[2],framecntr[0]);
+    fflush(stdout);
 #if 0
     // XXX elimination of duplicates is now handled within the 
     //     GPU kernels themselves, so we do not need to subtract them
@@ -803,7 +804,6 @@ int measure_sr(VMDApp *app,
     Gkr[i]    *= norm;
     avgcos[i] *= norm;
   }
-  msgInfo << "Returning results..." << sendmsg;
 
   return MEASURE_NOERR;
 }
