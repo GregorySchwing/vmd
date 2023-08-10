@@ -799,6 +799,7 @@ int measure_sr(VMDApp *app,
     gofr[i]   *= norm;
     numint[i] *= norm;
     histog[i] *= norm;
+    hOO[i]    *= norm;
     Gkr[i]    *= norm;
     avgcos[i] *= norm;
   }
