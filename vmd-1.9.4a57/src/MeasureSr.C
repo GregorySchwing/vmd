@@ -709,7 +709,7 @@ int measure_sr(VMDApp *app,
     double ngrp = ((double)sel1->selected * (double)sel2->selected) - (double)duplicates;
     // Need some more logic to always be right, but this works for OO
     ngrp = (double)sel1->selected;
-
+    double particleDens = ngrp / (a * b * c);
     if (sel1->selected && sel2->selected) {
       if (usepbc) {
         pair_dens = a * b * c / ((double)sel1->selected * (double)sel2->selected - (double)duplicates);
@@ -765,7 +765,8 @@ int measure_sr(VMDApp *app,
       } else {
         avgcos[i] += 0.0;
       }
-      hOO[i]    += 3.0 * ggg / (rho * slice_vol);
+      //hOO[i]    += 3.0 * ggg / (rho * slice_vol);
+      hOO[i]    += 3.0 * ggg / (particleDens * slice_vol);
       all       += histv;
       if (sel1->selected) {
         numint[i] += all / (double)(sel1->selected);
