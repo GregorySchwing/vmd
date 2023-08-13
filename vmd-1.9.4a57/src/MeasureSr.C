@@ -707,6 +707,8 @@ int measure_sr(VMDApp *app,
     double all=0.0;
     double pair_dens = 0.0;
     double ngrp = ((double)sel1->selected * (double)sel2->selected) - (double)duplicates;
+    // Need some more logic to always be right, but this works for OO
+    double ngrp = (double)sel1->selected;
 
     if (sel1->selected && sel2->selected) {
       if (usepbc) {
