@@ -766,7 +766,7 @@ int measure_sr(VMDApp *app,
         avgcos[i] += 0.0;
       }
       //hOO[i]    += 3.0 * ggg / (rho * slice_vol);
-      hOO[i]    += 3.0 * ggg / (particleDens * slice_vol);
+      hOO[i]    += 3.0 * ggg / histv;
       all       += histv;
       if (sel1->selected) {
         numint[i] += all / (double)(sel1->selected);
